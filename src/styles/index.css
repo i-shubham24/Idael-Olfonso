@@ -1,0 +1,301 @@
+@import '@fontsource-variable/archivo/wdth.css';
+@import '@fontsource-variable/cormorant-garamond/wght.css';
+@import '@fontsource-variable/cormorant-garamond/wght-italic.css';
+@import 'tailwindcss';
+
+/* Design tokens */
+@theme {
+  --color-onyx: #0a0a0b;
+  --color-onyx-2: #111113;
+  --color-graphite: #19191c;
+  --color-line: #2a2a2e;
+  --color-stone: #8f8b84;
+  --color-ivory: #ece8e0;
+  --color-ivory-2: #dcd7cd;
+  --color-ink: #0a0a0b;
+  --color-gold: #b89a67;
+  --color-gold-2: #d2b98a;
+
+  --font-sans: 'Archivo Variable', 'Archivo', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'Cormorant Garamond Variable', 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-expo: cubic-bezier(0.87, 0, 0.13, 1);
+
+  --radius-panel: 2px;
+}
+
+/* Base */
+@layer base {
+  html {
+    background: var(--color-onyx);
+    color: var(--color-ivory);
+    font-family: var(--font-sans);
+    font-stretch: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    /* Native bits (scrollbars, autofill, any control) follow the dark theme and the gold accent. */
+    color-scheme: dark;
+    accent-color: var(--color-gold);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  input,
+  textarea {
+    caret-color: var(--color-gold);
+  }
+
+  /* Browser autofill would paint fields pale blue or yellow; keep them on theme. */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill {
+    -webkit-text-fill-color: var(--color-ivory);
+    -webkit-box-shadow: 0 0 0 1000px var(--color-graphite) inset;
+    caret-color: var(--color-gold);
+    transition: background-color 99999s;
+  }
+
+  body {
+    min-height: 100dvh;
+    font-size: 1rem;
+    line-height: 1.6;
+    overflow-x: clip;
+  }
+
+  @media (min-width: 768px) {
+    body {
+      font-size: 1.0625rem;
+    }
+  }
+
+  ::selection {
+    background: var(--color-gold);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--color-gold);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  /* Italic accents inside serif headings: the one place gold shows up in type. */
+  em {
+    font-style: italic;
+  }
+
+  /* Cormorant defaults to old style figures; times and minutes read better lining. */
+  .font-serif {
+    font-variant-numeric: lining-nums;
+  }
+
+  /* Lenis */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+  .lenis.lenis-stopped {
+    overflow: clip;
+  }
+}
+
+/* Type */
+@utility t-display {
+  font-variant-numeric: lining-nums;
+  font-family: var(--font-serif);
+  font-weight: 300;
+  line-height: 0.82;
+  letter-spacing: -0.03em;
+}
+
+@utility t-h1 {
+  font-variant-numeric: lining-nums;
+  text-wrap: balance;
+  font-family: var(--font-serif);
+  font-weight: 300;
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+}
+
+@utility t-h2 {
+  font-variant-numeric: lining-nums;
+  text-wrap: balance;
+  font-family: var(--font-serif);
+  font-weight: 300;
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+}
+
+@utility t-h3 {
+  font-variant-numeric: lining-nums;
+  font-family: var(--font-serif);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+/* Small tracked capitals: section labels, facts, buttons. */
+@utility t-label {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  line-height: 1.4;
+  font-weight: 500;
+  font-stretch: 112%;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+}
+
+@utility t-lead {
+  font-size: clamp(1.0625rem, 0.95rem + 0.45vw, 1.25rem);
+  line-height: 1.6;
+  font-weight: 350;
+}
+
+@utility t-small {
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Layout */
+@utility shell {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: 1rem;
+  @media (min-width: 768px) {
+    padding-inline: 2rem;
+  }
+  @media (min-width: 1280px) {
+    padding-inline: 3rem;
+  }
+}
+
+/* Grain: one fixed layer behind the content (tile generated once in Grain.jsx).
+   Very fine and faint: it is what makes the black read as matte instead of flat. */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-repeat: repeat;
+  background-size: 128px 128px;
+  mix-blend-mode: normal;
+}
+
+html.low-gpu .grain {
+  display: none;
+}
+
+/* Photo treatment: deep monochrome with a faint warm cast, so mixed shoots look like one series. */
+.photo-grade {
+  filter: grayscale(1) sepia(0.1) contrast(1.1) brightness(0.84);
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Faint concentric rings, like the grooves on a plate. Used where a photo is missing. */
+.rings-pattern {
+  background-image: repeating-radial-gradient(
+    circle at 50% 50%,
+    rgb(236 232 224 / 0.05) 0 1px,
+    transparent 1px 14px
+  );
+}
+
+/* Reveal words: used by the manifesto scrub */
+.word {
+  display: inline-block;
+  will-change: opacity;
+}
+
+/* Hide scrollbars on horizontal snap rails without breaking keyboard scroll */
+.rail {
+  scrollbar-width: none;
+}
+.rail::-webkit-scrollbar {
+  display: none;
+}
+
+/* Page scrollbar: slim, dark, gold on hover, no arrow buttons. */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+  background: var(--color-onyx);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-line);
+  border: 3px solid var(--color-onyx);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gold);
+}
+::-webkit-scrollbar-button,
+::-webkit-scrollbar-corner {
+  display: none;
+  background: transparent;
+}
+@supports (-moz-appearance: none) {
+  html {
+    scrollbar-color: var(--color-line) var(--color-onyx);
+  }
+}
+
+/* The time dropdown on /book scrolls without a visible bar; a fade shows there is more. */
+.time-list {
+  scrollbar-width: none;
+}
+.time-list::-webkit-scrollbar {
+  display: none;
+}
+
+/* The one marquee on the site */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  animation: marquee 60s linear infinite;
+}
+
+/* Custom cursor only exists on a mouse; hide the native one where it is drawn. */
+html.has-cursor,
+html.has-cursor a,
+html.has-cursor button,
+html.has-cursor label {
+  cursor: none;
+}
+
+/* Reduced motion: stop looping CSS animations. Scroll effects, pins and
+   3D motion are switched off in the components themselves. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}

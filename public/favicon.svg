@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
+  <rect width="40" height="40" rx="8" fill="#0A0A0B"/>
+  <circle cx="20" cy="20" r="15" fill="none" stroke="#B89A67" stroke-width="1"/>
+  <path d="M20 3.5 L21.4 6.2 L18.6 6.2 Z" fill="#B89A67"/>
+  <text x="20" y="25.4" text-anchor="middle" fill="#ECE8E0" font-family="Georgia, 'Times New Roman', serif" font-size="14" letter-spacing="-0.3">IA</text>
+</svg>

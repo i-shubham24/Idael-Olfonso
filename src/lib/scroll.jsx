@@ -1,0 +1,71 @@
+import { createContext, useContext, useEffect, useState } from 'react'
+import Lenis from 'lenis'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useReducedMotion } from './media'
+
+gsap.registerPlugin(ScrollTrigger)
+// Mobile address bars resize the viewport while scrolling; don't re-measure pins for that.
+ScrollTrigger.config({ ignoreMobileResize: true })
+
+const ScrollCtx = createContext({ lenis: null })
+
+/*
+  Lenis drives smooth scrolling and GSAP's ticker drives Lenis, so
+  ScrollTrigger and the smooth scroll share one clock and never drift.
+  With reduced motion turned on we keep native scrolling.
+*/
+export function ScrollProvider({ children }) {
+  const reduced = useReducedMotion()
+  const [lenis, setLenis] = useState(null)
+
+  useEffect(() => {
+    if (reduced) return
+    const instance = new Lenis({
+      lerp: 0.12,
+      smoothWheel: true,
+      wheelMultiplier: 0.95,
+      touchMultiplier: 1.2,
+    })
+    instance.on('scroll', ScrollTrigger.update)
+    const tick = (time) => instance.raf(time * 1000)
+    gsap.ticker.add(tick)
+    gsap.ticker.lagSmoothing(500, 33)
+    setLenis(instance)
+    window.__lenis = instance // handy for debugging and automated checks
+    return () => {
+      gsap.ticker.remove(tick)
+      instance.destroy()
+      setLenis(null)
+    }
+  }, [reduced])
+
+  useEffect(() => {
+    // Fonts change line breaks, which moves every trigger. Re-measure once they land.
+    document.fonts?.ready.then(() => ScrollTrigger.refresh())
+  }, [])
+
+  return <ScrollCtx.Provider value={{ lenis }}>{children}</ScrollCtx.Provider>
+}
+
+export function useLenis() {
+  return useContext(ScrollCtx).lenis
+}
+
+const NAV_OFFSET = -72
+
+export function scrollToTarget(lenis, target, { immediate = false, offset = NAV_OFFSET } = {}) {
+  const el = typeof target === 'string' ? document.querySelector(target) : target
+  if (target === 0 || target === 'top') {
+    if (lenis) lenis.scrollTo(0, { immediate, force: true })
+    else window.scrollTo({ top: 0, behavior: immediate ? 'auto' : 'smooth' })
+    return
+  }
+  if (!el) return
+  if (lenis) {
+    lenis.scrollTo(el, { offset, immediate, force: true, duration: 1.4 })
+  } else {
+    const top = el.getBoundingClientRect().top + window.scrollY + offset
+    window.scrollTo({ top, behavior: immediate ? 'auto' : 'smooth' })
+  }
+}
