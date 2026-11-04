@@ -22,7 +22,7 @@ export function ScrollProvider({ children }) {
   useEffect(() => {
     if (reduced) return
     const instance = new Lenis({
-      lerp: 0.12,
+      lerp: 0.1,
       smoothWheel: true,
       wheelMultiplier: 0.95,
       touchMultiplier: 1.2,
@@ -30,7 +30,7 @@ export function ScrollProvider({ children }) {
     instance.on('scroll', ScrollTrigger.update)
     const tick = (time) => instance.raf(time * 1000)
     gsap.ticker.add(tick)
-    gsap.ticker.lagSmoothing(500, 33)
+    gsap.ticker.lagSmoothing(0)
     setLenis(instance)
     window.__lenis = instance // handy for debugging and automated checks
     return () => {
@@ -43,6 +43,39 @@ export function ScrollProvider({ children }) {
   useEffect(() => {
     // Fonts change line breaks, which moves every trigger. Re-measure once they land.
     document.fonts?.ready.then(() => ScrollTrigger.refresh())
+  }, [])
+
+  useEffect(() => {
+    /*
+      Content that changes height after load (the booking calendar filling in,
+      a booking step changing, a language switch) moves every section below it.
+      Without a re-measure, pinned sections start too early and overlap the
+      section above. Watch the page height and refresh when it really changes;
+      the pin spacers a refresh creates are ignored by comparing against the
+      height measured right after the last refresh.
+    */
+    const main = document.getElementById('main')
+    if (!main || typeof ResizeObserver === 'undefined') return
+    let settled = main.offsetHeight
+    let timer
+    const onRefresh = () => requestAnimationFrame(() => (settled = main.offsetHeight))
+    ScrollTrigger.addEventListener('refresh', onRefresh)
+    const ro = new ResizeObserver(() => {
+      clearTimeout(timer)
+      timer = setTimeout(() => {
+        if (window.__lenis && window.__lenis.isScrolling) return;
+        if (Math.abs(main.offsetHeight - settled) > 16) {
+          ScrollTrigger.sort();
+          ScrollTrigger.refresh();
+        }
+      }, 200)
+    })
+    ro.observe(main)
+    return () => {
+      clearTimeout(timer)
+      ro.disconnect()
+      ScrollTrigger.removeEventListener('refresh', onRefresh)
+    }
   }, [])
 
   return <ScrollCtx.Provider value={{ lenis }}>{children}</ScrollCtx.Provider>

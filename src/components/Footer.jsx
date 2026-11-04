@@ -1,11 +1,12 @@
 import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ArrowUpRight, InstagramLogo, WhatsappLogo } from '@phosphor-icons/react'
-import { availabilitySummary, brand, contact } from '../content/site'
+import { useContent } from '../lib/i18n'
 import { prefersReducedMotion } from '../lib/media'
 import { TLink } from '../lib/transition'
 import { useFitText } from '../lib/useFitText'
 import Button from './Button'
+import Reveal from './Reveal'
 
 /*
   The one deliberate theme switch on the site: the page turns ivory at the end.
@@ -13,6 +14,8 @@ import Button from './Button'
   letter out of the bottom edge.
 */
 export default function Footer({ cta = true }) {
+  const { t, brand, contact } = useContent()
+  const f = t.footer
   const root = useRef(null)
   const panel = useRef(null)
   const word = useRef(null)
@@ -53,16 +56,13 @@ export default function Footer({ cta = true }) {
       <div ref={panel} className="bg-ivory text-ink">
         {cta && (
           <section className="shell pb-20 pt-24 md:pb-28 md:pt-40" aria-labelledby="closing-cta">
-            <h2 id="closing-cta" className="t-h2 max-w-[14ch] text-[clamp(3rem,8.5vw,9rem)]">
-              Start with a <em className="text-[#8a6d3f]">free consultation.</em>
-            </h2>
+            <Reveal as="h2" id="closing-cta" className="t-h2 max-w-[14ch] text-[clamp(3rem,8.5vw,9rem)]">
+              {f.title} <em className="text-[#8a6d3f]">{f.titleEm}</em>
+            </Reveal>
             <div className="mt-10 flex flex-col items-start gap-10 md:mt-14 md:flex-row md:items-end md:justify-between">
-              <p className="t-lead max-w-[44ch] text-ink/70">
-                A 20 minute call by phone or video. Tell Idael what you want to achieve and when you can train, and he
-                will suggest how to start.
-              </p>
-              <Button to="/book?type=consultation" variant="ink" size="xl">
-                Book a consultation
+              <p className="t-lead max-w-[40ch] text-ink/70">{f.intro}</p>
+              <Button to="/#book" variant="ink" size="xl">
+                {f.cta}
               </Button>
             </div>
           </section>
@@ -72,14 +72,14 @@ export default function Footer({ cta = true }) {
           className={`shell grid gap-10 pb-16 sm:grid-cols-2 lg:grid-cols-4 ${cta ? 'pt-8' : 'pt-28'}`}
         >
           <div>
-            <h3 className="t-label mb-4 text-ink/55">Where</h3>
-            <p className="font-serif text-2xl leading-tight">{contact.area}</p>
-            <p className="mt-2 text-ink/65">Your home, your hotel, outdoors or a private studio.</p>
+            <h3 className="t-label mb-4 text-ink/65">{f.where}</h3>
+            <p className="font-serif text-2xl leading-tight">{brand.area}</p>
+            <p className="mt-2 text-ink/65">{f.whereText}</p>
           </div>
           <div>
-            <h3 className="t-label mb-4 text-ink/55">Availability</h3>
+            <h3 className="t-label mb-4 text-ink/65">{f.availability}</h3>
             <dl className="grid gap-1 text-ink/65">
-              {availabilitySummary.map((h) => (
+              {t.availabilitySummary.map((h) => (
                 <div key={h.label} className="flex flex-wrap gap-x-2">
                   <dt>{h.label}</dt>
                   <dd className="tabular text-ink">{h.value}</dd>
@@ -88,7 +88,7 @@ export default function Footer({ cta = true }) {
             </dl>
           </div>
           <div>
-            <h3 className="t-label mb-4 text-ink/55">Contact</h3>
+            <h3 className="t-label mb-4 text-ink/65">{f.contact}</h3>
             <ul className="grid gap-1 text-ink/65">
               <li>
                 <a className={linkCls} href={`mailto:${contact.email}`}>
@@ -102,32 +102,33 @@ export default function Footer({ cta = true }) {
               </li>
               <li>
                 <a className={linkCls} href={`https://wa.me/${contact.whatsapp}`} target="_blank" rel="noreferrer">
-                  <WhatsappLogo size={18} aria-hidden="true" /> Message Idael
+                  <WhatsappLogo size={18} aria-hidden="true" /> {f.message}
                 </a>
               </li>
             </ul>
           </div>
           <div>
-            <h3 className="t-label mb-4 text-ink/55">Explore</h3>
+            <h3 className="t-label mb-4 text-ink/65">{f.explore}</h3>
             <ul className="grid gap-1 text-ink/65">
               <li>
                 <TLink className={linkCls} to="/about">
-                  About Idael
+                  {f.about}
                 </TLink>
               </li>
               <li>
                 <TLink className={linkCls} to="/#services">
-                  Services
+                  {f.services}
                 </TLink>
               </li>
               <li>
-                <TLink className={linkCls} to="/book">
-                  Book a session <ArrowUpRight size={14} aria-hidden="true" />
+                <TLink className={linkCls} to="/#book">
+                  {f.book} <ArrowUpRight size={14} aria-hidden="true" />
                 </TLink>
               </li>
               <li className="pt-2">
-                <a className={linkCls} href={contact.instagram} target="_blank" rel="noreferrer" aria-label="Instagram">
-                  <InstagramLogo size={22} aria-hidden="true" />
+                <a className={linkCls} href={contact.instagram} target="_blank" rel="noreferrer">
+                  <InstagramLogo size={20} aria-hidden="true" /> {contact.instagramHandle}
+                  <span className="tabular text-ink/55">{contact.followers}</span>
                 </a>
               </li>
             </ul>
@@ -150,18 +151,18 @@ export default function Footer({ cta = true }) {
           </div>
         </div>
 
-        <div className="shell flex flex-col gap-2 py-6 text-sm text-ink/55 sm:flex-row sm:justify-between">
+        <div className="shell flex flex-col gap-2 py-6 text-sm text-ink/65 sm:flex-row sm:justify-between">
           <p>
-            © {year} {brand.name}. All rights reserved.
+            © {year} {brand.name}. {f.rights}
           </p>
           <p className="flex gap-6">
             <TLink className="hover:text-ink" to="/privacy">
-              Privacy
+              {f.privacy}
             </TLink>
             <TLink className="hover:text-ink" to="/imprint">
-              Imprint
+              {f.imprint}
             </TLink>
-            <span>Demo photography from Unsplash</span>
+            <span>{f.photos}</span>
           </p>
         </div>
       </div>

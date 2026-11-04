@@ -3,13 +3,14 @@ import { motion } from 'motion/react'
 import { X } from '@phosphor-icons/react'
 import { TLink } from '../lib/transition'
 import { useLenis } from '../lib/scroll'
-import { availabilitySummary, contact } from '../content/site'
+import { useContent } from '../lib/i18n'
 import Button from './Button'
-import { NAV_LINKS } from './Nav'
+import { LanguageSwitch, navLinks } from './Nav'
 
 const ease = [0.16, 1, 0.3, 1]
 
 export default function MobileMenu({ onClose }) {
+  const { t, brand } = useContent()
   const lenis = useLenis()
   const closeRef = useRef(null)
 
@@ -31,7 +32,7 @@ export default function MobileMenu({ onClose }) {
       id="mobile-menu"
       role="dialog"
       aria-modal="true"
-      aria-label="Menu"
+      aria-label={t.nav.menu}
       data-lenis-prevent
       className="fixed inset-0 z-[60] flex flex-col overflow-y-auto bg-onyx"
       initial={{ clipPath: 'inset(0% 0% 100% 0%)' }}
@@ -47,12 +48,12 @@ export default function MobileMenu({ onClose }) {
           className="t-label inline-flex h-12 items-center gap-2 rounded-[2px] bg-graphite px-5"
         >
           <X size={16} aria-hidden="true" />
-          Close
+          {t.nav.close}
         </button>
       </div>
       <nav className="shell flex flex-1 flex-col justify-between gap-12 pb-10 pt-6" aria-label="Mobile">
         <ul className="flex flex-col gap-1">
-          {[{ to: '/', label: 'Home' }, ...NAV_LINKS, { to: '/book', label: 'Book' }].map((l, i) => (
+          {[{ to: '/', label: t.nav.home }, ...navLinks(t), { to: '/#book', label: t.nav.book }].map((l, i) => (
             <li key={l.to} className="overflow-hidden">
               <motion.div
                 initial={{ y: '105%' }}
@@ -76,16 +77,17 @@ export default function MobileMenu({ onClose }) {
           transition={{ duration: 0.7, ease, delay: 0.5 }}
           className="flex flex-col gap-8"
         >
-          <Button to="/book?type=consultation" size="lg" onClick={onClose} magnetic={false} full>
-            Book a free consultation
+          <LanguageSwitch id="menu" className="self-start" />
+          <Button to="/#book" size="lg" onClick={onClose} magnetic={false} full>
+            {t.hero.cta}
           </Button>
           <div className="grid grid-cols-2 gap-6 text-sm text-stone">
             <div>
-              <p className="text-ivory">{contact.area}</p>
-              <p>By appointment only</p>
+              <p className="text-ivory">{brand.area}</p>
+              <p>{t.nav.appointment}</p>
             </div>
             <div>
-              {availabilitySummary.map((h) => (
+              {t.availabilitySummary.map((h) => (
                 <p key={h.label}>
                   {h.label}: {h.value}
                 </p>

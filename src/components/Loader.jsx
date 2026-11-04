@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
-import { brand } from '../content/site'
+import { useContent } from '../lib/i18n'
 import { prefersReducedMotion } from '../lib/media'
 import { revealStore } from '../lib/reveal'
 import { useLenis } from '../lib/scroll'
@@ -22,6 +22,7 @@ function shouldShow() {
   the counter runs to sixty, then the cover lifts. Covers font and 3D load.
 */
 export default function Loader() {
+  const { brand } = useContent()
   const [show, setShow] = useState(shouldShow)
   const root = useRef(null)
   const min = useRef(null)
@@ -95,7 +96,7 @@ export default function Loader() {
       className="fixed inset-0 z-[95] flex flex-col items-center justify-center bg-onyx"
       style={{ clipPath: 'inset(0% 0% 0% 0%)' }}
       role="status"
-      aria-label={`Loading ${brand.name}`}
+      aria-label={brand.name}
     >
       <div data-dial className="relative w-[min(70vw,340px)]">
         <svg viewBox="0 0 400 400" className="w-full -rotate-90" aria-hidden="true">

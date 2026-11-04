@@ -2,22 +2,95 @@ import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { AnimatePresence } from 'motion/react'
+import { AnimatePresence, motion } from 'motion/react'
 import { TLink } from '../lib/transition'
-import { brand } from '../content/site'
+import { LANGS, useContent, useLocale } from '../lib/i18n'
 import { prefersReducedMotion } from '../lib/media'
 import Button from './Button'
 import Monogram from './Monogram'
 import MobileMenu from './MobileMenu'
 
-export const NAV_LINKS = [
-  { to: '/about', label: 'About' },
-  { to: '/#services', label: 'Services' },
-  { to: '/#method', label: 'How it works' },
-  { to: '/#engagements', label: 'Prices' },
-]
+/** Main links, in the current language. The booking button is separate. */
+export function navLinks(t) {
+  return [
+    { to: '/about', label: t.nav.about },
+    { to: '/#why', label: t.nav.why },
+    { to: '/#services', label: t.nav.services },
+  ]
+}
+
+/* Small square flags for the language switch (Swiss for German, British for English). */
+const FLAGS = {
+  de: (
+    <svg viewBox="0 0 32 32" className="h-full w-full">
+      <rect width="32" height="32" fill="#D52B1E" />
+      <path d="M13 6h6v7h7v6h-7v7h-6v-7H6v-6h7z" fill="#fff" />
+    </svg>
+  ),
+  en: (
+    <svg viewBox="0 0 60 60" className="h-full w-full">
+      <rect width="60" height="60" fill="#012169" />
+      <path d="M0 0L60 60M60 0L0 60" stroke="#fff" strokeWidth="12" />
+      <path d="M0 0L60 60M60 0L0 60" stroke="#C8102E" strokeWidth="5" />
+      <path d="M30 0v60M0 30h60" stroke="#fff" strokeWidth="18" />
+      <path d="M30 0v60M0 30h60" stroke="#C8102E" strokeWidth="10" />
+    </svg>
+  ),
+}
+
+/*
+  Language switch, like the one on OkyFit: two flags in one control, the
+  active one in colour on a sliding block, the other one greyed out.
+  The site is German first, English for everyone else.
+*/
+export function LanguageSwitch({ className = '', id = 'nav' }) {
+  const { lang, setLang } = useLocale()
+  const { t } = useContent()
+  return (
+    <div
+      className={`flex items-center gap-0.5 rounded-[2px] bg-graphite/80 p-1 ${className}`}
+      role="group"
+      aria-label={t.nav.language}
+    >
+      {LANGS.map((l) => {
+        const on = lang === l
+        return (
+          <button
+            key={l}
+            type="button"
+            onClick={() => setLang(l)}
+            aria-pressed={on}
+            lang={l}
+            className={`relative flex h-8 items-center gap-2 rounded-[2px] px-2.5 transition-colors duration-300 ${
+              on ? 'text-ivory' : 'text-ivory/45 hover:text-ivory'
+            }`}
+          >
+            {on && (
+              <motion.span
+                layoutId={`lang-${id}`}
+                className="absolute inset-0 rounded-[2px] bg-line"
+                transition={{ type: 'spring', stiffness: 420, damping: 34 }}
+              />
+            )}
+            <span
+              className={`relative block h-3.5 w-3.5 overflow-hidden rounded-[1px] transition-[filter,opacity] duration-300 ${
+                on ? '' : 'opacity-60 grayscale'
+              }`}
+              aria-hidden="true"
+            >
+              {FLAGS[l]}
+            </span>
+            <span className="t-label relative">{l.toUpperCase()}</span>
+          </button>
+        )
+      })}
+    </div>
+  )
+}
 
 export default function Nav() {
+  const { t, brand } = useContent()
+  const links = navLinks(t)
   const bar = useRef(null)
   const [menu, setMenu] = useState(false)
   const location = useLocation()
@@ -53,7 +126,7 @@ export default function Nav() {
         href="#main"
         className="t-label fixed left-4 top-3 z-[70] -translate-y-24 rounded-[2px] bg-ivory px-5 py-3 text-ink focus:translate-y-0"
       >
-        Skip to content
+        {t.nav.skip}
       </a>
       <header
         ref={bar}
@@ -61,7 +134,7 @@ export default function Nav() {
         className="group/nav fixed inset-x-0 top-0 z-50 transition-[background-color,backdrop-filter] duration-500 data-[scrolled=true]:bg-onyx/80 data-[scrolled=true]:backdrop-blur-md"
       >
         <nav className="shell flex h-[72px] items-center gap-6 md:h-[84px]" aria-label="Main">
-          <TLink to="/" className="flex items-center gap-3 rounded-sm" aria-label={`${brand.name}, home`}>
+          <TLink to="/" className="flex items-center gap-3 rounded-sm" aria-label={`${brand.name}, ${t.nav.home}`}>
             <Monogram size={38} />
             <span className="hidden flex-col leading-none sm:flex">
               <span className="font-serif text-[1.35rem] tracking-[-0.01em]">{brand.name}</span>
@@ -72,7 +145,7 @@ export default function Nav() {
           <HourDial />
 
           <ul className="ml-auto hidden items-center gap-1 lg:flex">
-            {NAV_LINKS.map((l) => {
+            {links.map((l) => {
               const active = !l.to.includes('#') && location.pathname.startsWith(l.to)
               return (
                 <li key={l.to}>
@@ -88,20 +161,22 @@ export default function Nav() {
             })}
           </ul>
 
-          <div className="ml-auto hidden lg:ml-4 lg:block">
-            <Button to="/book" size="md" variant="ghost" magnetic={false}>
-              Book
+          <LanguageSwitch className="ml-auto lg:ml-3" />
+
+          <div className="hidden lg:ml-2 lg:block">
+            <Button to="/#book" size="md" variant="ghost" magnetic={false}>
+              {t.nav.book}
             </Button>
           </div>
 
           <button
             type="button"
             onClick={() => setMenu(true)}
-            className="t-label ml-auto inline-flex h-12 items-center gap-3 rounded-[2px] bg-graphite px-5 lg:hidden"
+            className="t-label inline-flex h-12 items-center gap-3 rounded-[2px] bg-graphite px-5 lg:hidden"
             aria-expanded={menu}
             aria-controls="mobile-menu"
           >
-            Menu
+            {t.nav.menu}
           </button>
         </nav>
       </header>

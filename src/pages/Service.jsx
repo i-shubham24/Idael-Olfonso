@@ -2,7 +2,7 @@ import { Suspense, lazy, useLayoutEffect, useRef } from 'react'
 import { useParams } from 'react-router'
 import gsap from 'gsap'
 import { Check } from '@phosphor-icons/react'
-import { brand, services } from '../content/site'
+import { useContent } from '../lib/i18n'
 import { usePageReady } from '../lib/reveal'
 import { prefersReducedMotion, useReducedMotion } from '../lib/media'
 import { useDocumentTitle } from '../lib/useDocumentTitle'
@@ -11,11 +11,15 @@ import { useFitText } from '../lib/useFitText'
 import { TLink } from '../lib/transition'
 import Button from '../components/Button'
 import Img from '../components/Img'
+import Video from '../components/Video'
 import NotFound from './NotFound'
+import Reveal from '../components/Reveal'
 
 const ShowcaseScene = lazy(() => import('../three/ShowcaseScene'))
 
 function SessionTimeline({ service }) {
+  const { t } = useContent()
+  const sp = t.servicePage
   const main = service.session.reduce((best, s, i, arr) => (s.minutes > arr[best].minutes ? i : best), 0)
   let start = 0
   return (
@@ -33,11 +37,13 @@ function SessionTimeline({ service }) {
             style={{ '--m': s.minutes, flexGrow: s.minutes }}
           >
             <span className="t-label tabular opacity-70">
-              {from} to {start} min
+              {sp.range(from, start)}
             </span>
             <span>
               <span className="t-h3 block text-2xl md:text-3xl">{s.name}</span>
-              <span className="tabular mt-1 block text-sm opacity-75">{s.minutes} minutes</span>
+              <span className="tabular mt-1 block text-sm opacity-75">
+                {s.minutes} {sp.minutes}
+              </span>
             </span>
           </li>
         )
@@ -47,14 +53,17 @@ function SessionTimeline({ service }) {
 }
 
 export default function Service() {
+  const { services, t } = useContent()
   const { slug } = useParams()
   const service = services.find((s) => s.slug === slug)
-  useDocumentTitle(service?.name ?? 'Not found')
+  useDocumentTitle(service?.name ?? t.notFound.title)
   if (!service) return <NotFound />
   return <ServiceView key={service.slug} service={service} />
 }
 
 function ServiceView({ service }) {
+  const { services, t, brand } = useContent()
+  const sp = t.servicePage
   const root = useRef(null)
   const stage = useRef(null)
   const nextTitle = useRef(null)
@@ -128,7 +137,7 @@ function ServiceView({ service }) {
         <div className="min-w-0 lg:col-span-7">
           <p className="pg-fade flex items-center gap-4">
             <TLink to="/#services" className="t-label text-stone transition-colors hover:text-ivory">
-              All services
+              {sp.all}
             </TLink>
             <span className="t-label text-stone" aria-hidden="true">
               /
@@ -145,9 +154,9 @@ function ServiceView({ service }) {
           <p className="pg-fade t-lead mt-8 max-w-[46ch] text-ivory/75">{service.description}</p>
           <dl className="pg-fade mt-10 grid max-w-[600px] grid-cols-1 gap-1.5 sm:grid-cols-3">
             {[
-              ['Session', `${service.duration} min`],
-              ['Format', service.format],
-              ['Where', service.where],
+              [sp.session, `${service.duration} ${sp.minutes}`],
+              [sp.format, service.format],
+              [sp.where, service.where],
             ].map(([k, v]) => (
               <div key={k} className="rounded-[2px] bg-onyx-2 px-5 py-4">
                 <dt className="t-label text-stone">{k}</dt>
@@ -156,11 +165,11 @@ function ServiceView({ service }) {
             ))}
           </dl>
           <div className="pg-fade mt-10 flex flex-wrap gap-3">
-            <Button to={`/book?type=${service.slug}`} size="lg">
-              Book this session
+            <Button to="/#book" size="lg">
+              {sp.book}
             </Button>
             <Button to={`/services/${service.slug}#session`} variant="ghost" size="lg">
-              The session plan
+              {sp.plan}
             </Button>
           </div>
         </div>
@@ -170,7 +179,7 @@ function ServiceView({ service }) {
         >
           <Suspense fallback={null}>
             <ShowcaseScene
-              label={`${service.duration} MINUTES  ·  ${service.name.toUpperCase()}  ·  `}
+              label={`${service.duration} MIN  ·  ${service.name.toUpperCase()}  ·  `}
               reduced={reduced}
               intro={intro}
               active={stageVisible}
@@ -180,29 +189,34 @@ function ServiceView({ service }) {
       </section>
 
       <div className="pg-band relative h-[60vh] overflow-hidden md:h-[84vh]">
-        <Img
-          image={service.image}
-          alt={`${service.name} with ${brand.name}`}
-          className="pg-band-img absolute inset-[-10%_0] h-[120%] w-full object-cover"
-        />
+        {service.video ? (
+          <Video
+            video={service.video}
+            quality="1080p"
+            className="pg-band-img absolute inset-[-10%_0] h-[120%] w-full object-cover"
+          />
+        ) : (
+          <Img
+            image={service.image}
+            alt={`${service.name}, ${brand.name}`}
+            className="pg-band-img absolute inset-[-10%_0] h-[120%] w-full object-cover"
+          />
+        )}
       </div>
 
       <section id="session" className="pg-session shell py-28 md:py-40" aria-labelledby="session-title">
-        <h2 id="session-title" className="t-h2 max-w-[16ch] text-[clamp(3rem,6.5vw,7rem)]">
-          What {service.duration} minutes with Idael looks like
-        </h2>
-        <p className="t-lead mt-6 max-w-[44ch] text-ivory/70">
-          Each session follows a set plan, adjusted on the day to how you slept, travelled and feel. The gold block is
-          the main part of the session.
-        </p>
+        <Reveal as="h2" id="session-title" className="t-h2 max-w-[16ch] text-[clamp(3rem,6.5vw,7rem)]">
+          {sp.planTitle(service.duration)}
+        </Reveal>
+        <p className="t-lead mt-6 max-w-[44ch] text-ivory/70">{sp.planIntro}</p>
         <div className="mt-14">
           <SessionTimeline service={service} />
         </div>
       </section>
 
-      <section className="shell grid gap-14 pb-28 md:grid-cols-2 md:pb-40" aria-label="Who it is for">
+      <section className="shell grid gap-14 pb-28 md:grid-cols-2 md:pb-40" aria-label={sp.suitsYou}>
         <div>
-          <h2 className="t-h3 text-4xl md:text-5xl">This suits you if</h2>
+          <Reveal as="h2" className="t-h3 text-4xl md:text-5xl">{sp.suitsYou}</Reveal>
           <ul className="mt-8 grid gap-1.5">
             {service.forWho.map((f) => (
               <li key={f} className="t-lead flex gap-4 rounded-[2px] bg-onyx-2 px-5 py-4">
@@ -214,18 +228,15 @@ function ServiceView({ service }) {
         </div>
         <div className="grid content-start gap-10">
           <div>
-            <h2 className="t-h3 text-4xl md:text-5xl">Where</h2>
+            <Reveal as="h2" className="t-h3 text-4xl md:text-5xl">{sp.where}</Reveal>
             <p className="t-lead mt-4 text-ivory/75">{service.where}</p>
           </div>
           <div>
-            <h2 className="t-h3 text-4xl md:text-5xl">Getting started</h2>
-            <p className="t-lead mt-4 text-ivory/75">
-              If you are new, book a free consultation first, then an assessment. If you already train with Idael, you
-              can book this session directly.
-            </p>
+            <Reveal as="h2" className="t-h3 text-4xl md:text-5xl">{sp.start}</Reveal>
+            <p className="t-lead mt-4 text-ivory/75">{sp.startText}</p>
             <div className="mt-8">
-              <Button to="/book?type=consultation" variant="ghost">
-                Book a free consultation
+              <Button to="/#book" variant="ghost">
+                {sp.book}
               </Button>
             </div>
           </div>
@@ -235,10 +246,10 @@ function ServiceView({ service }) {
       <TLink
         to={`/services/${next.slug}`}
         className="group block overflow-hidden bg-onyx-2 transition-colors duration-500 hover:bg-graphite"
-        data-cursor="Next"
+        data-cursor={t.cursor.next}
       >
         <div className="shell flex flex-col gap-4 py-16 md:py-24">
-          <span className="t-label text-stone">Next service</span>
+          <span className="t-label text-stone">{sp.next}</span>
           <span className="block overflow-hidden">
             <span
               ref={nextTitle}

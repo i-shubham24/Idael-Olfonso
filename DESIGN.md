@@ -1,6 +1,6 @@
 # Idael Alfonso: design system
 
-Matte black, high end, quiet. The site sells one person, Idael Alfonso, to a small private clientele. Every name, price, photo and time lives in `src/content/site.js`.
+Matte black, high end, quiet. The site sells one person, Idael Alfonso, to a small private clientele in Switzerland. Shared data lives in `src/content/site.js`, words in `src/content/copy/de.js` and `en.js`.
 
 ## Concept: the bezel
 
@@ -25,7 +25,11 @@ Shape: 2 px corners on buttons, blocks, inputs and images. No pill shapes.
 
 Separation: spacing and background tone only. No divider lines or rules.
 
-Photography: one warm black and white grade on every image.
+Photography: one warm black and white grade on every image. Idael himself, never stock, wherever he appears. Keep his head in frame: photos zoom from the top edge instead of sliding.
+
+Video: short, muted loops of Idael, only playing while on screen. Light studio clips get `.video-grade`; behind text they get `.video-dark`.
+
+Language switch: two square flags in one control (Swiss for German, British for English), the active one in colour.
 
 ## Writing
 
@@ -38,4 +42,8 @@ Photography: one warm black and white grade on every image.
 
 - Slow, smooth easing (expo out), long durations, small distances.
 - Every animation explains something: the bezel fly through opens the story, the rolling bezel tracks the service in view, the step number rolls as you read.
-- `prefers-reduced-motion`: no smooth scroll, no pins, still 3D, native cursor, instant page changes.
+- Headings rise out of a mask the first time they scroll into view.
+- Buttons fill with gold from the left on hover; service photos tilt toward the pointer.
+- The booking confirmation draws a small bezel and a check.
+- Pinned, scroll driven sections work on phones and tablets too, not only on desktop.
+- `prefers-reduced-motion`: no smooth scroll, no pins, still 3D, no autoplay, native cursor, instant page changes.

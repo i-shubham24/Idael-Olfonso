@@ -1,14 +1,16 @@
 import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
-import { about, brand, contact } from '../content/site'
+import { useContent } from '../lib/i18n'
 import { usePageReady } from '../lib/reveal'
 import { prefersReducedMotion, useReducedMotion } from '../lib/media'
 import { useDocumentTitle } from '../lib/useDocumentTitle'
 import Img from '../components/Img'
 import Button from '../components/Button'
+import Reveal from '../components/Reveal'
 
 export default function About() {
-  useDocumentTitle('About')
+  const { t, about, brand } = useContent()
+  useDocumentTitle(about.title)
   const root = useRef(null)
   const ready = usePageReady()
   const reduced = useReducedMotion()
@@ -67,12 +69,14 @@ export default function About() {
           scrollTrigger: { trigger: '.ab-portrait', start: 'top top', end: 'bottom top', scrub: true },
         },
       )
+      // A slow zoom out anchored at the top edge, so Idael's head never leaves the frame.
       gsap.utils.toArray('.ab-gal').forEach((el, i) => {
         gsap.fromTo(
           el.querySelector('img, [role="img"]'),
-          { yPercent: -10 },
+          { scale: i % 2 ? 1.08 : 1.14 },
           {
-            yPercent: i % 2 ? 4 : 10,
+            scale: 1,
+            transformOrigin: '50% 0%',
             ease: 'none',
             scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: true },
           },
@@ -108,12 +112,12 @@ export default function About() {
           <p className="ab-fade t-lead mt-8 max-w-[46ch] text-ivory/75">{about.intro}</p>
           <dl className="ab-fade mt-10 grid max-w-[560px] grid-cols-1 gap-1.5 sm:grid-cols-2">
             <div className="rounded-[2px] bg-onyx-2 px-5 py-4">
-              <dt className="t-label text-stone">Based in</dt>
-              <dd className="mt-2">{contact.area}</dd>
+              <dt className="t-label text-stone">{about.based}</dt>
+              <dd className="mt-2">{brand.area}</dd>
             </div>
             <div className="rounded-[2px] bg-onyx-2 px-5 py-4">
-              <dt className="t-label text-stone">Languages</dt>
-              <dd className="mt-2">{about.languages.join(', ')}</dd>
+              <dt className="t-label text-stone">{about.languages}</dt>
+              <dd className="mt-2">{about.languageList}</dd>
             </div>
           </dl>
         </div>
@@ -121,7 +125,7 @@ export default function About() {
           <div className="ab-portrait relative aspect-[4/5] overflow-hidden rounded-[2px] bg-graphite">
             <Img
               image={about.standing}
-              alt={`${brand.name}, standing with arms crossed`}
+              alt={about.portraitAlt}
               eager
               width={1100}
               ratio={1.25}
@@ -132,7 +136,7 @@ export default function About() {
         </div>
       </section>
 
-      <section className="ab-story shell py-28 md:py-44" aria-label="His story">
+      <section className="ab-story shell py-28 md:py-44" aria-label={about.title}>
         <p className="t-h1 max-w-[24ch] text-[clamp(2.25rem,4.8vw,5rem)] leading-[1.05]">
           {storyWords.map((w, i) => (
             <span key={i} className="ab-story-word word">
@@ -156,7 +160,7 @@ export default function About() {
             alt=""
             width={1000}
             sizes="(min-width: 768px) 40vw, 92vw"
-            className="absolute inset-[-10%_0] h-[120%] w-full object-cover"
+            className="absolute inset-0 h-full w-full object-cover object-[50%_4%]"
           />
         </figure>
         <figure className="ab-gal relative aspect-[4/5] overflow-hidden rounded-[2px] bg-graphite md:col-span-6 md:col-start-7 md:mt-40">
@@ -165,15 +169,15 @@ export default function About() {
             alt=""
             width={1000}
             sizes="(min-width: 768px) 50vw, 92vw"
-            className="absolute inset-[-10%_0] h-[120%] w-full object-cover"
+            className="absolute inset-0 h-full w-full object-cover object-[50%_4%]"
           />
         </figure>
       </section>
 
       <section className="ab-principles shell py-28 md:py-44" aria-labelledby="principles-title">
-        <h2 id="principles-title" className="t-h2 text-[clamp(3rem,6vw,6.5rem)]">
-          How he works
-        </h2>
+        <Reveal as="h2" id="principles-title" className="t-h2 text-[clamp(3rem,6vw,6.5rem)]">
+          {about.principlesTitle}
+        </Reveal>
         <ol className="mt-16 grid gap-1.5 md:grid-cols-3">
           {about.principles.map((p) => (
             <li key={p.title} className="ab-principle rounded-[2px] bg-onyx-2 p-6 md:p-8">
@@ -187,12 +191,12 @@ export default function About() {
       <section className="shell pb-28 md:pb-44" aria-labelledby="credentials-title">
         <div className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-5">
-            <h2 id="credentials-title" className="t-h2 text-[clamp(2.75rem,5vw,5rem)]">
-              Training and experience
-            </h2>
+            <Reveal as="h2" id="credentials-title" className="t-h2 text-[clamp(2.75rem,5vw,5rem)]">
+              {about.credentialsTitle}
+            </Reveal>
           </div>
           <ul className="grid gap-1.5 lg:col-span-7">
-            {about.credentials.map((c) => (
+            {t.trainer.credentials.map((c) => (
               <li key={c.title} className="flex flex-col gap-1 rounded-[2px] bg-onyx-2 px-6 py-5 md:flex-row md:items-baseline md:gap-8">
                 <span className="font-serif text-2xl md:w-1/2">{c.title}</span>
                 <span className="text-stone">{c.detail}</span>
@@ -201,11 +205,11 @@ export default function About() {
           </ul>
         </div>
         <div className="mt-16 flex flex-wrap gap-3">
-          <Button to="/book?type=consultation" size="lg">
-            Book a free consultation
+          <Button to="/#book" size="lg">
+            {about.cta}
           </Button>
           <Button to="/#services" variant="ghost" size="lg">
-            See the services
+            {about.services}
           </Button>
         </div>
       </section>

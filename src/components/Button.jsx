@@ -4,10 +4,18 @@ import { TLink } from '../lib/transition'
 import { useFinePointer, useReducedMotion } from '../lib/media'
 
 const VARIANTS = {
-  ivory: 'bg-ivory text-ink hover:bg-white',
-  ghost: 'bg-graphite text-ivory hover:bg-line',
-  gold: 'bg-gold text-ink hover:bg-gold-2',
-  ink: 'bg-ink text-ivory hover:bg-black',
+  ivory: 'bg-ivory text-ink',
+  ghost: 'bg-graphite text-ivory hover:text-ink',
+  gold: 'bg-gold text-ink',
+  ink: 'bg-ink text-ivory hover:text-ink',
+}
+
+// On hover a gold layer sweeps in from the left (ivory on the gold button).
+const FILL = {
+  ivory: 'bg-gold',
+  ghost: 'bg-gold',
+  gold: 'bg-ivory',
+  ink: 'bg-gold',
 }
 
 const SIZES = {
@@ -59,11 +67,17 @@ export default function Button({
     y.set(0)
   }
 
-  const cls = `group relative inline-flex select-none items-center justify-center gap-3 whitespace-normal rounded-[2px] text-center font-medium uppercase leading-snug tracking-[0.2em] sm:whitespace-nowrap sm:tracking-[0.24em] [font-stretch:112%] transition-[background-color,color] duration-300 active:scale-[0.98] ${VARIANTS[variant]} ${SIZES[size]} ${full ? 'w-full' : ''} ${className}`
+  const cls = `group relative inline-flex select-none items-center justify-center gap-3 overflow-hidden whitespace-normal rounded-[2px] text-center font-medium uppercase leading-snug tracking-[0.2em] sm:whitespace-nowrap sm:tracking-[0.24em] [font-stretch:112%] transition-[background-color,color] duration-500 active:scale-[0.98] ${VARIANTS[variant]} ${SIZES[size]} ${full ? 'w-full' : ''} ${className}`
   const inner = (
-    <motion.span className="relative z-10 inline-flex items-center gap-3" style={active ? { x: sx, y: sy } : undefined}>
-      {children}
-    </motion.span>
+    <>
+      <span
+        aria-hidden="true"
+        className={`absolute inset-0 origin-left scale-x-0 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:scale-x-100 group-disabled:hidden ${FILL[variant]}`}
+      />
+      <motion.span className="relative z-10 inline-flex items-center gap-3" style={active ? { x: sx, y: sy } : undefined}>
+        {children}
+      </motion.span>
+    </>
   )
 
   const wrapProps = {

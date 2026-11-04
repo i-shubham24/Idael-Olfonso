@@ -1,0 +1,406 @@
+/*
+  English copy. Same shape as de.js. Keep it short: no dashes or hyphens,
+  plain sentences, no slogans.
+*/
+const en = {
+  lang: 'en',
+  locale: 'en-GB',
+
+  meta: {
+    title: 'Idael Alfonso | Private trainer in Zürich',
+    description:
+      'Private training and nutrition with Idael Alfonso in Zürich. At your home, your hotel or a private studio. Book a free first conversation.',
+  },
+
+  brand: {
+    role: 'Private trainer',
+    area: 'Zürich and Central Switzerland',
+  },
+
+  nav: {
+    about: 'About',
+    why: 'Why Idael',
+    services: 'Services',
+    book: 'Book',
+    menu: 'Menu',
+    close: 'Close',
+    home: 'Home',
+    skip: 'Skip to content',
+    language: 'Language',
+    appointment: 'By appointment only',
+  },
+
+  cursor: { view: 'View', drag: 'Drag', next: 'Next' },
+
+  hero: {
+    role: 'Private trainer in Zürich',
+    headline: 'Private training,',
+    headlineEm: 'by appointment.',
+    subline: 'Training and nutrition, one to one, wherever you are.',
+    cta: 'Book a free consultation',
+    secondary: 'Sound familiar?',
+    bridge: 'Most clients come to Idael for the same few reasons.',
+    scroll: 'Scroll',
+  },
+
+  pains: {
+    title: 'Sound familiar?',
+    answerLabel: 'With Idael',
+    items: {
+      time: { problem: 'Training is the first thing you cancel.', answer: 'Sessions fit your week, early or late.' },
+      travel: { problem: 'A new city every week.', answer: 'Online sessions keep the plan going.' },
+      dining: { problem: 'Business dinners decide what you eat.', answer: 'A food plan built for restaurants.' },
+      desk: { problem: 'Long days and flights, stiff back.', answer: 'Mobility work in every session.' },
+      gyms: { problem: 'Crowded gyms. Being recognised.', answer: 'Your home, a hotel or a private studio.' },
+      energy: { problem: 'Tired by the afternoon.', answer: 'Training, food and sleep in one plan.' },
+    },
+  },
+
+  trainer: {
+    title: 'Meet Idael',
+    intro: 'Cuban roots, Swiss qualified. Lead trainer at top Swiss sports centres, followed by 186K people online.',
+    credentials: [
+      { title: 'Diploma in Personal Training', detail: 'Swiss Academy of Fitness and Sports' },
+      { title: 'Programme lead', detail: 'Leading sports centres in Switzerland' },
+      { title: 'Latin Dance and HIIT', detail: 'Creator of the workouts 186K people follow' },
+    ],
+    cta: 'His story',
+  },
+
+  showreel: {
+    title: 'Idael',
+    titleEm: 'in motion',
+    intro: 'Short clips from his training. Tap to see the next one.',
+    prev: 'Previous clip',
+    next: 'Next clip',
+    clips: [
+      { id: 'core', label: 'Core strength' },
+      { id: 'dance', label: 'Latin footwork' },
+    ],
+  },
+
+  why: {
+    title: 'Why Idael',
+    intro: 'Six things clients notice in the first month.',
+    facts: [
+      { value: '1:1', label: 'Every session, just you and Idael' },
+      { value: '2 in 1', label: 'Training and nutrition in one plan' },
+      { value: '5', label: 'Places to train, your home included' },
+      { value: '186K', label: 'People follow his training on Instagram' },
+      { value: '0', label: 'Photos or names shared, ever' },
+      { value: 'CH', label: 'Swiss qualified and based in Zürich' },
+    ],
+  },
+
+  bookSection: {
+    title: 'Book a',
+    titleEm: 'first conversation',
+    intro: 'Free, 20 minutes, by phone or video. Idael takes it from there.',
+  },
+
+  services: {
+    title: 'Ways to train with Idael',
+    intro: 'One to one, or as a pair.',
+    session: 'Session',
+    format: 'Format',
+    see: 'See the session',
+    items: {
+      private: {
+        name: 'Private Training',
+        kicker: 'One to one',
+        summary: 'Strength, conditioning and mobility, built around you.',
+        description:
+          'Six week blocks that adapt to your schedule, your travel and how you feel on the day. At home, at your hotel, in a private studio or outdoors.',
+        format: 'One to one',
+        where: 'Studio, home, hotel or outdoors',
+        forWho: ['You want progress you can measure', 'Your week is never the same twice', 'You want one trainer who knows you'],
+        session: ['Check in', 'Mobility', 'Strength', 'Conditioning', 'Cool down'],
+      },
+      nutrition: {
+        name: 'Nutrition Coaching',
+        kicker: 'Food and recovery',
+        summary: 'A food plan that works with restaurants, travel and late nights.',
+        description:
+          'Simple rules for eating out, a plan for travel days and weekly check ins. Built together with your training, so both pull in the same direction.',
+        format: 'One to one, in person or by video',
+        where: 'Anywhere',
+        forWho: ['You eat out more than you cook', 'You travel often', 'You want energy that lasts all day'],
+        session: ['Check in', 'Review', 'Plan', 'Next steps'],
+      },
+      duo: {
+        name: 'Duo Sessions',
+        kicker: 'For two',
+        summary: 'Train with your partner or a friend. Two plans, one hour.',
+        description: 'You train together, each with your own programme. Ideal for couples with different goals.',
+        format: 'Two people',
+        where: 'Studio, home or hotel',
+        forWho: ['You train better together', 'You and your partner want different things', 'You want a regular hour together'],
+        session: ['Check in', 'Warm up', 'Strength', 'Partner circuit', 'Cool down'],
+      },
+      'latin-conditioning': {
+        name: 'Latin Conditioning',
+        kicker: 'Signature session',
+        summary: 'Intervals, footwork and music, from Latin dance.',
+        description: 'Short intervals set to music and full body movement. No dance experience needed, only good shoes.',
+        format: 'One to one or duo',
+        where: 'Studio, home or hotel',
+        forWho: ['Treadmills bore you', 'You want your fitness back quickly', 'You like music when you train'],
+        session: ['Warm up', 'Footwork', 'Intervals', 'Core', 'Cool down'],
+      },
+      'body-flow': {
+        name: 'Body Flow',
+        kicker: 'Mobility and recovery',
+        summary: 'Mobility, breathing and slow strength.',
+        description: 'For stiff backs after flights and long days. Joint by joint, then calm, controlled strength.',
+        format: 'One to one',
+        where: 'Studio, home, hotel or online',
+        forWho: ['You feel stiff after travel', 'You are coming back from an injury', 'You want to sleep better'],
+        session: ['Breathing', 'Joint prep', 'Mobility flow', 'Recovery'],
+      },
+      online: {
+        name: 'Online Coaching',
+        kicker: 'While you travel',
+        summary: 'Live video sessions and a plan for any hotel gym.',
+        description: 'Train live with Idael by video and keep the same plan in every city.',
+        format: 'Live video',
+        where: 'Anywhere',
+        forWho: ['You are away a lot', 'You want the same trainer everywhere', 'You often have little equipment'],
+        session: ['Check in', 'Warm up', 'Main block', 'Finisher', 'Review'],
+      },
+    },
+  },
+
+  method: {
+    title: 'How it works',
+    intro: 'From the first call to your first review.',
+    step: 'Step',
+    items: [
+      { title: 'Consultation', text: 'A free 20 minute call about your goals and your week.' },
+      { title: 'Assessment', text: 'How you move, how strong you are, how you recover.' },
+      { title: 'Your plan', text: 'Training and food, written around your calendar.' },
+      { title: 'Training', text: 'At home, at your hotel, in a studio or outdoors.' },
+      { title: 'Review', text: 'Every six weeks, with measurements.' },
+    ],
+  },
+
+  locations: {
+    title: 'Where you train',
+    intro: 'Idael comes to you. Just the two of you, always.',
+    available: 'Available times',
+    bookTime: 'Book a time',
+    zones: {
+      studio: { name: 'Private studio', detail: 'One client at a time.' },
+      residence: { name: 'Your home', detail: 'Idael brings the equipment.' },
+      hotel: { name: 'Hotels and private gyms', detail: 'Across Switzerland.' },
+      outdoors: { name: 'Outdoors', detail: 'By the lake when the weather is good.' },
+      online: { name: 'Online', detail: 'When you are away.' },
+    },
+  },
+
+  availabilitySummary: [
+    { label: 'Monday to Friday', value: '6:00 to 21:00' },
+    { label: 'Saturday', value: '8:00 to 13:00' },
+    { label: 'Sunday', value: 'On request' },
+  ],
+
+  // PLACEHOLDER: demo quotes. Replace with real ones, shared with permission.
+  testimonials: {
+    title: 'What clients say',
+    intro: 'Names withheld, as they prefer.',
+    prev: 'Previous',
+    next: 'Next',
+    items: [
+      { quote: 'The first trainer who fits around my calendar, not the other way round.', attribution: 'Founder', place: 'Zürich' },
+      { quote: 'Six in the morning at home, done by seven. I feel it all day.', attribution: 'Private banker', place: 'Zug' },
+      { quote: 'Latin Conditioning is the only cardio my wife and I look forward to.', attribution: 'Entrepreneur', place: 'Lucerne' },
+      { quote: 'I travel two weeks a month and still have the same trainer.', attribution: 'Executive', place: 'Geneva' },
+    ],
+  },
+
+  faq: {
+    title: 'Questions',
+    intro: 'Anything else? Message Idael on',
+    items: [
+      { q: 'Do I need to be fit to start?', a: 'No. The assessment shows where you are and the plan starts there.' },
+      { q: 'Do you help with diet as well?', a: 'Yes. Nutrition is part of the plan, with simple rules for eating out and travel.' },
+      { q: 'What happens when I travel?', a: 'Sessions continue online, with a plan for whatever gym your hotel has.' },
+      { q: 'How does the first appointment work?', a: 'Book a free consultation below. Everything else is agreed with Idael in person.' },
+      { q: 'Is everything confidential?', a: 'Yes. No photos, no names, nothing on social media without your written consent.' },
+    ],
+  },
+
+  booking: {
+    steps: ['Session', 'Date and time', 'Your details'],
+    typeTitle: 'Choose your appointment',
+    typeHint: 'Not sure? Start with the free consultation.',
+    startHere: 'Start here',
+    min: 'min',
+    chooseTime: 'Choose a time',
+    types: {
+      consultation: { name: 'Free consultation', format: 'Phone or video', note: 'Your goals, your week and how Idael can help.' },
+      meeting: { name: 'Meet in person', format: 'Studio, home or hotel', note: 'A first meeting and a short movement check.' },
+    },
+    places: {
+      video: 'Video call',
+      phone: 'Phone call',
+      studio: 'Private studio',
+      home: 'My home',
+      hotel: 'Hotel or private gym',
+    },
+    weekdays: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+    prevMonth: 'Previous month',
+    nextMonth: 'Next month',
+    timesAvailable: (n) => `${n} times available`,
+    unavailable: 'unavailable',
+    checking: 'Checking availability',
+    legend: 'Marks today. Faded days are fully booked.',
+    timeTitle: 'Choose a date and time',
+    timeIntro: (name, minutes) => `${name}, ${minutes} minutes. Swiss time.`,
+    chooseDay: 'Choose a day',
+    loadError: 'Availability could not be loaded. Please try again, or message Idael on WhatsApp.',
+    noneThisMonth: 'No times left this month. Try the next month.',
+    startTime: 'Start time',
+    timesFree: (n) => `${n} ${n === 1 ? 'time' : 'times'} free on this day`,
+    until: 'until',
+    swissTime: 'Swiss time',
+    parts: ['Morning', 'Afternoon', 'Evening'],
+    back: 'Back',
+    addDetails: 'Add your details',
+    detailsTitle: 'Your details',
+    detailsNote: 'Only Idael sees these.',
+    name: 'Full name',
+    email: 'Email',
+    phone: 'Phone',
+    phoneHint: 'For a reminder the day before.',
+    where: 'Where would you like to meet?',
+    goals: 'What would you like to change? (optional)',
+    goalsHint: 'Goals, injuries, anything Idael should know.',
+    referral: 'Referred by (optional)',
+    consent: 'Idael may contact me about this appointment by email, phone or WhatsApp.',
+    errors: {
+      name: 'Please enter your full name.',
+      email: 'Please enter an email address like name@example.com.',
+      phone: 'Please enter a phone number with the country code, like +41.',
+      place: 'Please choose where you would like to meet.',
+      consent: 'Please tick this so Idael can confirm.',
+    },
+    sending: 'Sending',
+    request: 'Request this time',
+    confirm: 'Book my consultation',
+    taken: 'That time was just taken. Please choose another one.',
+    failed: 'Something went wrong. Please try again, or message Idael on WhatsApp.',
+    received: 'Request received',
+    confirmed: 'Booked',
+    thanks: 'Thank you,',
+    receivedText: 'Idael will confirm your time himself, usually within a few hours.',
+    confirmedText: 'You will get an email with the details and a reminder the day before.',
+    summary: { session: 'Appointment', when: 'When', where: 'Where', status: 'Status' },
+    awaiting: 'Awaiting confirmation',
+    addToCalendar: 'Add to calendar',
+    backHome: 'Back to the home page',
+    whatsapp: 'Prefer to talk? Message Idael',
+    personal: 'Every request goes to Idael himself.',
+    whatsappText: (name, when) => `Hello Idael, I would like to book ${name ? `a ${name.toLowerCase()}` : 'an appointment'}${when ? ` on ${when}` : ''}.`,
+    pageTitle: 'Book a',
+    pageTitleEm: 'first conversation',
+    pageIntro: 'Choose an appointment and a time, then add your details. About two minutes.',
+    icsTitle: (name) => `${name} with Idael Alfonso`,
+    icsRequested: 'Requested. Idael will confirm.',
+    icsConfirmed: 'Booked.',
+  },
+
+  footer: {
+    title: 'Start with a',
+    titleEm: 'free consultation.',
+    intro: 'Twenty minutes by phone or video. No obligation.',
+    cta: 'Book a consultation',
+    where: 'Where',
+    whereText: 'Your home, your hotel, outdoors or a private studio.',
+    availability: 'Availability',
+    contact: 'Contact',
+    message: 'Message Idael',
+    explore: 'Explore',
+    about: 'About Idael',
+    services: 'Services',
+    book: 'Book a consultation',
+    rights: 'All rights reserved.',
+    privacy: 'Privacy',
+    imprint: 'Imprint',
+    photos: 'Demo photography from Unsplash',
+  },
+
+  aboutPage: {
+    title: 'About',
+    based: 'Based in',
+    languages: 'Languages',
+    languageList: 'Spanish, German, English',
+    intro:
+      'Idael holds a diploma in Personal Training from the Swiss Academy of Fitness and Sports and leads programmes at leading sports centres in Switzerland.',
+    story: [
+      'Idael grew up in Cuba with music and dance. Rhythm, balance and a feel for movement are still part of every session.',
+      'He works with a small group of private clients, so he can prepare properly and stay flexible when plans change.',
+      'Training and food are planned together, because one without the other rarely lasts.',
+    ],
+    principlesTitle: 'How he works',
+    principles: [
+      { title: 'Your privacy', text: 'No photos, no names, nothing shared without your consent.' },
+      { title: 'One plan', text: 'Training, food and recovery, written around your calendar.' },
+      { title: 'Good energy', text: 'Hard work goes better with music and a smile.' },
+    ],
+    credentialsTitle: 'Training and experience',
+    cta: 'Book a free consultation',
+    services: 'See the services',
+    portraitAlt: 'Idael Alfonso at the Zurich Film Festival',
+  },
+
+  servicePage: {
+    all: 'All services',
+    session: 'Session',
+    format: 'Format',
+    where: 'Where',
+    book: 'Book a consultation',
+    plan: 'The session plan',
+    planTitle: (minutes) => `What ${minutes} minutes look like`,
+    planIntro: 'A set plan, adjusted on the day. The gold block is the main part.',
+    minutes: 'min',
+    range: (from, to) => `${from} to ${to} min`,
+    suitsYou: 'This suits you if',
+    start: 'Getting started',
+    startText: 'Book a free consultation. Idael will suggest how to begin.',
+    next: 'Next service',
+  },
+
+  legal: {
+    label: 'Legal',
+    privacy: {
+      title: 'Privacy',
+      intro: 'How your information is handled on this website.',
+      sections: [
+        { h: 'What we collect', p: 'Your name, email, phone number and the appointment you book. No advertising or tracking cookies.' },
+        { h: 'Why', p: 'Only to arrange and confirm your appointment.' },
+        { h: 'Who sees it', p: 'Idael Alfonso and the booking service that runs the calendar. Never sold or shared.' },
+        { h: 'Your rights', p: 'Ask to see, correct or delete your information at any time.' },
+      ],
+    },
+    imprint: {
+      title: 'Imprint',
+      intro: 'Legal information for this website.',
+      sections: [
+        { h: 'Responsible', p: 'Idael Alfonso, Zürich. Full address to be added.' },
+        { h: 'Contact', p: 'See the contact details in the footer.' },
+        { h: 'Liability', p: 'Training advice on this website does not replace an individual assessment.' },
+      ],
+    },
+  },
+
+  notFound: {
+    title: 'Page not found',
+    text: 'This page does not exist, or the link is out of date.',
+    home: 'Back to the home page',
+    book: 'Book a consultation',
+  },
+
+  routes: { about: 'About', book: 'Book', privacy: 'Privacy', imprint: 'Imprint', lost: 'Lost?' },
+}
+
+export default en

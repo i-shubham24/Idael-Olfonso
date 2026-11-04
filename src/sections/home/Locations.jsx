@@ -1,9 +1,10 @@
 import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
-import { availabilitySummary, locations } from '../../content/site'
+import { useContent } from '../../lib/i18n'
 import { prefersReducedMotion } from '../../lib/media'
 import Img from '../../components/Img'
 import Button from '../../components/Button'
+import Reveal from '../../components/Reveal'
 
 // Bento placement for exactly six cells: five places and the availability card.
 const PLACE = {
@@ -37,12 +38,13 @@ function Zone({ zone }) {
 }
 
 function AvailabilityCell() {
+  const { t } = useContent()
   return (
     <div className="zone flex min-h-[360px] flex-col justify-between rounded-[2px] bg-onyx-2 p-6 md:p-8 lg:col-span-4">
       <div>
-        <p className="font-serif text-3xl">Available times</p>
+        <p className="font-serif text-3xl">{t.locations.available}</p>
         <dl className="mt-8 grid gap-4">
-          {availabilitySummary.map((h) => (
+          {t.availabilitySummary.map((h) => (
             <div key={h.label}>
               <dt className="t-label text-stone">{h.label}</dt>
               <dd className="tabular mt-1 font-serif text-2xl text-ivory">{h.value}</dd>
@@ -51,8 +53,8 @@ function AvailabilityCell() {
         </dl>
       </div>
       <div className="mt-8">
-        <Button to="/book" variant="ivory">
-          Book a time
+        <Button to="/#book" variant="ivory">
+          {t.locations.bookTime}
         </Button>
       </div>
     </div>
@@ -60,6 +62,7 @@ function AvailabilityCell() {
 }
 
 export default function Locations() {
+  const { t, zones } = useContent()
   const root = useRef(null)
 
   useLayoutEffect(() => {
@@ -106,12 +109,12 @@ export default function Locations() {
 
   return (
     <section ref={root} id="locations" className="shell py-28 md:py-44" aria-labelledby="locations-title">
-      <h2 id="locations-title" className="t-h2 text-[clamp(3rem,7vw,7.5rem)]">
-        {locations.headline}
-      </h2>
-      <p className="t-lead mt-6 max-w-[46ch] text-ivory/70">{locations.intro}</p>
+      <Reveal as="h2" id="locations-title" className="t-h2 text-[clamp(3rem,7vw,7.5rem)]">
+        {t.locations.title}
+      </Reveal>
+      <p className="t-lead mt-6 max-w-[46ch] text-ivory/70">{t.locations.intro}</p>
       <div className="mt-14 grid grid-cols-1 gap-3 md:mt-20 md:grid-cols-2 lg:grid-cols-12 lg:gap-4">
-        {locations.zones.map((z) => (
+        {zones.map((z) => (
           <Zone key={z.id} zone={z} />
         ))}
         <AvailabilityCell />

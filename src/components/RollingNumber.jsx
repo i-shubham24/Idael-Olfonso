@@ -13,7 +13,8 @@ export default function RollingNumber({ value, className = '' }) {
         if (!/\d/.test(ch)) {
           return (
             <span key={key + ch} aria-hidden="true" className="inline-block">
-              {ch}
+              {/* A plain space would collapse inside the flex row ("2 in 1" would read "2in1"). */}
+              {ch === ' ' ? ' ' : ch}
             </span>
           )
         }

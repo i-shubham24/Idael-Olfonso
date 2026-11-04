@@ -1,7 +1,5 @@
 import { timeZone } from '../content/site'
-
-export const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-export const DAYS_SHORT = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+import { currentLang } from './i18n'
 
 const WEEKDAY_INDEX = { Mon: 0, Tue: 1, Wed: 2, Thu: 3, Fri: 4, Sat: 5, Sun: 6 }
 
@@ -37,10 +35,22 @@ export function addMinutes(hhmm, mins) {
   return `${String(Math.floor(t / 60) % 24).padStart(2, '0')}:${String(t % 60).padStart(2, '0')}`
 }
 
-export function formatDate(date) {
-  return new Intl.DateTimeFormat('en-GB', { timeZone, weekday: 'long', day: 'numeric', month: 'long' }).format(date)
+const localeFor = (lang) => (lang === 'de' ? 'de-CH' : 'en-GB')
+
+/** "Friday 30 October" or "Freitag, 30. Oktober", in the current language. */
+export function formatDate(date, lang = currentLang()) {
+  return new Intl.DateTimeFormat(localeFor(lang), { timeZone, weekday: 'long', day: 'numeric', month: 'long' }).format(
+    date,
+  )
 }
 
-export function formatDateShort(date) {
-  return new Intl.DateTimeFormat('en-GB', { timeZone, day: 'numeric', month: 'short' }).format(date)
+/** "October 2026" or "Oktober 2026" for a calendar month. */
+export function formatMonth({ y, m }, lang = currentLang()) {
+  return new Intl.DateTimeFormat(localeFor(lang), { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(
+    new Date(Date.UTC(y, m - 1, 1)),
+  )
+}
+
+export function formatDateShort(date, lang = currentLang()) {
+  return new Intl.DateTimeFormat(localeFor(lang), { timeZone, day: 'numeric', month: 'short' }).format(date)
 }

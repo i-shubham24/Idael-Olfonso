@@ -1,41 +1,48 @@
 import { Suspense, lazy, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { services } from '../../content/site'
-import { useMediaQuery, useReducedMotion } from '../../lib/media'
+import { useContent } from '../../lib/i18n'
+import { useReducedMotion } from '../../lib/media'
 import Img from '../../components/Img'
+import Video from '../../components/Video'
+import Tilt from '../../components/Tilt'
 import { ROLL_MARGIN, ROLL_RADIUS } from '../../three/rollingConfig'
 import Button from '../../components/Button'
 import { TLink } from '../../lib/transition'
+import Reveal from '../../components/Reveal'
 
 const RollingScene = lazy(() => import('../../three/RollingScene'))
 
-const engraving = (s) => `${s.duration} MINUTES  ·  ${s.name.toUpperCase()}  ·  `
+const engraving = (s) => `${s.duration} MIN  ·  ${s.name.toUpperCase()}  ·  `
 
 function Facts({ service }) {
+  const { t } = useContent()
   return (
     <dl className="grid grid-cols-2 gap-x-6 gap-y-1.5 text-sm">
-      <dt className="t-label text-stone">Session</dt>
-      <dt className="t-label text-stone">Format</dt>
-      <dd className="tabular">{service.duration} minutes</dd>
+      <dt className="t-label text-stone">{t.services.session}</dt>
+      <dt className="t-label text-stone">{t.services.format}</dt>
+      <dd className="tabular">
+        {service.duration} {t.servicePage.minutes}
+      </dd>
       <dd>{service.format}</dd>
     </dl>
   )
 }
 
 function Intro({ compact = false }) {
+  const { t, services } = useContent()
   return (
     <div className="flex flex-col justify-center">
-      <h2
+      <Reveal as="h2"
         id="services-title"
         className={`t-h2 ${compact ? 'text-[clamp(2.75rem,4.4vw,5rem)]' : 'text-[clamp(3rem,5.6vw,6.25rem)]'}`}
       >
-        Ways to train with Idael
-      </h2>
+        {t.services.title}
+      </Reveal>
       <p className={`t-lead mt-6 max-w-[34ch] text-ivory/70 ${compact ? 'hidden [@media(min-height:900px)]:block' : ''}`}>
-        Every session is one to one, or with one other person if you prefer to train as a pair.
+        {t.services.intro}
       </p>
-      <ol className={`grid gap-1 ${compact ? 'mt-8' : 'mt-10'}`} aria-label="Services">
+      <ol className={`grid gap-1 ${compact ? 'mt-8' : 'mt-10'}`} aria-label={t.services.title}>
         {services.map((s) => (
           <li key={s.slug}>
             <TLink to={`/services/${s.slug}`} className={`group flex items-baseline gap-4 rounded-[2px] bg-onyx-2 px-4 transition-colors duration-300 hover:bg-graphite ${compact ? 'py-2.5' : 'py-3.5'}`}>
@@ -52,7 +59,8 @@ function Intro({ compact = false }) {
 }
 
 function Panel({ service, index, stacked = false }) {
-  // `stacked`: the narrow swipe-rail version (phones, reduced motion).
+  const { t } = useContent()
+  // `stacked`: the narrow swipe-rail version (reduced motion only).
   return (
     <article
       className="service-panel group flex h-full w-full flex-col"
@@ -62,34 +70,44 @@ function Panel({ service, index, stacked = false }) {
       <p className="t-label text-gold">{service.kicker}</p>
       <h3
         id={`service-${service.slug}`}
-        className={`panel-name t-h2 mt-3 ${stacked ? 'text-[clamp(2.4rem,10vw,3.5rem)]' : 'text-[clamp(2.5rem,6vw,7rem)]'}`}
+        className={`panel-name t-h2 mt-3 ${stacked ? 'text-[clamp(2.4rem,10vw,3.5rem)]' : 'text-[clamp(2.5rem,5.2vw,6.25rem)]'}`}
       >
         {service.name}
       </h3>
       <div
-        className={`mt-5 grid min-h-0 flex-1 grid-cols-1 grid-rows-[1fr_auto] gap-5 ${stacked ? '' : 'lg:mt-8 lg:grid-cols-12 lg:grid-rows-1 lg:gap-10'}`}
+        className={`mt-5 grid min-h-0 flex-1 grid-cols-1 grid-rows-[1fr_auto] gap-5 ${stacked ? '' : 'lg:mt-5 lg:grid-cols-12 lg:grid-rows-1 lg:gap-10'}`}
       >
-        <TLink
-          to={`/services/${service.slug}`}
-          tabIndex={-1}
-          aria-hidden="true"
-          data-cursor="View"
-          className={`relative block min-h-[200px] overflow-hidden rounded-[2px] bg-graphite ${stacked ? '' : 'lg:col-span-7'}`}
-        >
-          <Img
-            image={service.image}
-            alt=""
-            sizes="(min-width: 1024px) 50vw, 85vw"
-            className="panel-img will-change-transform absolute inset-0 h-full w-full scale-[1.12] object-cover transition-transform duration-[1.4s] ease-[var(--ease-out-expo)]"
-          />
-          <div className="absolute inset-0 bg-[linear-gradient(to_top,rgb(10_10_11/0.5),transparent_40%)]" />
-        </TLink>
-        <div className={`flex flex-col justify-end gap-6 ${stacked ? '' : 'lg:col-span-5'}`}>
+        <Tilt className={`min-h-[200px] ${stacked ? '' : 'lg:col-span-8'}`}>
+          <TLink
+            to={`/services/${service.slug}`}
+            tabIndex={-1}
+            aria-hidden="true"
+            data-cursor={t.cursor.view}
+            className="relative block h-full overflow-hidden rounded-[2px] bg-graphite"
+          >
+            {/* Services with a clip of Idael play it while the panel is in view; the rest show a photo. */}
+            {service.video ? (
+              <Video
+                video={service.video}
+                className="panel-img will-change-transform absolute inset-0 h-full w-full scale-[1.12] object-cover"
+              />
+            ) : (
+              <Img
+                image={service.image}
+                alt=""
+                sizes="(min-width: 1024px) 50vw, 85vw"
+                className="panel-img will-change-transform absolute inset-0 h-full w-full scale-[1.12] object-cover transition-transform duration-[1.4s] ease-[var(--ease-out-expo)]"
+              />
+            )}
+            <div className="absolute inset-0 bg-[linear-gradient(to_top,rgb(10_10_11/0.5),transparent_40%)]" />
+          </TLink>
+        </Tilt>
+        <div className={`flex flex-col justify-end gap-6 ${stacked ? '' : 'lg:col-span-4'}`}>
           <p className={`max-w-[34ch] text-ivory/80 ${stacked ? '' : 'lg:t-lead'}`}>{service.summary}</p>
           <Facts service={service} />
           <div>
             <Button to={`/services/${service.slug}`} variant="ghost">
-              See the session
+              {t.services.see}
             </Button>
           </div>
         </div>
@@ -99,19 +117,22 @@ function Panel({ service, index, stacked = false }) {
 }
 
 /*
-  Desktop: the section pins and the services pan sideways while a 3D bezel
+  Every screen size: the section pins and the services pan sideways while a 3D bezel
   rolls along the bottom, its engraving following the service above it.
-  Phones and reduced motion: a native swipe rail, no pinning.
+  Reduced motion: a native swipe rail, no pinning.
 */
 export default function Services() {
+  const { services } = useContent()
   const root = useRef(null)
   const track = useRef(null)
   const progress = useRef(0)
-  const [label, setLabel] = useState(engraving(services[0]))
+  // Which service the bezel is rolling under; the engraving follows it in the current language.
+  const [roll, setRoll] = useState(0)
+  const label = engraving(services[roll] ?? services[0])
   const [active, setActive] = useState(false)
-  const desktop = useMediaQuery('(min-width: 1024px)')
   const reduced = useReducedMotion()
-  const pan = desktop && !reduced
+  // Pinned and panning on every screen size; reduced motion gets the swipe rail.
+  const pan = !reduced
 
   useLayoutEffect(() => {
     if (!pan) return
@@ -137,7 +158,9 @@ export default function Services() {
           end: () => `+=${distance()}`,
           pin: true,
           scrub: true,
+          anticipatePin: 1,
           invalidateOnRefresh: true,
+          refreshPriority: 1,
           onRefresh: measurePanels,
           onUpdate(self) {
             progress.current = self.progress
@@ -159,7 +182,7 @@ export default function Services() {
             }
             if (best !== last) {
               last = best
-              setLabel(engraving(services[best]))
+              setRoll(best)
             }
           },
         },
@@ -202,7 +225,7 @@ export default function Services() {
       ScrollTrigger.create({
         trigger: root.current,
         start: 'top bottom',
-        end: () => `+=${distance() + window.innerHeight * 2}`,
+        end: () => `+=${distance()}`,
         onToggle: (self) => setActive(self.isActive),
       })
     }, root)
@@ -232,16 +255,16 @@ export default function Services() {
   }
 
   return (
-    <section ref={root} id="services" className="relative h-[100svh] overflow-hidden" aria-labelledby="services-title">
+    <section ref={root} id="services" className="relative h-[100svh] overflow-hidden bg-ink" aria-labelledby="services-title">
       <div
         ref={track}
-        className="flex h-full items-stretch gap-[6vw] pb-[24vh] pl-[max(3rem,calc((100vw-1440px)/2+3rem))] pr-[10vw] pt-[calc(84px+5vh)] will-change-transform"
+        className="flex h-full items-stretch gap-[6vw] pb-[24vh] pl-4 pr-[8vw] pt-[calc(72px+2svh)] will-change-transform md:pl-8 lg:gap-[5vw] lg:pl-[max(3rem,calc((100vw-1440px)/2+3rem))] lg:pt-[calc(72px+1.5vh)]"
       >
-        <div className="w-[min(32vw,480px)] shrink-0">
+        <div className="w-[86vw] shrink-0 sm:w-[60vw] lg:w-[min(32vw,480px)]">
           <Intro compact />
         </div>
         {services.map((s, i) => (
-          <div key={s.slug} className="w-[min(74vw,1180px)] shrink-0">
+          <div key={s.slug} className="w-[86vw] shrink-0 md:w-[78vw] lg:w-[min(84vw,1400px)]">
             <Panel service={s} index={i} />
           </div>
         ))}

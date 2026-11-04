@@ -14,6 +14,8 @@ export default function Img({
   className = '',
   grade = true,
   eager = false,
+  // High fetch priority only for the first images on screen; eager images further down load normally.
+  priority = eager,
   ...rest
 }) {
   const [failed, setFailed] = useState(false)
@@ -35,7 +37,7 @@ export default function Img({
       alt={alt}
       loading={eager ? 'eager' : 'lazy'}
       decoding="async"
-      fetchPriority={eager ? 'high' : undefined}
+      fetchPriority={priority ? 'high' : undefined}
       onError={() => setFailed(true)}
       className={`${grade ? 'photo-grade' : ''} ${className}`}
       {...rest}

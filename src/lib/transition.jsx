@@ -5,21 +5,22 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useLenis, scrollToTarget } from './scroll'
 import { prefersReducedMotion } from './media'
 import { revealStore } from './reveal'
-import { brand, services } from '../content/site'
+import { buildContent, currentLang } from './i18n'
 
-/** Destination name for the route transition panel. */
+/** Destination name for the route transition panel, in the current language. */
 export function routeMeta(pathname) {
+  const { brand, services, t } = buildContent(currentLang())
   const meta = (label) => ({ label, color: '#111113', ink: '#ECE8E0' })
   if (pathname === '/') return meta(brand.name)
   if (pathname.startsWith('/services/')) {
     const s = services.find((x) => x.slug === pathname.split('/')[2])
     if (s) return meta(s.name)
   }
-  if (pathname.startsWith('/about')) return meta('About')
-  if (pathname.startsWith('/book')) return meta('Book')
-  if (pathname.startsWith('/privacy')) return meta('Privacy')
-  if (pathname.startsWith('/imprint')) return meta('Imprint')
-  return meta('Lost?')
+  if (pathname.startsWith('/about')) return meta(t.routes.about)
+  if (pathname.startsWith('/book')) return meta(t.routes.book)
+  if (pathname.startsWith('/privacy')) return meta(t.routes.privacy)
+  if (pathname.startsWith('/imprint')) return meta(t.routes.imprint)
+  return meta(t.routes.lost)
 }
 
 const TransitionCtx = createContext({ go: () => {} })

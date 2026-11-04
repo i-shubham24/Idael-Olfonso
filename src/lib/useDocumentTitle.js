@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
-import { brand } from '../content/site'
+import { useContent } from './i18n'
 
 export function useDocumentTitle(title) {
+  const { brand, t } = useContent()
   useEffect(() => {
-    document.title = title ? `${title} | ${brand.name}` : `${brand.name} | Private training in ${brand.region}`
-  }, [title])
+    document.title = title ? `${title} | ${brand.name}` : t.meta.title
+  }, [title, brand.name, t])
 }

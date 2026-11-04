@@ -1,6 +1,7 @@
 import { Outlet, createBrowserRouter, useLocation } from 'react-router'
 import { ScrollProvider } from './lib/scroll'
 import { TransitionProvider } from './lib/transition'
+import { LocaleProvider } from './lib/i18n'
 import Loader from './components/Loader'
 import Nav from './components/Nav'
 import Footer from './components/Footer'
@@ -22,20 +23,22 @@ import NotFound from './pages/NotFound'
 function RootLayout() {
   const { pathname } = useLocation()
   return (
-    <ScrollProvider>
-      <TransitionProvider>
-        <Grain />
-        <Loader />
-        <Nav />
-        <main id="main" tabIndex={-1} className="relative z-[2] outline-none">
-          <Outlet />
-        </main>
-        <div className="relative z-[1]">
-          <Footer cta={!pathname.startsWith('/book')} />
-        </div>
-        <Cursor />
-      </TransitionProvider>
-    </ScrollProvider>
+    <LocaleProvider>
+      <ScrollProvider>
+        <TransitionProvider>
+          <Grain />
+          <Loader />
+          <Nav />
+          <main id="main" tabIndex={-1} className="relative z-[2] outline-none">
+            <Outlet />
+          </main>
+          <div className="relative z-[1]">
+            <Footer cta={!pathname.startsWith('/book')} />
+          </div>
+          <Cursor />
+        </TransitionProvider>
+      </ScrollProvider>
+    </LocaleProvider>
   )
 }
 

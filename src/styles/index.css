@@ -214,6 +214,15 @@ html.low-gpu .grain {
   backface-visibility: hidden;
 }
 
+/* Video grades. Idael's clips are shot on a light studio backdrop:
+   video-grade matches the photos, video-dark sinks the backdrop for text on top. */
+.video-grade {
+  filter: grayscale(1) sepia(0.08) contrast(1.12) brightness(0.86);
+}
+.video-dark {
+  filter: grayscale(1) sepia(0.1) contrast(1.6) brightness(0.42);
+}
+
 /* Faint concentric rings, like the grooves on a plate. Used where a photo is missing. */
 .rings-pattern {
   background-image: repeating-radial-gradient(
@@ -268,6 +277,24 @@ html.low-gpu .grain {
 }
 .time-list::-webkit-scrollbar {
   display: none;
+}
+
+/* Hero scroll hint: the gold index drops through its slot and fades, again and again. */
+@keyframes scroll-cue {
+  0% {
+    transform: translateY(-12px);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(44px);
+    opacity: 0;
+  }
+}
+.scroll-cue svg {
+  animation: scroll-cue 1.8s var(--ease-in-out-expo) infinite;
 }
 
 /* The one marquee on the site */

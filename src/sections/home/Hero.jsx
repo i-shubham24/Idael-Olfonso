@@ -1,12 +1,13 @@
 import { Suspense, lazy, useLayoutEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { brand, images } from '../../content/site'
+import { useContent } from '../../lib/i18n'
 import { usePageReady } from '../../lib/reveal'
 import { useReducedMotion } from '../../lib/media'
 import { useFitText } from '../../lib/useFitText'
 import Button from '../../components/Button'
 import Img from '../../components/Img'
+import Video from '../../components/Video'
 
 const HeroScene = lazy(() => import('../../three/HeroScene'))
 
@@ -17,6 +18,8 @@ const HeroScene = lazy(() => import('../../three/HeroScene'))
   0.60 to 1.00  the manifesto reads in, word by word
 */
 export default function Hero() {
+  const { brand, images, videos, t } = useContent()
+  const hero = t.hero
   const root = useRef(null)
   const reveal = useRef(null)
   const slot = useRef(null)
@@ -71,34 +74,38 @@ export default function Hero() {
           scrub: true,
           anticipatePin: 1,
           invalidateOnRefresh: true,
+          refreshPriority: 3,
           onUpdate: (self) => {
             progress.current = self.progress
           },
         },
       })
-      tl.to('.hero-copy', { yPercent: -18, opacity: 0, duration: 0.2 }, 0)
+      tl.to(['.hero-copy', '.hero-scroll'], { yPercent: -18, opacity: 0, duration: 0.2 }, 0)
       letters.forEach((el, i) => {
         tl.to(el, { xPercent: (i - mid) * 70, yPercent: 10, opacity: 0, duration: 0.36, ease: 'power1.in' }, 0)
       })
-      tl.fromTo('.manifesto', { opacity: 0 }, { opacity: 1, duration: 0.05 }, 0.58)
+      // The bridge line comes in as soon as the camera is through the ring, and reads in quickly.
+      tl.fromTo('.manifesto', { opacity: 0 }, { opacity: 1, duration: 0.04 }, 0.5)
       tl.fromTo(
         words,
         { opacity: 0.12 },
-        { opacity: 1, duration: 0.02, stagger: (0.34 - 0.02) / Math.max(1, words.length) },
-        0.62,
+        { opacity: 1, duration: 0.02, stagger: (0.18 - 0.02) / Math.max(1, words.length) },
+        0.52,
       )
       tl.set({}, {}, 1)
 
       // Only render WebGL while the hero section (including its pinned stretch) is on screen.
+      // Ends strictly when the hero finishes its pinned duration so the 3D ring does not linger.
       ScrollTrigger.create({
         trigger: root.current,
-        start: 'top top',
-        end: () => `+=${window.innerHeight * 3 + window.innerHeight}`,
+        start: 'top bottom',
+        end: () => `+=${window.innerHeight * 3}`,
         onToggle: (self) => setActive(self.isActive),
       })
     }, root)
     return () => ctx.revert()
-  }, [reduced])
+    // The words are new elements after a language switch, so the timeline is rebuilt for them.
+  }, [reduced, hero.bridge])
 
   // Entrance, played when the loader or route panel lifts.
   useLayoutEffect(() => {
@@ -130,14 +137,14 @@ export default function Hero() {
   }, [ready, reduced])
 
   const headlineWords = [
-    ...brand.headline.split(' ').map((w) => ({ w, em: false })),
-    ...brand.headlineEm.split(' ').map((w) => ({ w, em: true })),
+    ...hero.headline.split(' ').map((w) => ({ w, em: false })),
+    ...hero.headlineEm.split(' ').map((w) => ({ w, em: true })),
   ]
-  const manifestoWords = brand.manifesto.split(' ')
+  const manifestoWords = hero.bridge.split(' ')
 
   return (
     <>
-      <section ref={root} className="relative h-[100svh] min-h-[560px] overflow-hidden" aria-labelledby="hero-title">
+      <section ref={root} className="relative h-[100svh] min-h-[560px] overflow-hidden bg-ink" aria-labelledby="hero-title">
         {/* Faint concentric rings behind everything, like the dial under the bezel. */}
         <div className="rings-pattern absolute inset-0 opacity-60 [mask-image:radial-gradient(circle_at_72%_48%,black,transparent_55%)]" />
 
@@ -167,7 +174,14 @@ export default function Hero() {
           className="absolute inset-0 z-[1] will-change-[clip-path,opacity] [transform:translateZ(0)]"
           style={reduced ? { opacity: 0 } : { clipPath: 'circle(0px at 50% 50%)', opacity: 0 }}
         >
-          <Img image={images.manifesto} alt="" eager className="h-full w-full object-cover object-[50%_40%]" />
+          {/* Idael training, seen through the ring and then full screen. Plays only while the hero is on screen. */}
+          <Video
+            video={videos.core}
+            active={active}
+            quality="1080p"
+            grade="video-dark"
+            className="h-full w-full object-cover object-[50%_45%]"
+          />
           <div className="absolute inset-0 bg-[linear-gradient(to_top,rgb(10_10_11/0.94),rgb(10_10_11/0.4)_55%,rgb(10_10_11/0.2))]" />
         </div>
 
@@ -187,9 +201,9 @@ export default function Hero() {
         <div className="shell relative z-10 grid h-full grid-cols-1 grid-rows-[auto_1fr] pb-[19vw] pt-[calc(68px+3.5vh)] lg:grid-cols-12 lg:grid-rows-1 lg:pb-[14vw] lg:pt-[calc(84px+5vh)]">
           <div className="hero-copy lg:col-span-7">
             <p className="hero-fade t-label text-gold">
-              {brand.role} in {brand.region}
+              {hero.role}
             </p>
-            <h1 id="hero-title" className="t-h1 mt-6 text-[clamp(2.75rem,min(5.6vw,8.5vh),5.75rem)] md:mt-8">
+            <h1 id="hero-title" className="t-h1 mt-6 text-[clamp(3rem,min(6.8vw,12vh),6.25rem)] md:mt-8 lg:whitespace-nowrap">
               {headlineWords.map(({ w, em }, i) => (
                 <span key={i}>
                   {/* The italic half always starts on its own line. */}
@@ -200,13 +214,13 @@ export default function Hero() {
                 </span>
               ))}
             </h1>
-            <p className="hero-fade t-lead mt-5 max-w-[40ch] text-ivory/70 md:mt-7 lg:max-w-[48ch]">{brand.subline}</p>
+            <p className="hero-fade t-lead mt-5 max-w-[40ch] text-ivory/75 md:mt-7 lg:max-w-[48ch] lg:text-[1.375rem]">{hero.subline}</p>
             <div className="hero-fade mt-8 flex flex-wrap gap-3 md:mt-10">
-              <Button to="/book?type=consultation" size="lg">
-                Book a free consultation
+              <Button to="/#book" size="md" className="md:min-h-[3.25rem] md:px-8">
+                {hero.cta}
               </Button>
-              <Button to="/#method" variant="ghost" size="lg">
-                How it works
+              <Button to="/#pains" variant="ghost" size="md" className="md:min-h-[3.25rem] md:px-8">
+                {hero.secondary}
               </Button>
             </div>
           </div>
@@ -217,11 +231,28 @@ export default function Hero() {
           />
         </div>
 
+        {/* Scroll hint on the right edge: a turning label and a gold index that keeps dropping. */}
+        {!reduced && (
+          <div
+            className="hero-scroll pointer-events-none absolute right-2 top-1/2 z-10 -translate-y-1/2 md:right-3 xl:right-5"
+            aria-hidden="true"
+          >
+            <div className="hero-fade flex flex-col items-center gap-4">
+              <span className="t-label text-[0.6rem] text-ivory/70 [writing-mode:vertical-rl]">{hero.scroll}</span>
+              <span className="scroll-cue relative block h-12 w-3 overflow-hidden">
+                <svg width="12" height="10" viewBox="0 0 7 6" className="absolute left-0 top-0">
+                  <path d="M0 0 L7 0 L3.5 6 Z" fill="var(--color-gold)" />
+                </svg>
+              </span>
+            </div>
+          </div>
+        )}
+
         {/* Manifesto: revealed after the camera passes through the bezel. */}
         {!reduced && (
           <div className="manifesto pointer-events-none absolute inset-0 z-20 flex items-end opacity-0">
             <div className="shell pb-[14vh]">
-                            <p className="t-h1 max-w-[22ch] text-[clamp(2rem,4.6vw,5rem)] leading-[1.02]">
+              <p className="t-h1 max-w-[22ch] text-[clamp(2rem,4.6vw,5rem)] leading-[1.02]">
                 {manifestoWords.map((w, i) => (
                   <span key={i} className="mf-word word">
                     {w}&nbsp;
@@ -238,11 +269,11 @@ export default function Hero() {
         <section className="relative">
           <Img
             image={images.manifesto}
-            alt="A client training with a barbell, in black and white"
+            alt=""
             className="h-[70vh] w-full object-cover"
           />
           <div className="shell py-16">
-            <p className="t-h1 max-w-[22ch] text-[clamp(2rem,4.6vw,5rem)] leading-[1.02]">{brand.manifesto}</p>
+            <p className="t-h1 max-w-[22ch] text-[clamp(2rem,4.6vw,5rem)] leading-[1.02]">{hero.bridge}</p>
           </div>
         </section>
       )}

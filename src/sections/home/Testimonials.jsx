@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { ArrowLeft, ArrowRight } from '@phosphor-icons/react'
-import { testimonials } from '../../content/site'
+import { useContent } from '../../lib/i18n'
+import Reveal from '../../components/Reveal'
 
 function QuoteCard({ item }) {
   return (
@@ -15,7 +16,6 @@ function QuoteCard({ item }) {
         <p className="t-label text-ivory">
           {item.attribution}, {item.place}
         </p>
-        <p className="mt-1 text-sm text-stone">{item.focus}</p>
       </figcaption>
     </figure>
   )
@@ -26,6 +26,8 @@ function QuoteCard({ item }) {
   keyboard) with buttons, and click-and-drag for mouse users.
 */
 export default function Testimonials() {
+  const { t } = useContent()
+  const copy = t.testimonials
   const rail = useRef(null)
   const drag = useRef(null)
 
@@ -56,11 +58,11 @@ export default function Testimonials() {
     <section id="testimonials" className="py-28 md:py-44" aria-labelledby="testimonials-title">
       <div className="shell flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
         <div>
-          <h2 id="testimonials-title" className="t-h2 text-[clamp(3rem,7vw,7.5rem)]">
-            What clients say
-          </h2>
+          <Reveal as="h2" id="testimonials-title" className="t-h2 text-[clamp(3rem,7vw,7.5rem)]">
+            {copy.title}
+          </Reveal>
           <p className="t-lead mt-6 max-w-[42ch] text-ivory/70">
-            Shared with their permission. Most of Idael’s clients prefer not to be named.
+            {copy.intro}
           </p>
         </div>
         <div className="flex gap-2">
@@ -68,7 +70,7 @@ export default function Testimonials() {
             type="button"
             onClick={() => step(-1)}
             className="flex h-14 w-14 items-center justify-center rounded-[2px] bg-graphite transition-colors hover:bg-line"
-            aria-label="Previous testimonial"
+            aria-label={copy.prev}
           >
             <ArrowLeft size={20} weight="light" aria-hidden="true" />
           </button>
@@ -76,7 +78,7 @@ export default function Testimonials() {
             type="button"
             onClick={() => step(1)}
             className="flex h-14 w-14 items-center justify-center rounded-[2px] bg-ivory text-ink transition-colors hover:bg-white"
-            aria-label="Next testimonial"
+            aria-label={copy.next}
           >
             <ArrowRight size={20} weight="light" aria-hidden="true" />
           </button>
@@ -89,12 +91,12 @@ export default function Testimonials() {
         onPointerMove={onMove}
         onPointerUp={onUp}
         onPointerLeave={onUp}
-        aria-label="Client testimonials"
-        data-cursor="Drag"
+        aria-label={copy.title}
+        data-cursor={t.cursor.drag}
       >
-        {testimonials.map((t) => (
-          <li key={t.quote} className="w-[min(86vw,520px)] shrink-0 snap-start select-none">
-            <QuoteCard item={t} />
+        {copy.items.map((item) => (
+          <li key={item.quote} className="w-[min(86vw,520px)] shrink-0 snap-start select-none">
+            <QuoteCard item={item} />
           </li>
         ))}
       </ul>

@@ -1,18 +1,21 @@
 import { useState } from 'react'
 import { Plus } from '@phosphor-icons/react'
-import { contact, faqs } from '../../content/site'
+import { useContent } from '../../lib/i18n'
+import Reveal from '../../components/Reveal'
 
 export default function Faq() {
+  const { t, contact } = useContent()
+  const faqs = t.faq.items
   const [open, setOpen] = useState(0)
   return (
     <section id="faq" className="shell py-28 md:py-44" aria-labelledby="faq-title">
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
         <div className="lg:col-span-5">
-          <h2 id="faq-title" className="t-h2 text-[clamp(3rem,5vw,5.5rem)]">
-            Questions
-          </h2>
+          <Reveal as="h2" id="faq-title" className="t-h2 text-[clamp(3rem,5vw,5.5rem)]">
+            {t.faq.title}
+          </Reveal>
           <p className="t-lead mt-6 max-w-[32ch] text-ivory/70">
-            Anything else? Send Idael a message on{' '}
+            {t.faq.intro}{' '}
             <a
               href={`https://wa.me/${contact.whatsapp}`}
               target="_blank"
