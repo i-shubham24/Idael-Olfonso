@@ -55,11 +55,18 @@ export default function Footer({ cta = true }) {
     <footer ref={root} className="relative">
       <div ref={panel} className="bg-ivory text-ink">
         {cta && (
-          <section className="shell pb-20 pt-24 md:pb-28 md:pt-40" aria-labelledby="closing-cta">
-            <Reveal as="h2" id="closing-cta" className="t-h2 max-w-[14ch] text-[clamp(3rem,8.5vw,9rem)]">
+          <section
+            className="shell pb-16 pt-8 md:pb-24 md:pt-12"
+            aria-labelledby="closing-cta"
+          >
+            <Reveal
+              as="h2"
+              id="closing-cta"
+              className="t-h2 max-w-[14ch] text-[clamp(3rem,8.5vw,9rem)]"
+            >
               {f.title} <em className="text-[#8a6d3f]">{f.titleEm}</em>
             </Reveal>
-            <div className="mt-10 flex flex-col items-start gap-10 md:mt-14 md:flex-row md:items-end md:justify-between">
+            <div className="mt-8 flex flex-col items-start gap-8 md:mt-12 md:flex-row md:items-end md:justify-between">
               <p className="t-lead max-w-[40ch] text-ink/70">{f.intro}</p>
               <Button to="/#book" variant="ink" size="xl">
                 {f.cta}
@@ -69,7 +76,7 @@ export default function Footer({ cta = true }) {
         )}
 
         <div
-          className={`shell grid gap-10 pb-16 sm:grid-cols-2 lg:grid-cols-4 ${cta ? 'pt-8' : 'pt-28'}`}
+          className={`shell grid gap-10 pb-16 sm:grid-cols-2 lg:grid-cols-4 ${cta ? 'pt-6' : 'pt-16'}`}
         >
           <div>
             <h3 className="t-label mb-4 text-ink/65">{f.where}</h3>

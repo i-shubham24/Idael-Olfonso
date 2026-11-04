@@ -248,7 +248,7 @@ function ServiceView({ service }) {
         className="group block overflow-hidden bg-onyx-2 transition-colors duration-500 hover:bg-graphite"
         data-cursor={t.cursor.next}
       >
-        <div className="shell flex flex-col gap-4 py-16 md:py-24">
+        <div className="shell flex flex-col gap-4 py-12 md:py-16">
           <span className="t-label text-stone">{sp.next}</span>
           <span className="block overflow-hidden">
             <span

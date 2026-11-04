@@ -8,7 +8,7 @@ export default function Faq() {
   const faqs = t.faq.items
   const [open, setOpen] = useState(0)
   return (
-    <section id="faq" className="shell py-28 md:py-44" aria-labelledby="faq-title">
+    <section id="faq" className="shell pt-24 pb-14 md:pt-36 md:pb-20" aria-labelledby="faq-title">
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
         <div className="lg:col-span-5">
           <Reveal as="h2" id="faq-title" className="t-h2 text-[clamp(3rem,5vw,5.5rem)]">

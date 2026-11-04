@@ -188,7 +188,7 @@ export default function About() {
         </ol>
       </section>
 
-      <section className="shell pb-28 md:pb-44" aria-labelledby="credentials-title">
+      <section className="shell pb-16 md:pb-24" aria-labelledby="credentials-title">
         <div className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-5">
             <Reveal as="h2" id="credentials-title" className="t-h2 text-[clamp(2.75rem,5vw,5rem)]">
