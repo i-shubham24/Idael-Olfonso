@@ -70,12 +70,12 @@ function Panel({ service, index, stacked = false }) {
       <p className="t-label text-gold">{service.kicker}</p>
       <h3
         id={`service-${service.slug}`}
-        className={`panel-name t-h2 mt-3 ${stacked ? 'text-[clamp(2.4rem,10vw,3.5rem)]' : 'text-[clamp(2.5rem,5.2vw,6.25rem)]'}`}
+        className={`panel-name t-h2 mt-1.5 ${stacked ? 'text-[clamp(2.4rem,10vw,3.5rem)]' : 'text-[clamp(2.25rem,4.5vw,5.5rem)]'}`}
       >
         {service.name}
       </h3>
       <div
-        className={`mt-5 grid min-h-0 flex-1 grid-cols-1 grid-rows-[1fr_auto] gap-5 ${stacked ? '' : 'lg:mt-5 lg:grid-cols-12 lg:grid-rows-1 lg:gap-10'}`}
+        className={`mt-3 grid min-h-0 flex-1 grid-cols-1 grid-rows-[1fr_auto] gap-4 ${stacked ? '' : 'lg:mt-3 lg:grid-cols-12 lg:grid-rows-1 lg:gap-8'}`}
       >
         <Tilt className={`min-h-[200px] ${stacked ? '' : 'lg:col-span-8'}`}>
           <TLink
@@ -165,7 +165,7 @@ export default function Services() {
           onUpdate(self) {
             progress.current = self.progress
             // The bezel takes the engraving of whichever service it is rolling under.
-            const stripH = window.innerHeight * 0.24
+            const stripH = window.innerHeight * 0.2
             const margin = stripH * ROLL_RADIUS * ROLL_MARGIN
             const bezelX = margin + (window.innerWidth - margin * 2) * self.progress
             const trackX = -distance() * self.progress
@@ -251,7 +251,7 @@ export default function Services() {
     <section ref={root} id="services" className="relative z-[6] h-[100svh] overflow-hidden bg-ink" aria-labelledby="services-title">
       <div
         ref={track}
-        className="flex h-full items-stretch gap-[6vw] pb-[24vh] pl-4 pr-[8vw] pt-[calc(72px+2svh)] will-change-transform md:pl-8 lg:gap-[5vw] lg:pl-[max(3rem,calc((100vw-1440px)/2+3rem))] lg:pt-[calc(72px+1.5vh)]"
+        className="flex h-full items-stretch gap-[6vw] pb-[14vh] pl-4 pr-[8vw] pt-[70px] will-change-transform md:pl-8 lg:gap-[5vw] lg:pb-[13vh] lg:pl-[max(3rem,calc((100vw-1440px)/2+3rem))] lg:pt-[72px]"
       >
         <div className="w-[86vw] shrink-0 sm:w-[60vw] lg:w-[min(32vw,480px)]">
           <Intro compact />
@@ -262,7 +262,7 @@ export default function Services() {
           </div>
         ))}
       </div>
-      <div className={`pointer-events-none absolute inset-x-0 bottom-0 h-[24vh] transition-opacity duration-300 ${active ? 'opacity-100' : 'opacity-0'}`} aria-hidden="true">
+      <div className={`pointer-events-none absolute inset-x-0 bottom-0 h-[20vh] transition-opacity duration-300 ${active ? 'opacity-100' : 'opacity-0'}`} aria-hidden="true">
         <Suspense fallback={null}>
           <RollingScene progress={progress} label={label} active={active} />
         </Suspense>

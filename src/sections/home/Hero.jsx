@@ -80,7 +80,8 @@ export default function Hero() {
           },
         },
       })
-      tl.to(['.hero-copy', '.hero-scroll'], { yPercent: -18, opacity: 0, duration: 0.2 }, 0)
+      tl.to('.hero-copy', { yPercent: -18, opacity: 0, duration: 0.2 }, 0)
+      tl.to('.hero-scroll', { opacity: 0, duration: 0.1 }, 0.9)
       letters.forEach((el, i) => {
         tl.to(el, { xPercent: (i - mid) * 70, yPercent: 10, opacity: 0, duration: 0.36, ease: 'power1.in' }, 0)
       })

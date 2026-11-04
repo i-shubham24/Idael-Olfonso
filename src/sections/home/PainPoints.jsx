@@ -33,17 +33,29 @@ export default function PainPoints() {
     if (!pin) return
     const ctx = gsap.context(() => {
       let last = 0
-      gsap.timeline({
+      // One natural touchpad glide is ~300px. Each point advances with one glide,
+      // and a final glide on slide 06 scrolls cleanly off into the next section.
+      const stepDist = Math.max(280, Math.min(360, Math.round(window.innerHeight * 0.35)))
+      const totalSteps = n
+      const snapPoints = Array.from({ length: totalSteps + 1 }, (_, k) => k / totalSteps)
+
+      const tl = gsap.timeline({
         scrollTrigger: {
           trigger: root.current,
           start: 'top top',
-          end: () => `+=${window.innerHeight * (n - 0.4)}`,
+          end: () => `+=${stepDist * totalSteps}`,
           pin: true,
-          scrub: true,
+          scrub: 0.5,
           invalidateOnRefresh: true,
           refreshPriority: 2,
+          snap: {
+            snapTo: snapPoints,
+            duration: { min: 0.22, max: 0.42 },
+            delay: 0.02,
+            ease: 'power2.out',
+          },
           onUpdate(self) {
-            const i = Math.min(n - 1, Math.floor(self.progress * n))
+            const i = Math.min(n - 1, Math.max(0, Math.floor(self.progress * totalSteps + 0.5)))
             if (i !== last) {
               last = i
               setActive(i)
@@ -51,6 +63,8 @@ export default function PainPoints() {
           },
         },
       })
+      // Keep scroll cue visible throughout all 6 points, fading only as the section unpins
+      tl.to('.pains-scroll', { opacity: 0, duration: 0.04, ease: 'none' }, 0.96)
     }, root)
     return () => ctx.revert()
   }, [pin, n])
@@ -93,16 +107,16 @@ export default function PainPoints() {
 
   return (
     <section ref={root} id="pains" className="relative z-[2] h-[100svh] overflow-hidden bg-ink" aria-labelledby="pains-title">
-      <div className="shell flex h-full flex-col gap-5 pb-[4svh] pt-[calc(72px+2svh)] lg:grid lg:grid-cols-12 lg:items-center lg:gap-10 lg:pb-[6vh] lg:pt-[calc(84px+4vh)]">
+      <div className="shell flex h-full flex-col gap-4 pb-3 pt-[70px] lg:grid lg:grid-cols-12 lg:items-stretch lg:gap-10 lg:pb-4 lg:pt-[76px]">
         <p className="t-label text-gold lg:hidden" aria-hidden="true">
           {t.pains.title}
         </p>
-        {/* Photos: each new one wipes up over the last. */}
-        <div className="relative min-h-0 flex-1 overflow-hidden rounded-[2px] bg-graphite lg:col-span-7 lg:h-full lg:max-h-[78vh] lg:flex-none">
+        {/* Photos: each new one wipes up over the last, stretching tall from upward. */}
+        <div className="relative min-h-0 flex-1 overflow-hidden rounded-[2px] bg-graphite lg:col-span-7 lg:h-full lg:flex-none">
           {pains.map((p, i) => (
             <div
               key={p.id}
-              className="absolute inset-0 transition-[clip-path] duration-[1300ms] ease-[var(--ease-in-out-expo)]"
+              className="absolute inset-0 transition-[clip-path] duration-[700ms] ease-[var(--ease-in-out-expo)]"
               style={{ clipPath: i <= active ? 'inset(0% 0% 0% 0%)' : 'inset(100% 0% 0% 0%)' }}
             >
               <Img
@@ -112,8 +126,8 @@ export default function PainPoints() {
                 eager
                 priority={false}
                 sizes="(min-width: 1024px) 58vw, 100vw"
-                className={`h-full w-full object-cover transition-transform duration-[2200ms] ease-[var(--ease-out-expo)] ${
-                  i === active ? 'scale-100' : 'scale-[1.12]'
+                className={`h-full w-full object-cover transition-transform duration-[1400ms] ease-[var(--ease-out-expo)] ${
+                  i === active ? 'scale-100' : 'scale-[1.08]'
                 }`}
               />
               <div className="absolute inset-0 bg-[linear-gradient(to_top,rgb(10_10_11/0.55),transparent_45%)]" />
@@ -130,7 +144,7 @@ export default function PainPoints() {
           </div>
         </div>
 
-        <div className="flex shrink-0 flex-col lg:col-span-5 lg:h-full lg:max-h-[78vh] lg:justify-between">
+        <div className="flex shrink-0 flex-col justify-between py-1 lg:col-span-5 lg:h-full lg:py-3">
           <h2 id="pains-title" className="t-label hidden text-gold lg:block">
             {t.pains.title}
           </h2>
@@ -177,6 +191,23 @@ export default function PainPoints() {
           </ul>
         </div>
       </div>
+
+      {/* Scroll hint on the right edge: kept until the end of this section. */}
+      {!reduced && (
+        <div
+          className="pains-scroll pointer-events-none absolute right-3 top-1/2 z-20 -translate-y-1/2 md:right-5 xl:right-7"
+          aria-hidden="true"
+        >
+          <div className="flex flex-col items-center gap-4">
+            <span className="t-label text-[0.6rem] text-ivory/70 [writing-mode:vertical-rl]">{t.hero.scroll}</span>
+            <span className="scroll-cue relative block h-12 w-3 overflow-hidden">
+              <svg width="12" height="10" viewBox="0 0 7 6" className="absolute left-0 top-0">
+                <path d="M0 0 L7 0 L3.5 6 Z" fill="var(--color-gold)" />
+              </svg>
+            </span>
+          </div>
+        </div>
+      )}
     </section>
   )
 }

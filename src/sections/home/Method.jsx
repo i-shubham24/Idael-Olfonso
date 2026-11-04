@@ -24,14 +24,42 @@ export default function Method() {
   useLayoutEffect(() => {
     if (!track) return
     const ctx = gsap.context(() => {
-      gsap.utils.toArray('.md-step').forEach((step, i) => {
-        ScrollTrigger.create({
-          trigger: step,
-          start: 'top 55%',
-          end: 'bottom 55%',
-          onToggle: (self) => self.isActive && setActive(i),
+      let lastActive = 0
+      const updateActive = () => {
+        const stepEls = root.current?.querySelectorAll('.md-step')
+        if (!stepEls || !stepEls.length) return
+        const focusY = window.innerHeight * 0.45
+        let bestIdx = 0
+        let minDistance = Infinity
+
+        stepEls.forEach((el, i) => {
+          const rect = el.getBoundingClientRect()
+          // Step focus point: where the step header and title sit
+          const stepFocus = rect.top + Math.min(rect.height * 0.35, 120)
+          const dist = Math.abs(stepFocus - focusY)
+          if (dist < minDistance) {
+            minDistance = dist
+            bestIdx = i
+          }
         })
+
+        if (bestIdx !== lastActive) {
+          lastActive = bestIdx
+          setActive(bestIdx)
+        }
+      }
+
+      ScrollTrigger.create({
+        trigger: root.current,
+        start: 'top bottom',
+        end: 'bottom top',
+        onUpdate: updateActive,
+        onEnter: updateActive,
+        onEnterBack: updateActive,
+        onRefresh: updateActive,
       })
+
+      updateActive()
     }, root)
     return () => ctx.revert()
   }, [track, desktop])
