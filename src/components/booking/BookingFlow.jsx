@@ -513,9 +513,13 @@ function TimeStep({ type, date, setDate, slot, setSlot, onBack, onNext, notice }
 
 function validate(f, type, errors) {
   const e = {}
-  if (f.name.trim().length < 2) e.name = errors.name
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(f.email.trim())) e.email = errors.email
-  if (f.phone.replace(/\D/g, '').length < 7) e.phone = errors.phone
+  const name = (f.name ?? '').trim()
+  const email = (f.email ?? '').trim()
+  const phoneDigits = (f.phone ?? '').replace(/\D/g, '')
+
+  if (name.length < 2 || name.length > 100) e.name = errors.name
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) || email.length > 254) e.email = errors.email
+  if (phoneDigits.length < 7 || phoneDigits.length > 20) e.phone = errors.phone
   if (type.places.length > 1 && !f.place) e.place = errors.place
   if (!f.consent) e.consent = errors.consent
   return e
@@ -792,7 +796,20 @@ export default function BookingFlow({ heading = 'h2', title, titleEm, intro, ini
     }
     setSubmitting(true)
     const place = type.places.find((p) => p.id === form.place)?.label ?? type.places[0].label
-    const result = await createBooking({ type: typeId, date, time: slot.time, start: slot.start, ...form, place })
+    const cleanPayload = {
+      type: typeId,
+      date,
+      time: slot.time,
+      start: slot.start,
+      name: (form.name ?? '').trim().slice(0, 100),
+      email: (form.email ?? '').trim().toLowerCase().slice(0, 254),
+      phone: (form.phone ?? '').trim().slice(0, 30),
+      place,
+      goals: (form.goals ?? '').trim().slice(0, 1000),
+      referral: (form.referral ?? '').trim().slice(0, 200),
+      consent: !!form.consent,
+    }
+    const result = await createBooking(cleanPayload)
     setSubmitting(false)
     if (!result.ok) {
       setNotice(result.reason === 'taken' ? b.taken : b.failed)
