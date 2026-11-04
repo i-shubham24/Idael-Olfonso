@@ -158,10 +158,10 @@ export default function Services() {
           end: () => `+=${distance()}`,
           pin: true,
           scrub: true,
-          anticipatePin: 1,
           invalidateOnRefresh: true,
           refreshPriority: 1,
           onRefresh: measurePanels,
+          onToggle: (self) => setActive(self.isActive),
           onUpdate(self) {
             progress.current = self.progress
             // The bezel takes the engraving of whichever service it is rolling under.
@@ -221,13 +221,6 @@ export default function Services() {
           },
         )
       })
-
-      ScrollTrigger.create({
-        trigger: root.current,
-        start: 'top bottom',
-        end: () => `+=${distance()}`,
-        onToggle: (self) => setActive(self.isActive),
-      })
     }, root)
     return () => ctx.revert()
   }, [pan])
@@ -255,7 +248,7 @@ export default function Services() {
   }
 
   return (
-    <section ref={root} id="services" className="relative h-[100svh] overflow-hidden bg-ink" aria-labelledby="services-title">
+    <section ref={root} id="services" className="relative z-[6] h-[100svh] overflow-hidden bg-ink" aria-labelledby="services-title">
       <div
         ref={track}
         className="flex h-full items-stretch gap-[6vw] pb-[24vh] pl-4 pr-[8vw] pt-[calc(72px+2svh)] will-change-transform md:pl-8 lg:gap-[5vw] lg:pl-[max(3rem,calc((100vw-1440px)/2+3rem))] lg:pt-[calc(72px+1.5vh)]"
@@ -269,7 +262,7 @@ export default function Services() {
           </div>
         ))}
       </div>
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[24vh]" aria-hidden="true">
+      <div className={`pointer-events-none absolute inset-x-0 bottom-0 h-[24vh] transition-opacity duration-300 ${active ? 'opacity-100' : 'opacity-0'}`} aria-hidden="true">
         <Suspense fallback={null}>
           <RollingScene progress={progress} label={label} active={active} />
         </Suspense>

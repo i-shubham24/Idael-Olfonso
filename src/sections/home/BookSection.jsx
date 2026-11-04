@@ -8,7 +8,7 @@ export default function BookSection() {
     // The lighter tone fades in and out, so there is no hard edge against the sections around it.
     <section
       id="book"
-      className="bg-[linear-gradient(to_bottom,transparent,rgb(17_17_19/0.7)_14%,rgb(17_17_19/0.7)_86%,transparent)] py-28 md:py-40"
+      className="relative z-[5] bg-ink py-28 md:py-40"
       aria-label={t.routes.book}
     >
       <div className="shell">

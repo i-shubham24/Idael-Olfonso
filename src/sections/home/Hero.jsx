@@ -72,9 +72,9 @@ export default function Hero() {
           end: () => `+=${window.innerHeight * 3}`,
           pin: true,
           scrub: true,
-          anticipatePin: 1,
           invalidateOnRefresh: true,
           refreshPriority: 3,
+          onToggle: (self) => setActive(self.isActive),
           onUpdate: (self) => {
             progress.current = self.progress
           },
@@ -93,15 +93,6 @@ export default function Hero() {
         0.52,
       )
       tl.set({}, {}, 1)
-
-      // Only render WebGL while the hero section (including its pinned stretch) is on screen.
-      // Ends strictly when the hero finishes its pinned duration so the 3D ring does not linger.
-      ScrollTrigger.create({
-        trigger: root.current,
-        start: 'top bottom',
-        end: () => `+=${window.innerHeight * 3}`,
-        onToggle: (self) => setActive(self.isActive),
-      })
     }, root)
     return () => ctx.revert()
     // The words are new elements after a language switch, so the timeline is rebuilt for them.
@@ -186,7 +177,7 @@ export default function Hero() {
         </div>
 
         <Suspense fallback={null}>
-          <div className="absolute inset-0 z-[2]">
+          <div className={`absolute inset-0 z-[2] transition-opacity duration-300 ${active ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
             <HeroScene
               progress={progress}
               intro={intro}

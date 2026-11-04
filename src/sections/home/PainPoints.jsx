@@ -40,7 +40,6 @@ export default function PainPoints() {
           end: () => `+=${window.innerHeight * (n - 0.4)}`,
           pin: true,
           scrub: true,
-          anticipatePin: 1,
           invalidateOnRefresh: true,
           refreshPriority: 2,
           onUpdate(self) {
@@ -93,7 +92,7 @@ export default function PainPoints() {
   const current = pains[active]
 
   return (
-    <section ref={root} id="pains" className="relative h-[100svh] overflow-hidden bg-ink" aria-labelledby="pains-title">
+    <section ref={root} id="pains" className="relative z-[2] h-[100svh] overflow-hidden bg-ink" aria-labelledby="pains-title">
       <div className="shell flex h-full flex-col gap-5 pb-[4svh] pt-[calc(72px+2svh)] lg:grid lg:grid-cols-12 lg:items-center lg:gap-10 lg:pb-[6vh] lg:pt-[calc(84px+4vh)]">
         <p className="t-label text-gold lg:hidden" aria-hidden="true">
           {t.pains.title}

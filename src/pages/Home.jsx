@@ -1,5 +1,6 @@
 import { useLayoutEffect } from 'react'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useLocale } from '../lib/i18n'
 import Hero from '../sections/home/Hero'
 import PainPoints from '../sections/home/PainPoints'
 import Trainer from '../sections/home/Trainer'
@@ -20,13 +21,9 @@ import { useDocumentTitle } from '../lib/useDocumentTitle'
 */
 export default function Home() {
   useDocumentTitle()
+  const { lang } = useLocale()
 
   useLayoutEffect(() => {
-    // Once all child sections have mounted and registered their ScrollTriggers,
-    // sort them strictly by DOM order and refresh so that:
-    // Hero (prio 3) -> PainPoints (prio 2) -> Services (prio 1)
-    // and all intermediate sections have their pin spacers and trigger start/end
-    // calculated in strictly sequential order without overlapping.
     ScrollTrigger.sort()
     ScrollTrigger.refresh()
 
@@ -35,7 +32,7 @@ export default function Home() {
       ScrollTrigger.refresh()
     })
     return () => cancelAnimationFrame(rafId)
-  }, [])
+  }, [lang])
 
   return (
     <>
