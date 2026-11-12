@@ -2,8 +2,7 @@ let cached
 
 /**
  * True when WebGL runs on the CPU (hardware acceleration off, some VMs and
- * remote desktops). We then drop the grain layer and render 3D at a lower
- * resolution so scrolling stays smooth.
+ * remote desktops). We then drop the grain layer so scrolling stays smooth.
  */
 export function isSoftwareGL() {
   if (cached !== undefined) return cached

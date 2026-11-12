@@ -1,11 +1,10 @@
 import { useSyncExternalStore } from 'react'
 
 /*
-  A tiny store that says whether the current page is visible to the visitor.
-  It is false while the first-visit loader or a route transition panel covers
-  the screen, so entrance animations wait and play as the cover lifts.
+  Whether the current page is visible to the visitor. There is no loader or
+  cover panel any more, so it is always true; kept so pages can ask.
 */
-let ready = false
+let ready = true
 const listeners = new Set()
 
 export const revealStore = {
@@ -22,5 +21,5 @@ export const revealStore = {
 }
 
 export function usePageReady() {
-  return useSyncExternalStore(revealStore.subscribe, revealStore.get, () => false)
+  return useSyncExternalStore(revealStore.subscribe, revealStore.get, () => true)
 }

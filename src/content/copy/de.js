@@ -19,8 +19,8 @@ const de = {
 
   nav: {
     about: 'Über Idael',
-    why: 'Warum Idael',
-    services: 'Leistungen',
+    services: 'Training',
+    places: 'Orte',
     book: 'Buchen',
     menu: 'Menü',
     close: 'Schliessen',
@@ -30,22 +30,25 @@ const de = {
     appointment: 'Nur nach Vereinbarung',
   },
 
-  cursor: { view: 'Ansehen', drag: 'Ziehen', next: 'Weiter' },
 
   hero: {
-    role: 'Privater Trainer in Zürich',
-    headline: 'Privates Training,',
-    headlineEm: 'nach Vereinbarung.',
-    subline: 'Training und Ernährung, eins zu eins, wo immer Sie sind.',
+    headline: 'Privates Training|in Zürich',
+    subline: 'Training und Ernährung, eins zu eins, passend zu Ihrem Kalender.',
     cta: 'Kostenloses Erstgespräch buchen',
-    secondary: 'Kommt Ihnen das bekannt vor?',
-    bridge: 'Die meisten Kunden kommen aus denselben Gründen zu Idael.',
-    scroll: 'Scrollen',
+    note: 'Kostenlos, 20 Minuten, unverbindlich.',
+    scroll: 'Nach unten',
+    aside: 'Training, Ernährung, Erholung',
   },
+
 
   pains: {
     title: 'Kommt Ihnen das bekannt vor?',
+    lead: 'Die meisten kommen aus einem von drei Gründen zu Idael.',
+    leadA: 'Die meisten kommen zu Idael',
+    leadB: 'aus einem von drei Gründen.',
+    card: { title: 'Kostenloses Erstgespräch', text: 'Zwanzig Minuten per Telefon oder Video. Unverbindlich.' },
     answerLabel: 'Mit Idael',
+    featured: ['time', 'desk', 'energy'],
     items: {
       time: { problem: 'Das Training wird als Erstes abgesagt.', answer: 'Flexible Einheiten, die in Ihren Alltag passen.' },
       travel: { problem: 'Ständig beschäftigt, immer auf dem Sprung.', answer: 'Einheiten vor Ort oder online halten Sie verlässlich auf Kurs.' },
@@ -56,9 +59,11 @@ const de = {
     },
   },
 
+
   trainer: {
+    kicker: 'Der Trainer',
     title: 'Lernen Sie Idael kennen',
-    intro: 'Kubanische Wurzeln, Schweizer Diplom. Cheftrainer in führenden Schweizer Sportzentren, 186K Follower online.',
+    intro: 'Kubanische Wurzeln, Schweizer Diplom. Er betreut eine kleine Gruppe privater Kunden in Zürich und plant Training und Ernährung gemeinsam.',
     credentials: [
       { title: 'Diplom in Personal Training', detail: 'Swiss Academy of Fitness and Sports' },
       { title: 'Programmleitung', detail: 'Führende Sportzentren in der Schweiz' },
@@ -67,40 +72,50 @@ const de = {
     cta: 'Seine Geschichte',
   },
 
-  showreel: {
-    title: 'Idael',
-    titleEm: 'in Bewegung',
-    intro: 'Kurze Clips aus seinem Training. Antippen für den nächsten.',
-    prev: 'Vorheriger Clip',
-    next: 'Nächster Clip',
-    clips: [
-      { id: 'core', label: 'Rumpfkraft' },
-      { id: 'dance', label: 'Latin Beinarbeit' },
-    ],
+  gallery: {
+    kicker: 'Auf Instagram',
+    title: 'Idael im Training',
+    intro: (n) => `Von seinem Instagram, wo ${n} Menschen seinen Workouts folgen.`,
+    prev: 'Zurück',
+    next: 'Weiter',
+    labels: {
+      hiit: 'HIIT',
+      footwork: 'Latin Beinarbeit',
+      knees: 'Kondition',
+      night: 'Tanzabend',
+      rhythm: 'Rhythmus',
+      strength: 'Kraftbereich',
+      group: 'Gruppenstunde',
+      offduty: 'Nach dem Training',
+    },
   },
 
   why: {
-    title: 'Warum Idael',
-    intro: 'Sechs Dinge, die Kunden im ersten Monat bemerken.',
+    kicker: 'Warum Idael',
+    title: 'Was Kunden zuerst bemerken',
     facts: [
-      { value: '1:1', label: 'Jede Einheit nur Sie und Idael' },
-      { value: '2 in 1', label: 'Training und Ernährung in einem Plan' },
-      { value: '5', label: 'Orte zum Trainieren, inklusive Ihr Zuhause' },
-      { value: '186K', label: 'Menschen folgen seinem Training auf Instagram' },
-      { value: '0', label: 'Fotos oder Namen geteilt, jemals' },
-      { value: 'CH', label: 'In der Schweiz qualifiziert und in Zürich ansässig' },
+      { value: '1:1', label: 'Jede Einheit nur Sie und Idael. Keine Gruppen, kein Wechsel.' },
+      { value: '2 in 1', label: 'Training und Ernährung in einem Plan, beides in dieselbe Richtung.' },
+      { value: '5', label: 'Orte zum Trainieren, Ihr Zuhause und der See inklusive.' },
+      { value: '186K', label: 'Menschen folgen seinem Training auf Instagram.' },
+      { value: '0', label: 'Fotos oder Namen geteilt, ohne Ihre schriftliche Zustimmung.' },
+      { value: 'CH', label: 'In der Schweiz qualifiziert und in Zürich zu Hause.' },
     ],
   },
 
+
+
   bookSection: {
-    title: 'Buchen Sie ein',
-    titleEm: 'Erstgespräch',
-    intro: 'Kostenlos, 20 Minuten, per Telefon oder Video. Idael übernimmt ab da.',
+    title: 'Kostenloses Erstgespräch buchen',
+    intro: 'Zwanzig Minuten per Telefon oder Video. Nennen Sie Idael Ihr Ziel, er übernimmt ab da.',
   },
 
   services: {
-    title: 'Möglichkeiten mit Idael zu trainieren',
-    intro: 'Eins zu eins, oder zu zweit.',
+    kicker: 'Training',
+    title: 'So trainieren Sie',
+    intro: 'Vier Wege, mit Idael zu arbeiten. Jeder beginnt mit einem kostenlosen Erstgespräch.',
+    prev: 'Zurück',
+    next: 'Weiter',
     session: 'Einheit',
     format: 'Format',
     see: 'Einheit ansehen',
@@ -108,7 +123,7 @@ const de = {
       private: {
         name: 'Privates Training',
         kicker: 'Eins zu eins',
-        summary: 'Kraft, Kondition und Mobilität, abgestimmt auf Ihre persönlichen Ziele.',
+        summary: 'Kraft, Kondition und Mobilität, allein oder zu zweit.',
         description:
           'Strukturierte Trainingsblöcke, die sich an Ihren Zeitplan, Ihr Fitnesslevel und Ihre Tagesform anpassen. Zu Hause, im privaten Studio, draussen oder online.',
         format: 'Eins zu eins',
@@ -127,16 +142,6 @@ const de = {
         forWho: ['Sie möchten gesund essen ohne extreme Diäten', 'Sie verbinden Beruf, Familie und Fitness', 'Sie wollen Energie, die den ganzen Tag anhält'],
         session: ['Check-in', 'Rückblick', 'Plan', 'Nächste Schritte'],
       },
-      duo: {
-        name: 'Duo-Einheiten',
-        kicker: 'Für zwei',
-        summary: 'Trainieren Sie mit Partner, Familienmitglied oder Freunden. Zwei Pläne, eine Stunde.',
-        description: 'Sie trainieren zusammen, jede Person mit dem eigenen Trainingsplan. Ideal für Trainingspartner mit unterschiedlichen Fitnesszielen.',
-        format: 'Zwei Personen',
-        where: 'Studio, zu Hause oder draussen',
-        forWho: ['Sie trainieren lieber gemeinsam mit einem Partner', 'Sie und Ihr Partner haben verschiedene Ziele', 'Sie möchten eine feste gemeinsame Trainingsstunde'],
-        session: ['Check-in', 'Aufwärmen', 'Kraft', 'Partnerzirkel', 'Ausklang'],
-      },
       'latin-conditioning': {
         name: 'Latin Conditioning',
         kicker: 'Signature-Einheit',
@@ -146,16 +151,6 @@ const de = {
         where: 'Studio, zu Hause, draussen oder online',
         forWho: ['Laufbänder langweilen Sie', 'Sie wollen Ihre Fitness schnell zurück', 'Sie mögen Musik beim Training'],
         session: ['Aufwärmen', 'Beinarbeit', 'Intervalle', 'Core', 'Ausklang'],
-      },
-      'body-flow': {
-        name: 'Body Flow',
-        kicker: 'Mobilität und Erholung',
-        summary: 'Mobilität, Atmung und ruhige Kraft für das tägliche Wohlbefinden.',
-        description: 'Für verspannte Rücken, steife Hüften und langes Sitzen. Gelenk für Gelenk, dann ruhige, kontrollierte Kraft.',
-        format: 'Eins zu eins',
-        where: 'Studio, zu Hause, draussen oder online',
-        forWho: ['Sie fühlen sich steif vom Sitzen oder Alltagsstress', 'Sie kommen nach einer Verletzung zurück', 'Sie wollen besser schlafen und erholt aufwachen'],
-        session: ['Atmung', 'Gelenkvorbereitung', 'Mobilitäts-Flow', 'Erholung'],
       },
       online: {
         name: 'Online-Coaching',
@@ -171,23 +166,38 @@ const de = {
   },
 
   method: {
-    title: 'Wie es funktioniert',
-    intro: 'Vom ersten Anruf bis zum ersten Review.',
-    step: 'Schritt',
+    kicker: 'Ablauf',
+    title: 'Vom ersten Gespräch bis zum ersten Review',
     items: [
-      { title: 'Beratungsgespräch', text: 'Ein kostenloses 20-minütiges Gespräch über Ihre Ziele und Ihre Woche.' },
+      { title: 'Erstgespräch', text: 'Zwanzig Minuten über Ihre Ziele und Ihre Woche.' },
       { title: 'Einschätzung', text: 'Wie Sie sich bewegen, wie stark Sie sind, wie Sie sich erholen.' },
-      { title: 'Ihr Plan', text: 'Training und Ernährung, um Ihren Kalender herum geschrieben.' },
+      { title: 'Ihr Plan', text: 'Training und Ernährung, passend zu Ihrem Kalender.' },
       { title: 'Training', text: 'Zu Hause, im privaten Studio, draussen oder online.' },
       { title: 'Review', text: 'Alle sechs Wochen, mit Messungen.' },
     ],
   },
 
+  // BEISPIEL: Zitate von Kunden. Vor dem Start durch echte ersetzen, mit Erlaubnis.
+  clients: {
+    kicker: 'Bisherige Kunden',
+    title: 'In ihren Worten',
+    note: 'Namen auf Wunsch nicht genannt.',
+    prev: 'Zurück',
+    next: 'Weiter',
+    items: [
+      { quote: 'Der erste Trainer, der sich nach meinem Kalender richtet und nicht umgekehrt.', who: 'Architekt', place: 'Zürich' },
+      { quote: 'Um sechs Uhr morgens zu Hause, um sieben fertig. Die Energie spüre ich den ganzen Tag.', who: 'Softwareentwickler', place: 'Zug' },
+      { quote: 'Latin Conditioning ist das einzige Workout, auf das sich meine Partnerin und ich freuen.', who: 'Lehrerin', place: 'Luzern' },
+      { quote: 'Mit Beruf und Familie hat mich seine Betreuung verlässlich dranbleiben lassen.', who: 'Projektleiterin', place: 'Genf' },
+    ],
+  },
+
+
   locations: {
+    kicker: 'Orte',
     title: 'Wo Sie trainieren',
     intro: 'Idael kommt zu Ihnen. Nur Sie beide, immer.',
-    available: 'Verfügbare Zeiten',
-    bookTime: 'Zeit buchen',
+    featured: ['studio', 'residence', 'outdoors', 'online'],
     zones: {
       studio: { name: 'Privates Studio', detail: 'Ein Kunde auf einmal.' },
       residence: { name: 'Ihr Zuhause', detail: 'Idael bringt die Ausrüstung mit.' },
@@ -203,21 +213,9 @@ const de = {
     { label: 'Sonntag', value: 'Auf Anfrage' },
   ],
 
-  // BEISPIEL: Zitate von Klienten.
-  testimonials: {
-    title: 'Was Klienten sagen',
-    intro: 'Namen zurückgehalten, wie von ihnen gewünscht.',
-    prev: 'Zurück',
-    next: 'Weiter',
-    items: [
-      { quote: 'Der erste Trainer, der sich nach meinem Kalender richtet und nicht umgekehrt.', attribution: 'Architekt', place: 'Zürich' },
-      { quote: 'Um sechs Uhr morgens zu Hause, um sieben Uhr fertig. Den Energieschub spüre ich den ganzen Tag.', attribution: 'Software-Entwickler', place: 'Zug' },
-      { quote: 'Latin Conditioning ist das einzige Workout, auf das meine Partnerin und ich uns freuen.', attribution: 'Lehrerin', place: 'Luzern' },
-      { quote: 'Mit Beruf und Familie hat mich diese persönliche Betreuung verlässlich dranbleiben lassen.', attribution: 'Projektleiterin', place: 'Genf' },
-    ],
-  },
 
   faq: {
+    kicker: 'FAQ',
     title: 'Fragen',
     intro: 'Noch etwas? Schreiben Sie Idael auf',
     items: [
@@ -230,7 +228,15 @@ const de = {
   },
 
   booking: {
-    steps: ['Einheit', 'Datum und Zeit', 'Ihre Angaben'],
+    steps: ['Ihr Ziel', 'Datum und Zeit', 'Ihre Angaben'],
+    goalTitle: 'Was ist Ihr Ziel?',
+    goalHint: 'Wählen Sie das Nächstliegende. Mehr erzählen Sie Idael im Gespräch.',
+    goalOptions: {
+      strength: 'Stärker werden',
+      weight: 'Gewicht verlieren',
+      move: 'Schmerzfrei bewegen',
+      energy: 'Mehr Energie, weniger Stress',
+    },
     typeTitle: 'Wählen Sie Ihren Termin',
     typeHint: 'Nicht sicher? Beginnen Sie mit dem kostenlosen Erstgespräch.',
     startHere: 'Hier starten',
@@ -294,24 +300,23 @@ const de = {
     thanks: 'Vielen Dank,',
     receivedText: 'Idael wird Ihre Zeit persönlich bestätigen, normalerweise innerhalb weniger Stunden.',
     confirmedText: 'Sie erhalten eine E-Mail mit den Details und eine Erinnerung am Vortag.',
-    summary: { session: 'Termin', when: 'Wann', where: 'Wo', status: 'Status' },
+    summary: { session: 'Termin', goal: 'Ziel', when: 'Wann', where: 'Wo', status: 'Status' },
     awaiting: 'Wartet auf Bestätigung',
     addToCalendar: 'Zum Kalender hinzufügen',
     backHome: 'Zurück zur Startseite',
     whatsapp: 'Lieber sprechen? Schreiben Sie Idael',
     personal: 'Jede Anfrage geht an Idael persönlich.',
     whatsappText: (name, when) => `Hallo Idael, ich möchte gerne ${name ? `ein ${name.toLowerCase()}` : 'einen Termin'}${when ? ` am ${when}` : ''} buchen.`,
-    pageTitle: 'Buchen Sie ein',
-    pageTitleEm: 'Erstgespräch',
-    pageIntro: 'Wählen Sie einen Termin und eine Zeit, dann fügen Sie Ihre Angaben hinzu. Etwa zwei Minuten.',
+    pageTitle: 'Kostenloses Erstgespräch buchen',
+    pageIntro: 'Wählen Sie Ihr Ziel, einen Tag und eine Zeit, dann Ihre Angaben. Etwa zwei Minuten.',
     icsTitle: (name) => `${name} mit Idael Alfonso`,
     icsRequested: 'Angefragt. Idael wird bestätigen.',
     icsConfirmed: 'Gebucht.',
   },
 
   footer: {
-    title: 'Beginnen Sie mit einem',
-    titleEm: 'kostenlosen Erstgespräch.',
+    kicker: 'Ihr erster Schritt',
+    title: 'Beginnen Sie mit einem kostenlosen Erstgespräch.',
     intro: 'Zwanzig Minuten per Telefon oder Video. Ohne Verpflichtung.',
     cta: 'Erstgespräch buchen',
     where: 'Wo',
@@ -320,13 +325,31 @@ const de = {
     contact: 'Kontakt',
     message: 'Idael schreiben',
     explore: 'Erkunden',
+    follow: 'Folgen',
     about: 'Über Idael',
-    services: 'Leistungen',
+    services: 'Training',
     book: 'Erstgespräch buchen',
     rights: 'Alle Rechte vorbehalten.',
     privacy: 'Datenschutz',
     imprint: 'Impressum',
     photos: 'Demo-Fotos von Unsplash',
+  },
+
+  newsletter: {
+    kicker: 'Notizen von Idael',
+    title: 'Bleiben Sie nah am Training.',
+    text: 'Eine kurze Mail, wenn es etwas zu teilen gibt: neue Einheiten, Trainingstipps, Anlässe in Zürich. Ein paar Mal im Jahr, nie Angebote.',
+    email: 'E-Mail-Adresse',
+    cta: 'Auf dem Laufenden bleiben',
+    sending: 'Wird gesendet',
+    privacy: 'Abmeldung jederzeit möglich.',
+    privacyLink: 'Datenschutz',
+    done: 'Vielen Dank.',
+    doneText: 'Sie sind auf der Liste. Schauen Sie in Ihr Postfach.',
+    error: 'Bitte geben Sie eine E-Mail-Adresse wie name@beispiel.ch ein.',
+    failed: 'Etwas ist schiefgelaufen. Bitte erneut versuchen.',
+    close: 'Schliessen',
+    open: 'Newsletter',
   },
 
   aboutPage: {
@@ -349,25 +372,26 @@ const de = {
     ],
     credentialsTitle: 'Ausbildung und Erfahrung',
     cta: 'Kostenloses Erstgespräch buchen',
-    services: 'Leistungen ansehen',
+    services: 'So trainieren Sie',
     portraitAlt: 'Idael Alfonso am Zurich Film Festival',
   },
 
   servicePage: {
-    all: 'Alle Leistungen',
+    all: 'Alle Trainings',
     session: 'Einheit',
     format: 'Format',
     where: 'Wo',
     book: 'Erstgespräch buchen',
     plan: 'Der Ablauf der Einheit',
     planTitle: (minutes) => `Wie ${minutes} Minuten aussehen`,
-    planIntro: 'Ein fester Plan, am Tag angepasst. Der goldene Block ist der Hauptteil.',
+    planIntro: 'Ein fester Plan, am Tag angepasst an Ihre Form.',
     minutes: 'Min',
     range: (from, to) => `${from} bis ${to} Min`,
     suitsYou: 'Das passt zu Ihnen, wenn',
     start: 'Loslegen',
     startText: 'Buchen Sie ein kostenloses Erstgespräch. Idael schlägt vor, wie man anfängt.',
-    next: 'Nächste Leistung',
+    next: 'Weiter entdecken',
+    more: 'Weitere Trainings',
   },
 
   legal: {

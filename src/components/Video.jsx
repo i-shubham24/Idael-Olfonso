@@ -20,6 +20,7 @@ export default function Video({
 }) {
   const ref = useRef(null)
   const [visible, setVisible] = useState(false)
+  const [ready, setReady] = useState(false)
   const reduced = useReducedMotion()
   // Phones get a lighter file: 480p looks sharp on a small screen and loads much faster.
   const small = useMediaQuery('(max-width: 767px)')
@@ -55,7 +56,10 @@ export default function Video({
       playsInline
       preload={reduced ? 'none' : 'metadata'}
       onEnded={onEnded}
+      onLoadedData={() => setReady(true)}
+      data-loaded={ready || undefined}
       aria-hidden="true"
+      // No load fade on films: a clip without a poster must never sit invisible waiting for a frame.
       className={`${grade} ${className}`}
       {...rest}
     />

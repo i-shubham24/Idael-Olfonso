@@ -1,178 +1,168 @@
 import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
-import { ArrowUpRight, InstagramLogo, WhatsappLogo } from '@phosphor-icons/react'
+import { useLocation } from 'react-router'
+import { EnvelopeSimple, InstagramLogo, WhatsappLogo } from '@phosphor-icons/react'
 import { useContent } from '../lib/i18n'
 import { prefersReducedMotion } from '../lib/media'
 import { TLink } from '../lib/transition'
-import { useFitText } from '../lib/useFitText'
 import Button from './Button'
-import Reveal from './Reveal'
+import Img from './Img'
+import Title from './Title'
+import Logo from './Logo'
+import { NEWS_EVENT } from './Newsletter'
 
 /*
-  The one deliberate theme switch on the site: the page turns ivory at the end.
-  The panel widens to full bleed as it arrives and the name rises letter by
-  letter out of the bottom edge.
+  The close of every page:
+  1. A full width photograph of Idael that opens out from a framed card as
+     it arrives, with the closing line and the booking button over it.
+     (Not on /book, where the calendar already is.)
+  2. Columns of links in the site serif, a thin line, then the legal row.
 */
-export default function Footer({ cta = true }) {
-  const { t, brand, contact } = useContent()
+export default function Footer() {
+  const { t, brand, contact, images, services } = useContent()
+  const { pathname } = useLocation()
   const f = t.footer
   const root = useRef(null)
-  const panel = useRef(null)
-  const word = useRef(null)
-  useFitText(word)
+  const year = new Date().getFullYear()
+  const linkCls = 'inline-flex items-center gap-2 transition-colors duration-300 hover:text-ivory'
+  // Links in the site's serif, sentence case: quieter and more personal than shouted capitals.
+  const colLink = 'inline-flex items-center gap-2.5 font-serif text-[1.2rem] leading-snug text-ivory/75 transition-colors duration-300 hover:text-ivory'
+  const cta = !pathname.startsWith('/book')
 
   useLayoutEffect(() => {
     if (prefersReducedMotion()) return
-
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        panel.current,
-        { clipPath: 'inset(0% 3% 0% 3% round 4px)' },
-        {
-          clipPath: 'inset(0% 0% 0% 0% round 0px)',
-          ease: 'none',
-          scrollTrigger: { trigger: root.current, start: 'top bottom', end: 'top 35%', scrub: true },
-        },
-      )
-      gsap.fromTo(
-        '.ft-letter',
-        { yPercent: 100 },
-        {
-          yPercent: 0,
-          ease: 'none',
-          stagger: 0.04,
-          scrollTrigger: { trigger: word.current, start: 'top bottom', end: 'bottom bottom', scrub: 0.8 },
-        },
-      )
+      if (cta) {
+        const st = { trigger: '.close-band', start: 'top bottom', end: 'top 20%', scrub: true }
+        gsap.fromTo(
+          '.close-band',
+          { clipPath: 'inset(0% 6% 0% 6% round 10px)' },
+          { clipPath: 'inset(0% 0% 0% 0% round 0px)', ease: 'none', scrollTrigger: st },
+        )
+        gsap.fromTo('.close-img', { scale: 1.2 }, { scale: 1, ease: 'none', scrollTrigger: { ...st, end: 'bottom top' } })
+      }
     }, root)
     return () => ctx.revert()
-  }, [])
-
-  const year = new Date().getFullYear()
-  const linkCls = 'inline-flex items-center gap-2 transition-colors hover:text-ink'
+  }, [cta])
 
   return (
-    <footer ref={root} className="relative">
-      <div ref={panel} className="bg-ivory text-ink">
-        {cta && (
-          <section
-            className="shell pb-16 pt-8 md:pb-24 md:pt-12"
-            aria-labelledby="closing-cta"
-          >
-            <Reveal
-              as="h2"
-              id="closing-cta"
-              className="t-h2 max-w-[14ch] text-[clamp(3rem,8.5vw,9rem)]"
-            >
-              {f.title} <em className="text-[#8a6d3f]">{f.titleEm}</em>
-            </Reveal>
-            <div className="mt-8 flex flex-col items-start gap-8 md:mt-12 md:flex-row md:items-end md:justify-between">
-              <p className="t-lead max-w-[40ch] text-ink/70">{f.intro}</p>
-              <Button to="/#book" variant="ink" size="xl">
-                {f.cta}
-              </Button>
-            </div>
-          </section>
-        )}
-
-        <div
-          className={`shell grid gap-10 pb-16 sm:grid-cols-2 lg:grid-cols-4 ${cta ? 'pt-6' : 'pt-16'}`}
-        >
-          <div>
-            <h3 className="t-label mb-4 text-ink/65">{f.where}</h3>
-            <p className="font-serif text-2xl leading-tight">{brand.area}</p>
-            <p className="mt-2 text-ink/65">{f.whereText}</p>
+    <footer ref={root} className="bg-onyx-2">
+      {cta && (
+        <section className="close-band relative flex min-h-[86svh] items-end overflow-hidden" aria-labelledby="closing-cta">
+          <div className="absolute inset-0">
+            <Img
+              image={images.closing}
+              alt=""
+              width={1800}
+              sizes="100vw"
+              className="close-img h-full w-full object-cover object-[50%_30%]"
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(to_top,rgb(10_10_11/0.92),rgb(10_10_11/0.35)_55%,rgb(10_10_11/0.15))]" />
           </div>
-          <div>
-            <h3 className="t-label mb-4 text-ink/65">{f.availability}</h3>
-            <dl className="grid gap-1 text-ink/65">
+          <div className="shell relative grid w-full gap-10 pb-16 md:pb-24 lg:grid-cols-12 lg:items-end">
+            <div className="lg:col-span-7">
+              <Title id="closing-cta" kicker={f.kicker} kickerClass="text-ivory/70" className="t-display text-[clamp(3rem,6.4vw,7rem)]">
+                {f.title}
+              </Title>
+              <p className="t-lead mt-6 max-w-[38ch] text-ivory/80">{f.intro}</p>
+            </div>
+            <div className="flex flex-col items-start gap-5 lg:col-span-4 lg:col-start-9 lg:items-end">
+              <Button to="/#book" size="lg">
+                {t.hero.cta}
+              </Button>
+              <a className={`${linkCls} text-ivory/75`} href={`https://wa.me/${contact.whatsapp}`} target="_blank" rel="noreferrer">
+                <WhatsappLogo size={18} aria-hidden="true" /> {f.message}
+              </a>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Equinox style close: columns of links, a thin line, then the legal row. */}
+      <div className="shell pb-10 pt-20 md:pt-24">
+        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-12 lg:gap-8">
+          <div className="lg:col-span-3">
+            <TLink to="/" className="inline-block font-serif text-[1.2rem] uppercase tracking-[0.22em]" aria-label={brand.name}>
+              <Logo name={brand.name} markClass="h-[1.8em]" />
+            </TLink>
+            <p className="mt-4 text-sm text-ivory/60">
+              {brand.area}
+              <br />
+              {t.nav.appointment}
+            </p>
+            <dl className="mt-6 grid gap-1 text-sm text-ivory/60">
               {t.availabilitySummary.map((h) => (
                 <div key={h.label} className="flex flex-wrap gap-x-2">
                   <dt>{h.label}</dt>
-                  <dd className="tabular text-ink">{h.value}</dd>
+                  <dd className="tabular text-ivory">{h.value}</dd>
                 </div>
               ))}
             </dl>
           </div>
-          <div>
-            <h3 className="t-label mb-4 text-ink/65">{f.contact}</h3>
-            <ul className="grid gap-1 text-ink/65">
-              <li>
-                <a className={linkCls} href={`mailto:${contact.email}`}>
-                  {contact.email}
-                </a>
-              </li>
-              <li>
-                <a className={linkCls} href={`tel:${contact.phone.replace(/\s/g, '')}`}>
-                  {contact.phone}
-                </a>
-              </li>
-              <li>
-                <a className={linkCls} href={`https://wa.me/${contact.whatsapp}`} target="_blank" rel="noreferrer">
-                  <WhatsappLogo size={18} aria-hidden="true" /> {f.message}
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h3 className="t-label mb-4 text-ink/65">{f.explore}</h3>
-            <ul className="grid gap-1 text-ink/65">
-              <li>
-                <TLink className={linkCls} to="/about">
-                  {f.about}
-                </TLink>
-              </li>
-              <li>
-                <TLink className={linkCls} to="/#services">
-                  {f.services}
-                </TLink>
-              </li>
-              <li>
-                <TLink className={linkCls} to="/#book">
-                  {f.book} <ArrowUpRight size={14} aria-hidden="true" />
-                </TLink>
-              </li>
-              <li className="pt-2">
-                <a className={linkCls} href={contact.instagram} target="_blank" rel="noreferrer">
-                  <InstagramLogo size={20} aria-hidden="true" /> {contact.instagramHandle}
-                  <span className="tabular text-ink/55">{contact.followers}</span>
-                </a>
-              </li>
-            </ul>
-          </div>
+
+          <FooterColumn title={f.services} className="lg:col-span-2">
+            {services.map((s) => (
+              <TLink key={s.slug} className={colLink} to={`/services/${s.slug}`}>
+                {s.name}
+              </TLink>
+            ))}
+          </FooterColumn>
+
+          <FooterColumn title={f.explore} className="lg:col-span-2">
+            <TLink className={colLink} to="/about">{f.about}</TLink>
+            <TLink className={colLink} to="/#method">{t.method.kicker}</TLink>
+            <TLink className={colLink} to="/#clients">{t.clients.kicker}</TLink>
+            <TLink className={colLink} to="/#places">{t.locations.title}</TLink>
+            <TLink className={colLink} to="/#faq">{t.faq.title}</TLink>
+            <TLink className={colLink} to="/#book">{t.nav.book}</TLink>
+          </FooterColumn>
+
+          <FooterColumn title={f.contact} className="lg:col-span-3">
+            <a className={`${colLink} [overflow-wrap:anywhere]`} href={`mailto:${contact.email}`}>
+              {contact.email}
+            </a>
+            <a className={colLink} href={`tel:${contact.phone.replace(/\s/g, '')}`}>
+              {contact.phone}
+            </a>
+          </FooterColumn>
+
+          <FooterColumn title={f.follow} className="lg:col-span-2">
+            <a className={colLink} href={contact.instagram} target="_blank" rel="noreferrer">
+              <InstagramLogo size={16} aria-hidden="true" /> Instagram
+            </a>
+            <a className={colLink} href={`https://wa.me/${contact.whatsapp}`} target="_blank" rel="noreferrer">
+              <WhatsappLogo size={16} aria-hidden="true" /> WhatsApp
+            </a>
+            <button type="button" className={colLink} onClick={() => window.dispatchEvent(new Event(NEWS_EVENT))}>
+              <EnvelopeSimple size={16} aria-hidden="true" /> {t.newsletter.open}
+            </button>
+          </FooterColumn>
         </div>
 
-        <div className="shell overflow-hidden">
-          <div className="flex justify-center">
-            <p
-              ref={word}
-              aria-hidden="true"
-              className="t-display flex select-none whitespace-nowrap pb-[0.06em] leading-[0.9]"
-            >
-              {[...brand.name].map((ch, i) => (
-                <span key={i} className="inline-block overflow-hidden">
-                  <span className="ft-letter inline-block">{ch === ' ' ? ' ' : ch}</span>
-                </span>
-              ))}
-            </p>
-          </div>
-        </div>
-
-        <div className="shell flex flex-col gap-2 py-6 text-sm text-ink/65 sm:flex-row sm:justify-between">
-          <p>
-            © {year} {brand.name}. {f.rights}
-          </p>
-          <p className="flex gap-6">
-            <TLink className="hover:text-ink" to="/privacy">
+        <div className="mt-16 flex flex-col gap-4 border-t border-ivory/10 pt-8 text-sm text-ivory/50 md:mt-20 md:flex-row md:items-center md:justify-between">
+          <p className="flex flex-wrap gap-x-8 gap-y-2">
+            <TLink className="transition-colors hover:text-ivory" to="/privacy">
               {f.privacy}
             </TLink>
-            <TLink className="hover:text-ink" to="/imprint">
+            <TLink className="transition-colors hover:text-ivory" to="/imprint">
               {f.imprint}
             </TLink>
             <span>{f.photos}</span>
           </p>
+          <p>
+            © {year} {brand.name}. {f.rights}
+          </p>
         </div>
       </div>
     </footer>
+  )
+}
+
+function FooterColumn({ title, className = '', children }) {
+  return (
+    <nav className={className} aria-label={title}>
+      <h3 className="t-label mb-5 text-stone">{title}</h3>
+      <div className="flex flex-col items-start gap-2.5">{children}</div>
+    </nav>
   )
 }

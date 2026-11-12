@@ -10,8 +10,10 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          if (id.includes('node_modules/three') || id.includes('@react-three')) return 'three'
+          // Libraries change rarely, so they get their own long-cached files.
           if (id.includes('node_modules/gsap') || id.includes('node_modules/lenis')) return 'motion-core'
+          if (/node_modules[\\/](react|react-dom|scheduler|react-router)[\\/]/.test(id)) return 'react'
+          if (id.includes('node_modules/motion') || id.includes('node_modules/framer-motion')) return 'motion'
         },
       },
     },

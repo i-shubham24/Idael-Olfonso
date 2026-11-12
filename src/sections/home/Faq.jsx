@@ -8,10 +8,10 @@ export default function Faq() {
   const faqs = t.faq.items
   const [open, setOpen] = useState(0)
   return (
-    <section id="faq" className="shell pt-24 pb-14 md:pt-36 md:pb-20" aria-labelledby="faq-title">
+    <section id="faq" className="shell pb-28 pt-8 md:pb-40 md:pt-16" aria-labelledby="faq-title">
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
         <div className="lg:col-span-5">
-          <Reveal as="h2" id="faq-title" className="t-h2 text-[clamp(3rem,5vw,5.5rem)]">
+          <Reveal as="h2" id="faq-title" className="t-h2 text-[clamp(2.75rem,5vw,4.75rem)]">
             {t.faq.title}
           </Reveal>
           <p className="t-lead mt-6 max-w-[32ch] text-ivory/70">
@@ -33,7 +33,7 @@ export default function Faq() {
             return (
               <li
                 key={f.q}
-                className={`rounded-[2px] transition-colors duration-500 ${isOpen ? 'bg-graphite' : 'bg-onyx-2 hover:bg-graphite/60'}`}
+                className={`rounded-[2px] transition-colors duration-500 ${isOpen ? 'bg-ivory/[0.08]' : 'bg-ivory/[0.035] hover:bg-ivory/[0.06]'}`}
               >
                 <h3>
                   <button

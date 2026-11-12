@@ -22,8 +22,8 @@ import Reveal from '../Reveal'
 
 /*
   The booking flow, used on the home page (#book) and on /book.
-  Three steps: appointment type, date and time, details. Only first
-  appointments are booked here and nothing is paid online; everything
+  Three steps: your goal (one tap), date and time, details. Only the free
+  first session is booked here and nothing is paid online; everything
   else Idael agrees with the client in person.
 */
 
@@ -54,7 +54,7 @@ function Field({ id, label, error, hint, children }) {
 
 const inputCls = (error) =>
   `h-14 w-full rounded-[2px] px-4 text-ivory placeholder:text-stone/70 transition-colors ${
-    error ? 'bg-[#2e1c18]' : 'bg-onyx-2 hover:bg-graphite focus:bg-graphite'
+    error ? 'bg-[#2e1c18]' : 'bg-onyx hover:bg-graphite focus:bg-graphite'
   }`
 
 function OptionBlock({ id, name, value, checked, onChange, disabled, children, className = '' }) {
@@ -62,7 +62,7 @@ function OptionBlock({ id, name, value, checked, onChange, disabled, children, c
     <label
       className={`relative block cursor-pointer rounded-[2px] transition-[background-color,color] duration-300 has-[:focus-visible]:outline has-[:focus-visible]:outline-1 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-gold ${
         disabled ? 'cursor-not-allowed opacity-30' : ''
-      } ${checked ? 'bg-ivory text-ink' : 'bg-onyx-2 hover:bg-graphite'} ${className}`}
+      } ${checked ? 'bg-gold text-ink' : 'bg-graphite/70 hover:bg-graphite'} ${className}`}
     >
       <input
         id={id}
@@ -85,49 +85,31 @@ const Index = () => (
   </svg>
 )
 
-/* step 1: appointment type */
+/* step 1: the goal, one tap and straight on */
 
-function TypeStep({ value, onChange, onNext }) {
-  const { t, sessionTypes } = useContent()
+const GOALS = ['strength', 'weight', 'move', 'energy']
+
+function GoalStep({ value, onPick }) {
+  const { t } = useContent()
   const b = t.booking
   return (
     <fieldset>
-      <legend className="t-h3 text-4xl md:text-5xl">{b.typeTitle}</legend>
-      <p className="mt-4 text-ivory/70">{b.typeHint}</p>
-      <div className="mt-10 grid gap-1.5">
-        {sessionTypes.map((type, i) => {
-          const checked = value === type.id
-          return (
-            <OptionBlock
-              key={type.id}
-              name="type"
-              value={type.id}
-              checked={checked}
-              onChange={() => onChange(type.id)}
-              className="p-5 md:p-6"
-            >
-              <span className="flex flex-wrap items-baseline gap-x-5 gap-y-1">
-                <span className="font-serif text-2xl md:text-3xl">{type.name}</span>
-                {i === 0 && <span className={`t-label ${checked ? 'text-[#6e5631]' : 'text-gold'}`}>{b.startHere}</span>}
-                <span className={`t-label tabular ml-auto ${checked ? 'text-ink/60' : 'text-stone'}`}>
-                  {type.duration} {b.min} · {type.format}
-                </span>
-              </span>
-              <span className={`mt-2 block text-sm ${checked ? 'text-ink/70' : 'text-ivory/60'}`}>{type.note}</span>
-            </OptionBlock>
-          )
-        })}
-      </div>
-      <div className="mt-10">
-        <Button
-          size="lg"
-          onClick={onNext}
-          disabled={!value}
-          className="disabled:cursor-not-allowed disabled:opacity-40"
-          magnetic={false}
-        >
-          {b.chooseTime}
-        </Button>
+      <legend className="t-h3 text-4xl md:text-5xl">{b.goalTitle}</legend>
+      <p className="mt-4 text-ivory/70">{b.goalHint}</p>
+      <div className="mt-10 grid gap-2 sm:grid-cols-2">
+        {GOALS.map((id) => (
+          <OptionBlock
+            key={id}
+            name="goal"
+            value={id}
+            checked={value === id}
+            onChange={() => onPick(id)}
+            className="flex min-h-24 items-center justify-between gap-4 px-6 py-5"
+          >
+            <span className="t-h3 text-2xl md:text-[1.75rem]">{b.goalOptions[id]}</span>
+            <CaretRight size={18} className="shrink-0 opacity-60" aria-hidden="true" />
+          </OptionBlock>
+        ))}
       </div>
     </fieldset>
   )
@@ -151,7 +133,7 @@ function Calendar({ month, setMonth, data, loading, value, onChange, today, last
   const label = formatMonth(month)
 
   return (
-    <div className="rounded-[2px] bg-onyx-2 p-5 md:p-7">
+    <div className="rounded-[2px] bg-onyx p-5 md:p-7">
       <div className="flex items-center justify-between">
         <p className="font-serif text-2xl md:text-3xl" aria-live="polite">
           {label}
@@ -196,7 +178,7 @@ function Calendar({ month, setMonth, data, loading, value, onChange, today, last
               aria-label={`${formatDate(new Date(`${key}T12:00:00Z`))}, ${count ? b.timesAvailable(count) : b.unavailable}`}
               className={`relative flex aspect-square items-center justify-center rounded-[2px] font-serif text-lg transition-[background-color,color] duration-300 md:text-xl ${
                 selected
-                  ? 'bg-ivory text-ink'
+                  ? 'bg-gold text-ink'
                   : disabled
                     ? 'cursor-not-allowed text-ivory/20'
                     : 'bg-graphite text-ivory hover:bg-line'
@@ -332,7 +314,7 @@ function TimeSelect({ slots, slot, setSlot, duration }) {
           onClick={() => toggle(!open)}
           onKeyDown={onButtonKey}
           className={`flex h-16 w-full items-center justify-between gap-4 rounded-[2px] px-5 text-left transition-colors duration-300 ${
-            open ? 'bg-graphite' : 'bg-onyx-2 hover:bg-graphite'
+            open ? 'bg-graphite' : 'bg-onyx hover:bg-graphite'
           }`}
         >
           <span className={`tabular font-serif text-2xl ${slot ? 'text-ivory' : 'text-stone'}`}>
@@ -410,7 +392,7 @@ function TimeSelect({ slots, slot, setSlot, duration }) {
 
       <p className="mt-3 text-sm text-stone">{b.timesFree(slots.length)}</p>
       {slot && (
-        <p className="mt-6 rounded-[2px] bg-onyx-2 px-5 py-4 text-ivory/85">
+        <p className="mt-6 rounded-[2px] bg-onyx px-5 py-4 text-ivory/85">
           <span className="tabular font-serif text-2xl text-ivory">
             {prettyTime(slot.time)} {b.until} {prettyTime(addMinutes(slot.time, duration))}
           </span>
@@ -613,9 +595,6 @@ function DetailsStep({ type, form, setForm, errors, onBack, onSubmit, submitting
             className={`${inputCls(false)} h-auto resize-none py-3`}
           />
         </Field>
-        <Field id="referral" label={b.referral}>
-          <input id="referral" name="referral" value={form.referral} onChange={set('referral')} className={inputCls(false)} />
-        </Field>
         <div>
           <label className="flex cursor-pointer items-start gap-3">
             <input
@@ -703,7 +682,7 @@ function ConfirmDial() {
   )
 }
 
-function Done({ type, slot, form, onHome }) {
+function Done({ type, slot, form, goal, onHome }) {
   const { t, brand } = useContent()
   const b = t.booking
   const start = new Date(slot.start)
@@ -723,18 +702,19 @@ function Done({ type, slot, form, onHome }) {
     <div>
       <ConfirmDial />
       <p className="t-label mt-8 text-gold">{type.confirm ? b.received : b.confirmed}</p>
-      <h3 className="t-h2 mt-6 text-[clamp(3rem,7vw,6.5rem)]">
-        {b.thanks} <em className="text-gold-2">{form.name.split(' ')[0]}.</em>
+      <h3 className="t-h2 mt-6 text-[clamp(2.75rem,6vw,5rem)]">
+        {b.thanks} {form.name.split(' ')[0]}.
       </h3>
       <p className="t-lead mt-6 max-w-[42ch] text-ivory/75">{type.confirm ? b.receivedText : b.confirmedText}</p>
       <dl className="mt-12 grid gap-1.5 sm:grid-cols-2">
         {[
           [b.summary.session, `${type.name}, ${type.duration} ${b.min}`],
+          [b.summary.goal, b.goalOptions[goal] ?? ''],
           [b.summary.when, `${formatDate(start)}, ${prettyTime(slot.time)}`],
           [b.summary.where, where],
           [b.summary.status, type.confirm ? b.awaiting : b.confirmed],
         ].map(([k, v]) => (
-          <div key={k} className="rounded-[2px] bg-onyx-2 px-5 py-4">
+          <div key={k} className="rounded-[2px] bg-onyx px-5 py-4">
             <dt className="t-label text-stone">{k}</dt>
             <dd className="mt-2 font-serif text-2xl">{v}</dd>
           </div>
@@ -756,18 +736,19 @@ function Done({ type, slot, form, onHome }) {
 
 /* the whole flow */
 
-export default function BookingFlow({ heading = 'h2', title, titleEm, intro, initialType = 'consultation', showHomeLink = false }) {
-  const { t, contact, sessionTypes, about } = useContent()
+export default function BookingFlow({ heading = 'h2', title, intro, initialType = 'consultation', showHomeLink = false }) {
+  const { t, contact, sessionTypes, images } = useContent()
   const b = t.booking
-  const [step, setStep] = useState(1)
+  const [step, setStep] = useState(0)
+  const [goal, setGoal] = useState('')
   const [dir, setDir] = useState(1)
-  const [typeId, setTypeId] = useState(() =>
+  const [typeId] = useState(() =>
     sessionTypes.some((s) => s.id === initialType) ? initialType : sessionTypes[0].id,
   )
   const [date, setDate] = useState(null)
   const [slot, setSlot] = useState(null)
   const [notice, setNotice] = useState('')
-  const [form, setForm] = useState({ name: '', email: '', phone: '', place: '', goals: '', referral: '', consent: false })
+  const [form, setForm] = useState({ name: '', email: '', phone: '', place: '', goals: '', consent: false })
   const [errors, setErrors] = useState({})
   const [submitting, setSubmitting] = useState(false)
   const [done, setDone] = useState(false)
@@ -776,6 +757,7 @@ export default function BookingFlow({ heading = 'h2', title, titleEm, intro, ini
   const Heading = heading
 
   const type = sessionTypes.find((s) => s.id === typeId)
+
 
   const go = (n) => {
     setDir(n > step ? 1 : -1)
@@ -798,6 +780,7 @@ export default function BookingFlow({ heading = 'h2', title, titleEm, intro, ini
     const place = type.places.find((p) => p.id === form.place)?.label ?? type.places[0].label
     const cleanPayload = {
       type: typeId,
+      goal,
       date,
       time: slot.time,
       start: slot.start,
@@ -806,7 +789,6 @@ export default function BookingFlow({ heading = 'h2', title, titleEm, intro, ini
       phone: (form.phone ?? '').trim().slice(0, 30),
       place,
       goals: (form.goals ?? '').trim().slice(0, 1000),
-      referral: (form.referral ?? '').trim().slice(0, 200),
       consent: !!form.consent,
     }
     const result = await createBooking(cleanPayload)
@@ -829,13 +811,13 @@ export default function BookingFlow({ heading = 'h2', title, titleEm, intro, ini
     <div className="grid grid-cols-1 gap-14 lg:grid-cols-12">
       <aside className="lg:col-span-4">
         <div className="lg:sticky lg:top-32">
-          <Reveal as={Heading} className="t-h2 text-[clamp(3.25rem,6vw,6rem)]">
-            {title} <em className="text-gold-2">{titleEm}</em>
+          <Reveal as={Heading} className="t-h2 max-w-[12ch] text-[clamp(2.75rem,5vw,4.75rem)]">
+            {title}
           </Reveal>
           <p className="t-lead mt-6 max-w-[34ch] text-ivory/70">{intro}</p>
 
           {!done && (
-            <ol className="mt-12 grid gap-1" aria-label={b.steps.join(', ')}>
+            <ol className="mt-10 grid gap-1" aria-label={b.steps.join(', ')}>
               {b.steps.map((label, i) => {
                 const state = i < step ? 'done' : i === step ? 'current' : 'next'
                 const canGo = i < step
@@ -846,17 +828,13 @@ export default function BookingFlow({ heading = 'h2', title, titleEm, intro, ini
                       disabled={!canGo}
                       onClick={() => canGo && go(i)}
                       aria-current={state === 'current' ? 'step' : undefined}
-                      className={`flex w-full items-center gap-4 rounded-[2px] px-4 py-3.5 text-left transition-colors ${
-                        state === 'current'
-                          ? 'bg-graphite text-ivory'
-                          : state === 'next'
-                            ? 'bg-onyx-2 text-ivory/55'
-                            : 'bg-onyx-2 text-ivory'
+                      className={`flex w-full items-center gap-4 rounded-[2px] py-2 text-left transition-colors ${
+                        state === 'next' ? 'text-ivory/45' : 'text-ivory'
                       } ${canGo ? 'hover:text-gold-2' : ''}`}
                     >
                       <span
                         className={`flex h-7 w-7 items-center justify-center rounded-[2px] text-[0.65rem] ${
-                          state === 'current' ? 'bg-gold text-ink' : state === 'done' ? 'bg-line text-gold' : 'bg-graphite'
+                          state === 'current' ? 'bg-gold text-ink' : state === 'done' ? 'bg-graphite text-gold' : 'bg-graphite'
                         }`}
                       >
                         {state === 'done' ? <Check size={12} aria-hidden="true" /> : i + 1}
@@ -869,8 +847,9 @@ export default function BookingFlow({ heading = 'h2', title, titleEm, intro, ini
             </ol>
           )}
 
-          {(type || slot) && !done && (
-            <div className="mt-6 hidden rounded-[2px] bg-onyx-2 p-5 lg:block">
+          {(goal || slot) && !done && (
+            <div className="mt-6 hidden rounded-[2px] bg-graphite/60 p-5 lg:block">
+              {goal && <p className="t-label mb-3 text-gold">{b.goalOptions[goal]}</p>}
               {type && (
                 <p className="font-serif text-2xl">
                   {type.name}{' '}
@@ -890,7 +869,7 @@ export default function BookingFlow({ heading = 'h2', title, titleEm, intro, ini
           {/* A face on the form: people book a person, not a service. */}
           <div className="mt-10 flex items-center gap-4">
             <div className="h-16 w-16 shrink-0 overflow-hidden rounded-[2px] bg-graphite">
-              <Img image={about.portrait} alt="" width={240} className="h-full w-full object-cover object-[50%_35%]" />
+              <Img image={images.host} alt="" width={240} className="h-full w-full object-cover object-[50%_25%]" />
             </div>
             <p className="max-w-[24ch] text-sm text-ivory/75">{b.personal}</p>
           </div>
@@ -922,17 +901,14 @@ export default function BookingFlow({ heading = 'h2', title, titleEm, intro, ini
             transition={{ duration: 0.5, ease }}
           >
             {done && slot ? (
-              <Done type={type} slot={slot} form={form} onHome={showHomeLink} />
+              <Done type={type} slot={slot} form={form} goal={goal} onHome={showHomeLink} />
             ) : step === 0 ? (
-              <TypeStep
-                value={typeId}
-                onChange={(v) => {
-                  setTypeId(v)
-                  setDate(null)
-                  setSlot(null)
-                  setForm((f) => ({ ...f, place: '' }))
+              <GoalStep
+                value={goal}
+                onPick={(v) => {
+                  setGoal(v)
+                  go(1)
                 }}
-                onNext={() => go(1)}
               />
             ) : step === 1 ? (
               <TimeStep

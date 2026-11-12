@@ -1,118 +1,58 @@
-import { useRef } from 'react'
-import { motion, useMotionValue, useSpring, useTransform } from 'motion/react'
 import { TLink } from '../lib/transition'
-import { useFinePointer, useReducedMotion } from '../lib/media'
 
+/*
+  Two kinds of button, nothing more:
+  gold  the one main action (booking), always worded the same
+  ghost everything secondary
+  `ivory` and `ink` exist for the light section and old call sites.
+*/
 const VARIANTS = {
-  ivory: 'bg-ivory text-ink',
-  ghost: 'bg-graphite text-ivory hover:text-ink',
-  gold: 'bg-gold text-ink',
-  ink: 'bg-ink text-ivory hover:text-ink',
-}
-
-// On hover a gold layer sweeps in from the left (ivory on the gold button).
-const FILL = {
-  ivory: 'bg-gold',
-  ghost: 'bg-gold',
-  gold: 'bg-ivory',
-  ink: 'bg-gold',
+  gold: 'bg-gold text-ink hover:bg-gold-2',
+  ivory: 'bg-gold text-ink hover:bg-gold-2',
+  ghost: 'bg-ivory/[0.08] text-ivory hover:bg-ivory/[0.16]',
+  ink: 'bg-ink text-ivory hover:bg-graphite',
+  'ghost-ink': 'bg-ink/[0.07] text-ink hover:bg-ink/[0.14]',
 }
 
 const SIZES = {
-  md: 'min-h-12 px-6 py-2.5 text-[0.6875rem] sm:px-7',
-  lg: 'min-h-14 px-6 py-3 text-[0.72rem] sm:px-9 md:min-h-[3.75rem] md:px-11',
-  xl: 'min-h-16 px-7 py-4 text-[0.78rem] sm:px-10 md:min-h-20 md:px-14 md:text-[0.82rem]',
+  sm: 'min-h-10 px-5 text-[0.66rem]',
+  md: 'min-h-12 px-6 text-[0.7rem] sm:px-7',
+  lg: 'min-h-14 px-7 text-[0.72rem] sm:px-9',
+  xl: 'min-h-14 px-8 text-[0.74rem] sm:px-10',
 }
 
-/*
-  Square button with tracked capitals. On a mouse it leans gently toward the
-  pointer (magnetic) so the primary action feels physical; on touch it just presses down.
-*/
 export default function Button({
   to,
   href,
-  variant = 'ivory',
+  variant = 'gold',
   size = 'md',
-  magnetic = true,
+  // eslint-disable-next-line no-unused-vars
+  magnetic,
   full = false,
   className = '',
-  style,
   children,
   ...rest
 }) {
-  const ref = useRef(null)
-  const fine = useFinePointer()
-  const reduced = useReducedMotion()
-  const active = magnetic && fine && !reduced
-  const x = useMotionValue(0)
-  const y = useMotionValue(0)
-  const sx = useSpring(x, { stiffness: 220, damping: 18, mass: 0.6 })
-  const sy = useSpring(y, { stiffness: 220, damping: 18, mass: 0.6 })
-  const hx = useTransform(sx, (v) => v * 0.5)
-  const hy = useTransform(sy, (v) => v * 0.5)
+  const cls = `inline-flex select-none items-center justify-center gap-3 rounded-[2px] text-center font-medium uppercase leading-snug tracking-[0.18em] [font-stretch:108%] transition-[background-color,color,box-shadow,transform] duration-500 ease-[var(--ease-out-expo)] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 ${VARIANTS[variant] ?? VARIANTS.gold} ${SIZES[size]} ${full ? 'w-full' : ''} ${className}`
 
-  const rectRef = useRef(null)
-  const onMove = (e) => {
-    if (!active || !ref.current) return
-    if (!rectRef.current) {
-      rectRef.current = ref.current.getBoundingClientRect()
-    }
-    const r = rectRef.current
-    x.set((e.clientX - (r.left + r.width / 2)) * 0.2)
-    y.set((e.clientY - (r.top + r.height / 2)) * 0.3)
-  }
-  const onLeave = () => {
-    rectRef.current = null
-    x.set(0)
-    y.set(0)
-  }
-
-  const cls = `group relative inline-flex select-none items-center justify-center gap-3 overflow-hidden whitespace-normal rounded-[2px] text-center font-medium uppercase leading-snug tracking-[0.2em] sm:whitespace-nowrap sm:tracking-[0.24em] [font-stretch:112%] transition-[background-color,color] duration-500 active:scale-[0.98] ${VARIANTS[variant]} ${SIZES[size]} ${full ? 'w-full' : ''} ${className}`
-  const inner = (
-    <>
-      <span
-        aria-hidden="true"
-        className={`absolute inset-0 origin-left scale-x-0 transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:scale-x-100 group-disabled:hidden ${FILL[variant]}`}
-      />
-      <motion.span className="relative z-10 inline-flex items-center gap-3" style={active ? { x: sx, y: sy } : undefined}>
-        {children}
-      </motion.span>
-    </>
-  )
-
-  const wrapProps = {
-    ref,
-    onPointerMove: onMove,
-    onPointerLeave: onLeave,
-    className: full ? 'flex w-full' : 'inline-flex',
-  }
-
-  let el
   if (to) {
-    el = (
-      <TLink to={to} className={cls} style={style} {...rest}>
-        {inner}
+    return (
+      <TLink to={to} className={cls} {...rest}>
+        {children}
       </TLink>
     )
-  } else if (href) {
+  }
+  if (href) {
     const rel = rest.target === '_blank' && !rest.rel ? 'noopener noreferrer' : rest.rel
-    el = (
-      <a href={href} className={cls} style={style} {...rest} rel={rel}>
-        {inner}
+    return (
+      <a href={href} className={cls} {...rest} rel={rel}>
+        {children}
       </a>
     )
-  } else {
-    el = (
-      <button type="button" className={cls} style={style} {...rest}>
-        {inner}
-      </button>
-    )
   }
-
-  // The shell follows the pointer at half the strength of the label, which gives the press some depth.
   return (
-    <motion.span {...wrapProps} style={active ? { x: hx, y: hy } : undefined}>
-      {el}
-    </motion.span>
+    <button type="button" className={cls} {...rest}>
+      {children}
+    </button>
   )
 }

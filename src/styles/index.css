@@ -1,6 +1,5 @@
 @import '@fontsource-variable/archivo/wdth.css';
 @import '@fontsource-variable/cormorant-garamond/wght.css';
-@import '@fontsource-variable/cormorant-garamond/wght-italic.css';
 @import 'tailwindcss';
 
 /* Design tokens */
@@ -15,6 +14,9 @@
   --color-ink: #0a0a0b;
   --color-gold: #b89a67;
   --color-gold-2: #d2b98a;
+  /* The one light section (training): warm stone, like a limestone wall. */
+  --color-sand: #e9e4db;
+  --color-sand-2: #ddd6ca;
 
   --font-sans: 'Archivo Variable', 'Archivo', ui-sans-serif, system-ui, sans-serif;
   --font-serif: 'Cormorant Garamond Variable', 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
@@ -89,9 +91,9 @@
     cursor: pointer;
   }
 
-  /* Italic accents inside serif headings: the one place gold shows up in type. */
+  /* Headings stay upright; no italic accents. */
   em {
-    font-style: italic;
+    font-style: normal;
   }
 
   /* Cormorant defaults to old style figures; times and minutes read better lining. */
@@ -119,27 +121,27 @@
 @utility t-display {
   font-variant-numeric: lining-nums;
   font-family: var(--font-serif);
-  font-weight: 300;
-  line-height: 0.82;
-  letter-spacing: -0.03em;
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
 }
 
 @utility t-h1 {
   font-variant-numeric: lining-nums;
   text-wrap: balance;
   font-family: var(--font-serif);
-  font-weight: 300;
-  line-height: 0.98;
-  letter-spacing: -0.02em;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.015em;
 }
 
 @utility t-h2 {
   font-variant-numeric: lining-nums;
   text-wrap: balance;
   font-family: var(--font-serif);
-  font-weight: 300;
-  line-height: 0.95;
-  letter-spacing: -0.025em;
+  font-weight: 400;
+  line-height: 1.02;
+  letter-spacing: -0.015em;
 }
 
 @utility t-h3 {
@@ -232,7 +234,7 @@ html.low-gpu .grain {
   );
 }
 
-/* Reveal words: used by the manifesto scrub */
+/* Words that brighten one by one as you scroll */
 .word {
   display: inline-block;
   will-change: opacity;
@@ -279,41 +281,8 @@ html.low-gpu .grain {
   display: none;
 }
 
-/* Hero scroll hint: the gold index drops through its slot and fades, again and again. */
-@keyframes scroll-cue {
-  0% {
-    transform: translateY(-12px);
-    opacity: 0;
-  }
-  30% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(44px);
-    opacity: 0;
-  }
-}
-.scroll-cue svg {
-  animation: scroll-cue 1.8s var(--ease-in-out-expo) infinite;
-}
 
-/* The one marquee on the site */
-@keyframes marquee {
-  to {
-    transform: translateX(-50%);
-  }
-}
-.marquee-track {
-  animation: marquee 60s linear infinite;
-}
 
-/* Custom cursor only exists on a mouse; hide the native one where it is drawn. */
-html.has-cursor,
-html.has-cursor a,
-html.has-cursor button,
-html.has-cursor label {
-  cursor: none;
-}
 
 /* Reduced motion: stop looping CSS animations. Scroll effects, pins and
    3D motion are switched off in the components themselves. */
@@ -324,5 +293,82 @@ html.has-cursor label {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* Hero scroll cue: a short light runs down a thin track, again and again. */
+@keyframes scroll-drop {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(200%);
+  }
+}
+.scroll-drop {
+  animation: scroll-drop 1.8s var(--ease-in-out-expo) infinite;
+}
+
+/* Outlined display type for the moving text band. */
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px rgb(236 232 224 / 0.45);
+}
+
+/* Progress under the active client photo. */
+@keyframes grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Photos and films stay hidden until they have arrived, then fade in.
+   An animation (not a transition), so it never fights hover zooms or
+   scroll-driven transforms on the same element. Posters show at once. */
+.fade-media:not([data-loaded]) {
+  opacity: 0;
+}
+video.fade-media[poster]:not([data-loaded]) {
+  opacity: 1;
+}
+.fade-media[data-loaded] {
+  /* backwards, not both: once played, the element's own opacity rules again (crossfades). */
+  animation: media-in 1.4s var(--ease-out-expo) backwards;
+}
+@keyframes media-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+/* A film with a poster is already showing a picture; no fade from black. */
+video.fade-media[poster][data-loaded] {
+  animation: none;
+}
+
+/* Running gallery: one slow loop; the row holds still while you point at it. */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  animation: marquee 80s linear infinite;
+}
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    overflow-x: auto;
+  }
+  .marquee-track {
+    animation: none;
   }
 }

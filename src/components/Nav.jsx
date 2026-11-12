@@ -1,23 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { useLocation } from 'react-router'
-import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { AnimatePresence, motion } from 'motion/react'
 import { TLink } from '../lib/transition'
 import { LANGS, useContent, useLocale } from '../lib/i18n'
-import { prefersReducedMotion } from '../lib/media'
 import Button from './Button'
-import Monogram from './Monogram'
+import Logo from './Logo'
 import MobileMenu from './MobileMenu'
-
-/** Main links, in the current language. The booking button is separate. */
-export function navLinks(t) {
-  return [
-    { to: '/about', label: t.nav.about },
-    { to: '/#why', label: t.nav.why },
-    { to: '/#services', label: t.nav.services },
-  ]
-}
 
 /* Small square flags for the language switch (Swiss for German, British for English). */
 const FLAGS = {
@@ -48,7 +37,7 @@ export function LanguageSwitch({ className = '', id = 'nav' }) {
   const { t } = useContent()
   return (
     <div
-      className={`flex items-center gap-0.5 rounded-[2px] bg-graphite/80 p-1 ${className}`}
+      className={`flex items-center gap-0.5 rounded-[2px] p-1 ${className}`}
       role="group"
       aria-label={t.nav.language}
     >
@@ -61,14 +50,14 @@ export function LanguageSwitch({ className = '', id = 'nav' }) {
             onClick={() => setLang(l)}
             aria-pressed={on}
             lang={l}
-            className={`relative flex h-8 items-center gap-2 rounded-[2px] px-2.5 transition-colors duration-300 ${
+            className={`relative flex h-8 items-center gap-2 rounded-[2px] px-2 transition-colors duration-300 ${
               on ? 'text-ivory' : 'text-ivory/45 hover:text-ivory'
             }`}
           >
             {on && (
               <motion.span
                 layoutId={`lang-${id}`}
-                className="absolute inset-0 rounded-[2px] bg-line"
+                className="absolute inset-0 rounded-[2px] bg-ivory/10"
                 transition={{ type: 'spring', stiffness: 420, damping: 34 }}
               />
             )}
@@ -88,35 +77,41 @@ export function LanguageSwitch({ className = '', id = 'nav' }) {
   )
 }
 
+/*
+  Header in the Dogpound pattern, on every screen size: menu on the left, the
+  name in the middle, the booking button on the right. Nothing else competes.
+*/
 export default function Nav() {
   const { t, brand } = useContent()
-  const links = navLinks(t)
   const bar = useRef(null)
+  const progress = useRef(null)
   const [menu, setMenu] = useState(false)
   const location = useLocation()
 
+  // Transparent over the hero, a matte bar once the page moves. Always visible.
   useEffect(() => {
     const el = bar.current
-    let hidden = false
     const st = ScrollTrigger.create({
       start: 0,
       end: 'max',
       onUpdate(self) {
-        const y = self.scroll()
-        el.dataset.scrolled = y > 40 ? 'true' : 'false'
-        // Hide while reading down, return on the way back up (stays put with reduced motion).
-        const shouldHide = !prefersReducedMotion() && self.direction === 1 && y > 240
-        if (shouldHide !== hidden) {
-          hidden = shouldHide
-          gsap.to(el, { yPercent: hidden ? -110 : 0, duration: 0.6, ease: hidden ? 'power2.in' : 'expo.out' })
-        }
+        el.dataset.scrolled = self.scroll() > 40 ? 'true' : 'false'
+        // How far down the page you are, as a thin gold line along the top edge.
+        // Measured against the live page height, so pages that load in later never leave it stale.
+        const max = ScrollTrigger.maxScroll(window) || 1
+        const p = Math.min(1, Math.max(0, self.scroll() / max))
+        if (progress.current) progress.current.style.transform = `scaleX(${p})`
       },
     })
     return () => st.kill()
   }, [])
 
+  // A new page starts the line again from zero.
   useEffect(() => {
-    gsap.set(bar.current, { yPercent: 0 })
+    if (progress.current) progress.current.style.transform = 'scaleX(0)'
+  }, [location.key])
+
+  useEffect(() => {
     setMenu(false)
   }, [location.key])
 
@@ -131,102 +126,50 @@ export default function Nav() {
       <header
         ref={bar}
         data-scrolled="false"
-        className="group/nav fixed inset-x-0 top-0 z-50 transition-[background-color,backdrop-filter] duration-500 data-[scrolled=true]:bg-onyx/80 data-[scrolled=true]:backdrop-blur-md"
+        className="fixed inset-x-0 top-0 z-50 transition-[background-color,backdrop-filter] duration-500 data-[scrolled=true]:bg-onyx/90 data-[scrolled=true]:backdrop-blur-md"
       >
-        <nav className="shell flex h-[72px] items-center gap-6 md:h-[84px]" aria-label="Main">
-          <TLink to="/" className="flex items-center gap-3 rounded-sm" aria-label={`${brand.name}, ${t.nav.home}`}>
-            <Monogram size={38} />
-            <span className="hidden flex-col leading-none sm:flex">
-              <span className="font-serif text-[1.35rem] tracking-[-0.01em]">{brand.name}</span>
-              <span className="t-label mt-1 text-[0.58rem] text-stone">{brand.role}</span>
-            </span>
-          </TLink>
-
-          <HourDial />
-
-          <ul className="ml-auto hidden items-center gap-1 lg:flex">
-            {links.map((l) => {
-              const active = !l.to.includes('#') && location.pathname.startsWith(l.to)
-              return (
-                <li key={l.to}>
-                  <TLink
-                    to={l.to}
-                    aria-current={active ? 'page' : undefined}
-                    className="t-label flex items-center px-4 py-3 text-ivory/65 transition-colors duration-300 hover:text-gold-2 aria-[current=page]:text-gold-2"
-                  >
-                    {l.label}
-                  </TLink>
-                </li>
-              )
-            })}
-          </ul>
-
-          <LanguageSwitch className="ml-auto lg:ml-3" />
-
-          <div className="hidden lg:ml-2 lg:block">
-            <Button to="/#book" size="md" variant="ghost" magnetic={false}>
-              {t.nav.book}
-            </Button>
+        <span
+          ref={progress}
+          className="pointer-events-none absolute inset-x-0 top-0 h-[2px] origin-left bg-gold will-change-transform"
+          style={{ transform: 'scaleX(0)' }}
+          aria-hidden="true"
+        />
+        <nav className="shell grid h-16 grid-cols-[1fr_auto_1fr] items-center md:h-20" aria-label="Main">
+          <div className="flex items-center gap-6">
+            <button
+              type="button"
+              onClick={() => setMenu(true)}
+              className="group -ml-2 inline-flex h-11 items-center gap-3 px-2 text-ivory"
+              aria-expanded={menu}
+              aria-controls="mobile-menu"
+            >
+              <span className="flex w-6 flex-col gap-[6px]" aria-hidden="true">
+                <span className="h-px w-full bg-current transition-transform duration-300 group-hover:translate-x-1" />
+                <span className="h-px w-full bg-current" />
+                <span className="h-px w-2/3 bg-current transition-[width] duration-300 group-hover:w-full" />
+              </span>
+              <span className="t-label hidden md:inline">{t.nav.menu}</span>
+            </button>
+            <LanguageSwitch className="hidden lg:flex" />
           </div>
 
-          <button
-            type="button"
-            onClick={() => setMenu(true)}
-            className="t-label inline-flex h-12 items-center gap-3 rounded-[2px] bg-graphite px-5 lg:hidden"
-            aria-expanded={menu}
-            aria-controls="mobile-menu"
+          <TLink
+            to="/"
+            className="font-serif text-[0.8rem] uppercase tracking-[0.12em] min-[400px]:text-[0.95rem] min-[400px]:tracking-[0.16em] sm:text-[1.15rem] sm:tracking-[0.24em] md:text-[1.3rem]"
+            aria-label={`${brand.name}, ${t.nav.home}`}
           >
-            {t.nav.menu}
-          </button>
+            <Logo name={brand.name} markClass="h-[1.9em]" nameClass="max-[359px]:hidden" />
+          </TLink>
+
+          <div className="flex justify-end">
+            <Button to="/#book" size="sm" className="max-sm:min-h-9 max-sm:px-3.5">
+              <span className="hidden lg:inline">{t.hero.cta}</span>
+              <span className="lg:hidden">{t.nav.book}</span>
+            </Button>
+          </div>
         </nav>
       </header>
       <AnimatePresence>{menu && <MobileMenu onClose={() => setMenu(false)} />}</AnimatePresence>
     </>
-  )
-}
-
-/*
-  Scroll progress as an hour: a gold arc closes around a small dial while the
-  minute count runs from 0 at the top of the page to 60 at the bottom.
-*/
-const DIAL_R = 13
-const DIAL_C = 2 * Math.PI * DIAL_R
-function HourDial() {
-  const arc = useRef(null)
-  const minRef = useRef(null)
-
-  useEffect(() => {
-    const st = ScrollTrigger.create({
-      start: 0,
-      end: 'max',
-      onUpdate(self) {
-        const p = self.progress
-        if (arc.current) arc.current.style.strokeDashoffset = String(DIAL_C * (1 - p))
-        if (minRef.current) minRef.current.textContent = String(Math.round(p * 60)).padStart(2, '0')
-      },
-    })
-    return () => st.kill()
-  }, [])
-
-  return (
-    <div className="hidden items-center gap-3 xl:flex" aria-hidden="true">
-      <svg width="32" height="32" viewBox="0 0 32 32" className="-rotate-90">
-        <circle cx="16" cy="16" r={DIAL_R} fill="none" stroke="var(--color-line)" strokeWidth="1" />
-        <circle
-          ref={arc}
-          cx="16"
-          cy="16"
-          r={DIAL_R}
-          fill="none"
-          stroke="var(--color-gold)"
-          strokeWidth="1.25"
-          strokeDasharray={DIAL_C}
-          strokeDashoffset={DIAL_C}
-        />
-      </svg>
-      <span className="t-label tabular text-stone">
-        <span ref={minRef}>00</span> / 60 min
-      </span>
-    </div>
   )
 }

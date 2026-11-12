@@ -22,10 +22,11 @@ export function ScrollProvider({ children }) {
   useEffect(() => {
     if (reduced) return
     const instance = new Lenis({
-      lerp: 0.1,
+      // A long, soft glide: heavy enough to feel considered, never laggy.
+      lerp: 0.075,
       smoothWheel: true,
-      wheelMultiplier: 0.95,
-      touchMultiplier: 1.2,
+      wheelMultiplier: 0.9,
+      touchMultiplier: 1.1,
     })
     instance.on('scroll', ScrollTrigger.update)
     const tick = (time) => instance.raf(time * 1000)
@@ -96,7 +97,7 @@ export function scrollToTarget(lenis, target, { immediate = false, offset = NAV_
   }
   if (!el) return
   if (lenis) {
-    lenis.scrollTo(el, { offset, immediate, force: true, duration: 1.4 })
+    lenis.scrollTo(el, { offset, immediate, force: true, duration: 1.8, easing: (t) => 1 - Math.pow(1 - t, 4) })
   } else {
     const top = el.getBoundingClientRect().top + window.scrollY + offset
     window.scrollTo({ top, behavior: immediate ? 'auto' : 'smooth' })

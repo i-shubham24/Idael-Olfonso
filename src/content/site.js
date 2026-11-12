@@ -19,8 +19,6 @@
 export const brand = {
   name: 'Idael Alfonso',
   short: 'IA',
-  // Engraved around the 3D bezel. Works in both languages.
-  engraving: 'IDAEL ALFONSO  ·  PERSONAL TRAINER  ·  ZÜRICH  ·  ',
 }
 
 // PLACEHOLDER: confirm every contact detail with the client.
@@ -50,7 +48,10 @@ export const videos = {
 }
 
 export const images = {
-  // Seen through the bezel in the hero, then full screen behind the bridge line.
+  // Professional shoot from the OkyFit site (PLACEHOLDER until the client sends originals).
+  closing: '/media/okyfit/idael-stretch.jpg',
+  host: '/media/okyfit/idael-laugh.jpg',
+  // Shown behind the "Where" word in the menu.
   manifesto: 'photo-1526506118085-60ce8714f8c5',
   why: '/media/ig/idael-hiit.jpg',
   book: 'photo-1643142313112-3b9faa5dc015',
@@ -68,6 +69,30 @@ export const about = {
   gallery: ['/media/ig/idael-hiit.jpg', '/media/ig/idael-dance.jpg'],
 }
 
+/*
+  PLACEHOLDER: more covers from Idael's public Instagram (@idael_fit), saved at
+  the size Instagram shows them (about 360 x 640). Replace with original files.
+*/
+// Real sessions with clients, shown with the client quotes.
+export const clientPhotos = [
+  '/media/ig/idael-duo-jumps.jpg',
+  '/media/ig/idael-client-class.jpg',
+  '/media/ig/idael-studio-duo.jpg',
+  '/media/ig/idael-group-dance.jpg',
+]
+
+// The running gallery: Idael training. `tag` picks the caption, `wide` a landscape frame.
+export const wall = [
+  { image: '/media/ig/idael-hiit.jpg', tag: 'hiit' },
+  { image: '/media/okyfit/idael-dance-class.jpg', tag: 'group', wide: true },
+  { image: '/media/ig/idael-solo-dance.jpg', tag: 'footwork' },
+  { image: '/media/okyfit/idael-gym-portrait.jpg', tag: 'strength', wide: true },
+  { image: '/media/ig/idael-high-knees.jpg', tag: 'knees' },
+  { image: '/media/ig/idael-dance-night.jpg', tag: 'night' },
+  { image: '/media/ig/idael-dance.jpg', tag: 'rhythm' },
+  { image: '/media/ig/idael-portrait.jpg', tag: 'offduty' },
+]
+
 /* The problems people bring to Idael (text in the language files). */
 export const pains = [
   { id: 'time', image: 'photo-1634746827413-125b8a9c8eea' },
@@ -83,19 +108,17 @@ export const pains = [
   each block of one session in minutes (block names are in the language files).
 */
 export const services = [
-  { slug: 'private', duration: 60, image: 'photo-1643142313112-3b9faa5dc015', video: 'core', session: [5, 10, 25, 12, 8] },
+  { slug: 'private', duration: 60, image: '/media/ig/idael-strength.jpg', photo: '/media/ig/idael-hiit.jpg', hero: '/media/okyfit/idael-mat.jpg', heroFocus: '34% 30%', session: [5, 10, 25, 12, 8] },
+  { slug: 'latin-conditioning', duration: 50, image: 'photo-1774966425655-7b632a38702e', video: 'dance', photo: '/media/ig/idael-dance-night.jpg', hero: '/media/okyfit/idael-dance-class.jpg', heroFocus: '48% 25%', session: [8, 10, 20, 7, 5] },
   { slug: 'nutrition', duration: 45, image: 'photo-1703793578040-07e1778b6b2c', session: [10, 15, 15, 5] },
-  { slug: 'duo', duration: 60, image: 'photo-1648542036561-e1d66a5ae2b1', session: [5, 10, 22, 15, 8] },
-  { slug: 'latin-conditioning', duration: 50, image: 'photo-1774966425655-7b632a38702e', video: 'dance', session: [8, 10, 20, 7, 5] },
-  { slug: 'body-flow', duration: 45, image: 'photo-1741211699653-5e90542f9cda', session: [5, 10, 20, 10] },
-  { slug: 'online', duration: 45, image: 'photo-1611672585731-fa10603fb9e0', session: [5, 8, 22, 6, 4] },
+  { slug: 'online', duration: 45, image: 'photo-1611672585731-fa10603fb9e0', photo: '/media/ig/idael-portrait.jpg', hero: '/media/okyfit/idael-gym-portrait.jpg', heroFocus: '49% 15%', session: [5, 8, 22, 6, 4] },
 ]
 
 export const locations = [
   { id: 'studio', image: 'photo-1770513649465-2c60c8039806' },
   { id: 'residence', image: 'photo-1640357897497-599b4fc84f51' },
   { id: 'hotel', image: 'photo-1758448756350-3d0eec02ba37' },
-  { id: 'outdoors', image: 'photo-1791362795879-399d563981f1' },
+  { id: 'outdoors', image: '/media/ig/idael-outdoor-class.jpg' },
   { id: 'online', image: 'photo-1611672585731-fa10603fb9e0' },
 ]
 

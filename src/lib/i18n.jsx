@@ -38,6 +38,8 @@ export function buildContent(lang) {
     contact: site.contact,
     images: site.images,
     videos: site.videos,
+    clientPhotos: site.clientPhotos,
+    wall: site.wall.map((w) => (w.video ? { video: site.videos[w.video] } : w)),
     about: { ...site.about, ...t.aboutPage },
     pains: site.pains.map((p) => ({ ...p, ...t.pains.items[p.id] })),
     services: site.services.map((s) => {
