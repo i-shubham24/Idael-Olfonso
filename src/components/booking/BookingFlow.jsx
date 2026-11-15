@@ -16,6 +16,7 @@ import {
 import { useContent } from '../../lib/i18n'
 import { useLenis, scrollToTarget } from '../../lib/scroll'
 import { useReducedMotion } from '../../lib/media'
+import { sanitizeObject, validateHoneypot, validateSubmissionTiming, bookingRateLimiter } from '../../lib/security'
 import Button from '../Button'
 import Img from '../Img'
 import Reveal from '../Reveal'
@@ -517,6 +518,19 @@ function DetailsStep({ type, form, setForm, errors, onBack, onSubmit, submitting
       <h3 className="t-h3 text-4xl md:text-5xl">{b.detailsTitle}</h3>
       <p className="mt-4 text-ivory/70">{b.detailsNote}</p>
       <div className="mt-10 grid gap-7">
+        {/* Anti-bot Honeypot field (hidden from assistive tech and humans) */}
+        <div className="sr-only" aria-hidden="true" style={{ display: 'none' }}>
+          <label htmlFor="hp_website">Do not fill this field</label>
+          <input
+            id="hp_website"
+            name="hp_website"
+            type="text"
+            value={form.hp_website || ''}
+            onChange={set('hp_website')}
+            tabIndex={-1}
+            autoComplete="off"
+          />
+        </div>
         <Field id="name" label={b.name} error={errors.name}>
           <input
             id="name"
@@ -748,11 +762,12 @@ export default function BookingFlow({ heading = 'h2', title, intro, initialType 
   const [date, setDate] = useState(null)
   const [slot, setSlot] = useState(null)
   const [notice, setNotice] = useState('')
-  const [form, setForm] = useState({ name: '', email: '', phone: '', place: '', goals: '', consent: false })
+  const [form, setForm] = useState({ name: '', email: '', phone: '', place: '', goals: '', consent: false, hp_website: '' })
   const [errors, setErrors] = useState({})
   const [submitting, setSubmitting] = useState(false)
   const [done, setDone] = useState(false)
   const top = useRef(null)
+  const stepMountedAt = useRef(Date.now())
   const lenis = useLenis()
   const Heading = heading
 
@@ -762,6 +777,7 @@ export default function BookingFlow({ heading = 'h2', title, intro, initialType 
   const go = (n) => {
     setDir(n > step ? 1 : -1)
     setStep(n)
+    stepMountedAt.current = Date.now()
     requestAnimationFrame(() => scrollToTarget(lenis, top.current, { offset: -120 }))
   }
 
@@ -776,9 +792,26 @@ export default function BookingFlow({ heading = 'h2', title, intro, initialType 
       document.getElementById(target)?.focus()
       return
     }
+
+    // Zero-Trust: Bot honeypot & interaction timing checks
+    if (!validateHoneypot(form.hp_website) || !validateSubmissionTiming(stepMountedAt.current, 800)) {
+      setSubmitting(true)
+      setTimeout(() => {
+        setSubmitting(false)
+        setDone(true)
+      }, 500)
+      return
+    }
+
+    // Client-side Token-Bucket Rate Limiter Check
+    if (!bookingRateLimiter.isAllowed()) {
+      setNotice('Zu viele Anfragen. Bitte versuchen Sie es in einer Minute erneut.')
+      return
+    }
+
     setSubmitting(true)
     const place = type.places.find((p) => p.id === form.place)?.label ?? type.places[0].label
-    const cleanPayload = {
+    const cleanPayload = sanitizeObject({
       type: typeId,
       goal,
       date,
@@ -790,7 +823,7 @@ export default function BookingFlow({ heading = 'h2', title, intro, initialType 
       place,
       goals: (form.goals ?? '').trim().slice(0, 1000),
       consent: !!form.consent,
-    }
+    })
     const result = await createBooking(cleanPayload)
     setSubmitting(false)
     if (!result.ok) {

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">
+  <channel>
+    <title>Idael Alfonso Private Training | Zürich</title>
+    <link>https://www.idaelalfonso.ch</link>
+    <description>Elite Private Personal Fitness Training and Nutrition Coaching in Zürich, Switzerland.</description>
+    <item>
+      <g:id>ia-service-private</g:id>
+      <g:title>Private Personal Training Zürich | Idael Alfonso</g:title>
+      <g:description>One-on-one private personal fitness and mobility training in Zürich. Strength, conditioning, and tailored movement at your home, private studio, or outdoors.</g:description>
+      <g:link>https://www.idaelalfonso.ch/services/private</g:link>
+      <g:image_link>https://www.idaelalfonso.ch/media/ig/idael-strength.jpg</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>180.00 CHF</g:price>
+      <g:brand>Idael Alfonso</g:brand>
+      <g:condition>new</g:condition>
+      <g:identifier_exists>no</g:identifier_exists>
+      <g:google_product_category>536</g:google_product_category>
+      <g:product_type>Fitness &gt; Personal Training</g:product_type>
+    </item>
+    <item>
+      <g:id>ia-service-latin-conditioning</g:id>
+      <g:title>Latin Conditioning Signature Training | Idael Alfonso</g:title>
+      <g:description>Intervals, athletic footwork, core training, and Latin rhythms in Zürich. Full-body conditioning designed for maximum energy, agility, and cardiovascular fitness.</g:description>
+      <g:link>https://www.idaelalfonso.ch/services/latin-conditioning</g:link>
+      <g:image_link>https://www.idaelalfonso.ch/media/okyfit/idael-dance-class.jpg</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>160.00 CHF</g:price>
+      <g:brand>Idael Alfonso</g:brand>
+      <g:condition>new</g:condition>
+      <g:identifier_exists>no</g:identifier_exists>
+      <g:google_product_category>536</g:google_product_category>
+      <g:product_type>Fitness &gt; High Intensity Interval Training</g:product_type>
+    </item>
+    <item>
+      <g:id>ia-service-nutrition</g:id>
+      <g:title>Bespoke Nutrition &amp; Recovery Coaching | Idael Alfonso</g:title>
+      <g:description>Sustainable nutrition plan tailored for executive schedules, dining out, business travel, and sustained daytime energy without restrictive crash dieting.</g:description>
+      <g:link>https://www.idaelalfonso.ch/services/nutrition</g:link>
+      <g:image_link>https://www.idaelalfonso.ch/media/ig/idael-portrait.jpg</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>140.00 CHF</g:price>
+      <g:brand>Idael Alfonso</g:brand>
+      <g:condition>new</g:condition>
+      <g:identifier_exists>no</g:identifier_exists>
+      <g:google_product_category>536</g:google_product_category>
+      <g:product_type>Health &gt; Nutrition Coaching</g:product_type>
+    </item>
+    <item>
+      <g:id>ia-service-online</g:id>
+      <g:title>Online Remote Personal Training | Idael Alfonso</g:title>
+      <g:description>Live one-on-one video training sessions with Idael Alfonso and bespoke weekly workout programming accessible anywhere in Switzerland and internationally.</g:description>
+      <g:link>https://www.idaelalfonso.ch/services/online</g:link>
+      <g:image_link>https://www.idaelalfonso.ch/media/okyfit/idael-gym-portrait.jpg</g:image_link>
+      <g:availability>in_stock</g:availability>
+      <g:price>130.00 CHF</g:price>
+      <g:brand>Idael Alfonso</g:brand>
+      <g:condition>new</g:condition>
+      <g:identifier_exists>no</g:identifier_exists>
+      <g:google_product_category>536</g:google_product_category>
+      <g:product_type>Fitness &gt; Online Coaching</g:product_type>
+    </item>
+  </channel>
+</rss>

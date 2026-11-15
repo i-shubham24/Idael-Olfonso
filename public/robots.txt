@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 
+# Sitemaps and Feeds
 Sitemap: https://www.idaelalfonso.ch/sitemap.xml

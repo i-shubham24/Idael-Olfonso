@@ -1,1 +1,6 @@
-/*    /index.html   200
+/training                 /services/private     301
+/contact                  /book                 301
+/services                 /#training            301
+/enquiry                  /book                 301
+/feeds/google-merchant.xml /google-merchant.xml 200
+/*                        /index.html           200

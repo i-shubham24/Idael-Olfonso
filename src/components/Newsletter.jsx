@@ -5,6 +5,7 @@ import { Check, X } from '@phosphor-icons/react'
 import { useContent } from '../lib/i18n'
 import { useLenis } from '../lib/scroll'
 import { TLink } from '../lib/transition'
+import { sanitizeObject, validateHoneypot, validateSubmissionTiming, newsletterRateLimiter } from '../lib/security'
 import Img from './Img'
 import { Monogram } from './Logo'
 
@@ -55,8 +56,10 @@ export default function Newsletter() {
   const lenis = useLenis()
   const [open, setOpen] = useState(false)
   const [email, setEmail] = useState('')
+  const [hp, setHp] = useState('')
   const [status, setStatus] = useState('idle') // idle, sending, done, error, failed
   const input = useRef(null)
+  const mountedAt = useRef(Date.now())
 
   // Open once, by time or by scroll. Never over the calendar.
   useEffect(() => {
@@ -92,6 +95,7 @@ export default function Newsletter() {
   // While open: page holds still, Escape closes, focus goes to the field.
   useEffect(() => {
     if (!open) return
+    mountedAt.current = Date.now()
     lenis?.stop()
     const onKey = (e) => e.key === 'Escape' && close()
     window.addEventListener('keydown', onKey)
@@ -111,6 +115,23 @@ export default function Newsletter() {
 
   const submit = async (e) => {
     e.preventDefault()
+
+    // Bot honeypot & timing verification
+    if (!validateHoneypot(hp) || !validateSubmissionTiming(mountedAt.current, 600)) {
+      setStatus('sending')
+      setTimeout(() => {
+        writeState('joined')
+        setStatus('done')
+      }, 500)
+      return
+    }
+
+    // Rate limiter check
+    if (!newsletterRateLimiter.isAllowed()) {
+      setStatus('error')
+      return
+    }
+
     const value = email.trim().toLowerCase().slice(0, 254)
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value)) {
       setStatus('error')
@@ -121,10 +142,11 @@ export default function Newsletter() {
     try {
       const api = import.meta.env.VITE_NEWSLETTER_API
       if (api) {
+        const payload = sanitizeObject({ email: value, lang })
         const res = await fetch(api, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: value, lang }),
+          body: JSON.stringify(payload),
         })
         if (!res.ok) throw new Error(String(res.status))
       } else {
@@ -199,6 +221,19 @@ export default function Newsletter() {
                   </motion.div>
                 ) : (
                   <motion.form key="form" noValidate onSubmit={submit} exit={{ opacity: 0, y: -12, transition: { duration: 0.3 } }}>
+                    {/* Bot honeypot */}
+                    <div className="sr-only" aria-hidden="true" style={{ display: 'none' }}>
+                      <label htmlFor="hp_news">Leave blank</label>
+                      <input
+                        id="hp_news"
+                        name="hp_news"
+                        type="text"
+                        tabIndex={-1}
+                        autoComplete="off"
+                        value={hp}
+                        onChange={(e) => setHp(e.target.value)}
+                      />
+                    </div>
                     <h2 id="news-title" className="t-display mt-4 text-[clamp(2rem,min(3.6vw,6.5vh),3.25rem)]">
                       {n.title}
                     </h2>

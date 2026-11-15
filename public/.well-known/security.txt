@@ -1,0 +1,9 @@
+# RFC 9116 Security Policy for Idael Alfonso Private Training
+Contact: mailto:security@idaelalfonso.ch
+Contact: mailto:private@idaelalfonso.com
+Expires: 2027-12-31T23:59:59.000Z
+Preferred-Languages: de, en
+Canonical: https://www.idaelalfonso.ch/.well-known/security.txt
+Policy: https://www.idaelalfonso.ch/privacy
+Acknowledgments: https://www.idaelalfonso.ch/imprint
+Hiring: https://www.idaelalfonso.ch/about
