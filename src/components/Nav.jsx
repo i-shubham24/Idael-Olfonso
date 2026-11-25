@@ -170,7 +170,7 @@ export default function Nav() {
         />
         <nav
           className={`shell grid h-16 items-center md:h-20 ${training ? 'grid-cols-[1fr_auto]' : 'grid-cols-[1fr_auto_1fr]'}`}
-          aria-label="Main"
+          aria-label={t.nav.main}
         >
           <div className="flex items-center gap-6">
             <button

@@ -109,7 +109,7 @@ export default function MobileMenu({ onClose }) {
         </TLink>
       </div>
 
-      <nav className="shell relative flex min-h-0 flex-1 flex-col justify-center py-4" aria-label="Menu">
+      <nav className="shell relative flex min-h-0 flex-1 flex-col justify-center py-4" aria-label={t.nav.menu}>
         <ul className="flex flex-col items-center gap-1 text-center" onPointerLeave={() => setHover(null)}>
           {links.map((l, i) => (
             <li key={l.to} className="overflow-hidden">

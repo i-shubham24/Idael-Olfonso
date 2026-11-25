@@ -26,6 +26,7 @@ const en = {
     close: 'Close',
     home: 'Home',
     skip: 'Skip to content',
+    main: 'Main',
     language: 'Language',
     appointment: 'By appointment only',
   },

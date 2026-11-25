@@ -423,12 +423,6 @@ html[data-theme='all-white'] header[data-scrolled='true']:not(.on-dark) {
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
 
-html[data-theme='all-white'] header:not(.on-dark) button:not(.bg-gold) {
-  color: #0a0a0b !important;
-}
-html[data-theme] header.on-dark button:not(.bg-gold) {
-  color: #ffffff !important;
-}
 html[data-theme] header.on-dark[data-scrolled='true'] {
   background-color: rgba(10, 10, 11, 0.82) !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
@@ -580,7 +574,6 @@ html[data-theme='mix'] .theme-dark-section .hero-copy p {
    whatever section (dark band, photo, theme) they sit in. */
 html .bg-gold,
 html .bg-gold * {
-  background-color: #baff00;
   color: #0a0a0b !important;
 }
 html .bg-gold {

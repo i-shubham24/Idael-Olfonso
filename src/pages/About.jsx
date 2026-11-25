@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ArrowDown, ArrowRight } from '@phosphor-icons/react'
 import { useContent } from '../lib/i18n'
@@ -48,6 +48,18 @@ export default function About() {
       })
     }, root)
     return () => ctx.revert()
+  }, [])
+
+  // The band's fixed photo is a full-screen layer; only paint it while the band is on screen.
+  useEffect(() => {
+    const band = root.current?.querySelector('.ab-band')
+    const layer = band?.querySelector('.ab-band-layer')
+    if (!band || !layer) return
+    const io = new IntersectionObserver(([e]) => {
+      layer.style.visibility = e.isIntersecting ? 'visible' : 'hidden'
+    }, { rootMargin: '25% 0px' })
+    io.observe(band)
+    return () => io.disconnect()
   }, [])
 
   return (
@@ -116,7 +128,7 @@ export default function About() {
               <div className="relative aspect-[3/4] overflow-hidden rounded-[2px] bg-graphite">
                 <Img image={about.gallery[0]} alt="" width={900} sizes="(min-width: 1024px) 36vw, 70vw" className="absolute inset-0 h-full w-full object-cover object-[50%_10%]" />
               </div>
-              <figcaption className="t-label mt-3 text-stone">{about.captions[1]}</figcaption>
+              <figcaption className="t-label mt-3 max-w-[44%] text-stone lg:max-w-none">{about.captions[1]}</figcaption>
             </figure>
             <figure className="ab-drift relative -mt-24 ml-auto w-[52%] md:-mt-40" data-from="18" data-to="-14">
               <div className="relative aspect-[4/5] overflow-hidden rounded-[2px] bg-graphite outline outline-8 outline-onyx">
@@ -150,9 +162,9 @@ export default function About() {
         className="ab-band on-dark relative flex min-h-[100svh] items-center bg-onyx py-28 [clip-path:inset(0)] md:py-40"
         aria-labelledby="credentials-title"
       >
-        <div className="pointer-events-none fixed inset-x-0 top-0 h-[115lvh] will-change-transform [transform:translateZ(0)]" aria-hidden="true">
+        <div className="ab-band-layer pointer-events-none fixed inset-x-0 top-0 h-[115lvh] will-change-transform [transform:translateZ(0)]" aria-hidden="true">
           <Img image="/media/okyfit/idael-laugh.jpg" alt="" width={1800} sizes="100vw" className="absolute inset-0 h-full w-full object-cover object-[60%_27%]" />
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgb(10_10_11/0.94),rgb(10_10_11/0.8)_45%,rgb(10_10_11/0.42))]" />
+          <div className="absolute inset-0 bg-[rgb(10_10_11/0.72)] lg:bg-[linear-gradient(to_right,rgb(10_10_11/0.94),rgb(10_10_11/0.8)_45%,rgb(10_10_11/0.42))]" />
         </div>
         <div className="shell relative grid w-full gap-14 lg:grid-cols-12">
           <div className="lg:col-span-5">

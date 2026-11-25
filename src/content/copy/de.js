@@ -26,6 +26,7 @@ const de = {
     close: 'Schliessen',
     home: 'Home',
     skip: 'Zum Inhalt',
+    main: 'Hauptnavigation',
     language: 'Sprache',
     appointment: 'Nur nach Vereinbarung',
   },
@@ -173,7 +174,7 @@ const de = {
       { title: 'Einschätzung', text: 'Wie Sie sich bewegen, wie stark Sie sind, wie Sie sich erholen.' },
       { title: 'Ihr Plan', text: 'Training und Ernährung, passend zu Ihrem Kalender.' },
       { title: 'Training', text: 'Zu Hause, im privaten Studio, draussen oder online.' },
-      { title: 'Review', text: 'Alle sechs Wochen, mit Messungen.' },
+      { title: 'Auswertung', text: 'Alle sechs Wochen, mit Messungen.' },
     ],
   },
 
