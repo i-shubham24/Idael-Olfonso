@@ -353,6 +353,11 @@ const de = {
   },
 
   aboutPage: {
+    kicker: 'Personal Trainer · Zürich',
+    chapters: ['Wo alles begann', 'Mit wem er trainiert', 'Wie alles zusammenpasst'],
+    followersLabel: 'Menschen folgen seinen Workouts',
+    captions: ['Zurich Film Festival', 'HIIT, auf der Fläche', 'Rhythmus, immer'],
+    scroll: 'Seine Geschichte',
     title: 'Über Idael',
     based: 'Ansässig in',
     languages: 'Sprachen',

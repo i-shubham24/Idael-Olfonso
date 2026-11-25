@@ -418,13 +418,20 @@ html[data-theme='all-white'] ::-webkit-scrollbar-thumb:hover {
   background: var(--color-gold);
 }
 
-html[data-theme='all-white'] header[data-scrolled='true'] {
+html[data-theme='all-white'] header[data-scrolled='true']:not(.on-dark) {
   background-color: rgba(255, 255, 255, 0.94) !important;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
 
-html[data-theme='all-white'] header button {
+html[data-theme='all-white'] header:not(.on-dark) button:not(.bg-gold) {
   color: #0a0a0b !important;
+}
+html[data-theme] header.on-dark button:not(.bg-gold) {
+  color: #ffffff !important;
+}
+html[data-theme] header.on-dark[data-scrolled='true'] {
+  background-color: rgba(10, 10, 11, 0.82) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 /* Hero video background: visibility reduced by 10% for optimal contrast */
@@ -465,22 +472,32 @@ html[data-theme='all-white'] .text-outline {
   -webkit-text-stroke: 1px rgba(10, 10, 11, 0.22) !important;
 }
 
-/* Ensure footer closing band text is ALWAYS white on the dark photo */
+/* Ensure footer closing band text is ALWAYS white on the dark photo
+   (the neon booking button keeps its black label, see .bg-gold below). */
 .close-band,
-.close-band *,
-.close-band h1,
-.close-band h2,
-.close-band h3,
-.close-band .t-display,
-.close-band .t-display *,
-.close-band .t-lead,
-.close-band p:not(.kick),
-.close-band a:not([class*='bg-gold']) {
+.close-band :is(h1, h2, h3, .t-display, .t-display *, .t-lead, p:not(.kick), a):not(.bg-gold):not(.bg-gold *) {
   color: #ffffff !important;
 }
 
 .close-band .kick {
   color: #baff00 !important;
+}
+
+/* Text over photos: .on-dark puts the dark-theme tokens back for its subtree,
+   so text-ivory, text-stone etc. read light on the shaded image in any theme. */
+.on-dark {
+  --color-onyx: #0a0a0b;
+  --color-onyx-2: #111113;
+  --color-graphite: #19191c;
+  --color-line: #2a2a2e;
+  --color-stone: #c4c0b8;
+  --color-ivory: #ffffff;
+  --color-ivory-2: #ece8e0;
+  color: #ffffff;
+}
+html[data-theme] .on-dark .text-gold.text-gold.text-gold {
+  color: #baff00 !important;
+  font-weight: 600;
 }
 
 /* Places section photo cards: ensure text is always crystal clear white and neon green */
@@ -559,10 +576,15 @@ html[data-theme='mix'] .theme-dark-section .hero-copy p {
 }
 
 /* 3. NEON GREEN ACCENT REFINEMENTS */
-/* All action buttons with bg-gold: crisp volt green with pitch black text */
-.bg-gold {
-  background-color: #baff00 !important;
+/* All action buttons with bg-gold: crisp volt green with pitch black text,
+   whatever section (dark band, photo, theme) they sit in. */
+html .bg-gold,
+html .bg-gold * {
+  background-color: #baff00;
   color: #0a0a0b !important;
+}
+html .bg-gold {
+  background-color: #baff00 !important;
   font-weight: 600 !important;
 }
 

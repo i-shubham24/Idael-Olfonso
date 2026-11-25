@@ -353,6 +353,11 @@ const en = {
   },
 
   aboutPage: {
+    kicker: 'Personal trainer · Zürich',
+    chapters: ['Where it started', 'Who he trains', 'How it fits together'],
+    followersLabel: 'People follow his workouts',
+    captions: ['Zurich Film Festival', 'HIIT, on the floor', 'Rhythm, always'],
+    scroll: 'His story',
     title: 'About',
     based: 'Based in',
     languages: 'Languages',

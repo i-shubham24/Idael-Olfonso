@@ -48,7 +48,7 @@ export default function Footer() {
   return (
     <footer ref={root} className="theme-dark-section bg-onyx-2">
       {cta && (
-        <section className="close-band relative flex min-h-[86svh] items-end overflow-hidden text-white" aria-labelledby="closing-cta">
+        <section className="close-band on-dark relative flex min-h-[86svh] items-end overflow-hidden text-white" aria-labelledby="closing-cta">
           <div className="absolute inset-0">
             <Img
               image={images.closing}

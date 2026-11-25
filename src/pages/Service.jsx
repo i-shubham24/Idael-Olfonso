@@ -71,7 +71,7 @@ function ServiceView({ service }) {
   return (
     <div ref={root}>
       {/* 1. Hero */}
-      <section className="sv-hero relative h-[100svh] min-h-[620px] overflow-hidden bg-onyx" aria-labelledby="pg-title">
+      <section className="sv-hero on-dark relative h-[100svh] min-h-[620px] overflow-hidden bg-onyx" aria-labelledby="pg-title">
         <div className="sv-frame absolute inset-0 overflow-hidden">
           <Img
             image={service.hero ?? service.image}
@@ -81,7 +81,8 @@ function ServiceView({ service }) {
             className="sv-img h-full w-full object-cover"
             style={{ objectPosition: service.heroFocus ?? '50% 30%' }}
           />
-          <div className="absolute inset-0 bg-[linear-gradient(to_top,var(--color-onyx),rgb(10_10_11/0.4)_55%,rgb(10_10_11/0.25))]" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_top,rgb(10_10_11/0.92),rgb(10_10_11/0.55)_45%,rgb(10_10_11/0.3))]" />
+          <div className="absolute inset-x-0 top-0 h-40 bg-[linear-gradient(to_bottom,rgb(10_10_11/0.55),transparent)]" />
         </div>
         <div className="shell relative flex h-full flex-col justify-end pb-14 md:pb-20">
           <TLink to="/#training" className="sv-in t-label inline-flex items-center gap-2 self-start text-ivory/70 transition-colors hover:text-ivory">
@@ -178,17 +179,17 @@ function ServiceView({ service }) {
           {others.map((s, i) => (
             <Reveal as="li" key={s.slug} delay={i * 0.08}>
               <TLink to={`/services/${s.slug}`} className="group block">
-                <div className="relative aspect-[4/5] overflow-hidden rounded-[2px] bg-graphite">
+                <div className="on-dark relative aspect-[4/5] overflow-hidden rounded-[2px] bg-graphite">
                   <Img
                     image={s.image}
                     alt=""
                     width={800}
                     className="absolute inset-0 h-full w-full object-cover object-[50%_20%] transition-transform duration-[1.4s] ease-[var(--ease-out-expo)] group-hover:scale-[1.06]"
                   />
-                  <div className="absolute inset-0 bg-[linear-gradient(to_top,rgb(10_10_11/0.8),transparent_55%)]" />
+                  <div className="absolute inset-0 bg-[linear-gradient(to_top,rgb(10_10_11/0.9),rgb(10_10_11/0.35)_55%,transparent_80%)]" />
                   <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 md:p-6">
                     <div>
-                      <p className="t-label text-ivory/60">{s.kicker}</p>
+                      <p className="t-label text-ivory/75">{s.kicker}</p>
                       <h3 className="t-h3 mt-2 text-[1.75rem] md:text-[2rem]">{s.name}</h3>
                     </div>
                     <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-ivory text-ink transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:-translate-y-1 group-hover:translate-x-1">

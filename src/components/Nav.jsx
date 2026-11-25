@@ -87,6 +87,24 @@ export default function Nav() {
   const progress = useRef(null)
   const [menu, setMenu] = useState(false)
   const location = useLocation()
+  // Training pages carry the booking button in their hero, so the header drops
+  // its own and moves the logo to the right: menu left, name right.
+  const training = /^\/services\/[^/]+/.test(location.pathname)
+
+  // Light or dark header text, from whatever sits under the bar: anything inside
+  // an .on-dark block (photo heroes, the closing band) turns the header light.
+  const tone = useRef(() => {})
+  tone.current = () => {
+    const el = bar.current
+    if (!el) return
+    const y = el.offsetHeight / 2
+    const hit = document
+      .elementsFromPoint(window.innerWidth / 2, y)
+      .find((n) => !el.contains(n))
+    const dark = !!hit?.closest('.on-dark')
+    el.classList.toggle('on-dark', dark)
+    el.dataset.tone = dark ? 'dark' : 'light'
+  }
 
   // Transparent over the hero, a matte bar once the page moves. Always visible.
   useEffect(() => {
@@ -104,10 +122,23 @@ export default function Nav() {
         const max = ScrollTrigger.maxScroll(window) || 1
         const p = Math.min(1, Math.max(0, self.scroll() / max))
         if (progress.current) progress.current.style.transform = `scaleX(${p})`
+        tone.current()
       },
     })
-    return () => st.kill()
+    const onResize = () => tone.current()
+    window.addEventListener('resize', onResize)
+    return () => {
+      st.kill()
+      window.removeEventListener('resize', onResize)
+    }
   }, [])
+
+  // Re-check on every page: run now and again once the page transition has painted.
+  useEffect(() => {
+    tone.current()
+    const ids = [120, 600, 1400].map((ms) => setTimeout(() => tone.current(), ms))
+    return () => ids.forEach(clearTimeout)
+  }, [location.key])
 
   // A new page starts the line again from zero.
   useEffect(() => {
@@ -129,7 +160,7 @@ export default function Nav() {
       <header
         ref={bar}
         data-scrolled="false"
-        className="fixed inset-x-0 top-0 z-50 transition-[background-color,backdrop-filter] duration-500 data-[scrolled=true]:bg-onyx/90 data-[scrolled=true]:backdrop-blur-md"
+        className="fixed inset-x-0 top-0 z-50 text-ivory transition-[background-color,backdrop-filter,color] duration-500 data-[scrolled=true]:bg-onyx/90 data-[scrolled=true]:backdrop-blur-md"
       >
         <span
           ref={progress}
@@ -137,7 +168,10 @@ export default function Nav() {
           style={{ transform: 'scaleX(0)' }}
           aria-hidden="true"
         />
-        <nav className="shell grid h-16 grid-cols-[1fr_auto_1fr] items-center md:h-20" aria-label="Main">
+        <nav
+          className={`shell grid h-16 items-center md:h-20 ${training ? 'grid-cols-[1fr_auto]' : 'grid-cols-[1fr_auto_1fr]'}`}
+          aria-label="Main"
+        >
           <div className="flex items-center gap-6">
             <button
               type="button"
@@ -158,18 +192,20 @@ export default function Nav() {
 
           <TLink
             to="/"
-            className="font-serif text-[0.8rem] uppercase tracking-[0.12em] min-[400px]:text-[0.95rem] min-[400px]:tracking-[0.16em] sm:text-[1.15rem] sm:tracking-[0.24em] md:text-[1.3rem]"
+            className={`font-serif text-[0.8rem] uppercase tracking-[0.12em] min-[400px]:text-[0.95rem] min-[400px]:tracking-[0.16em] sm:text-[1.15rem] sm:tracking-[0.24em] md:text-[1.3rem] ${training ? 'justify-self-end' : ''}`}
             aria-label={`${brand.name}, ${t.nav.home}`}
           >
             <Logo name={brand.name} markClass="h-[1.9em]" nameClass="max-[359px]:hidden" />
           </TLink>
 
-          <div className="flex justify-end">
-            <Button to="/#book" size="sm" className="max-sm:min-h-9 max-sm:px-3.5">
-              <span className="hidden lg:inline">{t.hero.cta}</span>
-              <span className="lg:hidden">{t.nav.book}</span>
-            </Button>
-          </div>
+          {!training && (
+            <div className="flex justify-end">
+              <Button to="/#book" size="sm" className="max-sm:min-h-9 max-sm:px-3.5">
+                <span className="hidden lg:inline">{t.hero.cta}</span>
+                <span className="lg:hidden">{t.nav.book}</span>
+              </Button>
+            </div>
+          )}
         </nav>
       </header>
       <AnimatePresence>{menu && <MobileMenu onClose={() => setMenu(false)} />}</AnimatePresence>
