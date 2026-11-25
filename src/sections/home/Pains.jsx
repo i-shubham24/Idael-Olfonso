@@ -93,7 +93,7 @@ export default function Pains() {
                 />
               ))}
               <div className="absolute inset-0 bg-[linear-gradient(to_top,rgb(10_10_11/0.55),transparent_45%)]" />
-              <p className="t-label tabular absolute bottom-5 left-5 text-ivory/80" aria-hidden="true">
+              <p className="t-label tabular absolute bottom-5 left-5 text-white/90 drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]" aria-hidden="true">
                 {String(active + 1).padStart(2, '0')} / {String(shown.length).padStart(2, '0')}
               </p>
             </div>
@@ -115,7 +115,7 @@ export default function Pains() {
               <span className="t-label tabular text-stone">{String(i + 1).padStart(2, '0')}</span>
               <p className="t-h2 mt-5 text-[clamp(2.25rem,4vw,3.75rem)] leading-[1.05]">{item.problem}</p>
               <div className="mt-8 max-w-[38ch]">
-                <p className="t-label text-gold">{p.answerLabel}</p>
+                <p className="t-label inline-block rounded-[2px] bg-gold px-2.5 py-1 text-ink font-semibold tracking-[0.22em]">{p.answerLabel}</p>
                 <p className="t-lead mt-3 text-ivory/75">{item.answer}</p>
               </div>
             </li>

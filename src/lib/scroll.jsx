@@ -22,16 +22,16 @@ export function ScrollProvider({ children }) {
   useEffect(() => {
     if (reduced) return
     const instance = new Lenis({
-      // A long, soft glide: heavy enough to feel considered, never laggy.
-      lerp: 0.075,
+      // Fast, responsive, snappy glide: immediate wheel response, zero lag
+      lerp: 0.16,
       smoothWheel: true,
-      wheelMultiplier: 0.9,
-      touchMultiplier: 1.1,
+      wheelMultiplier: 1.05,
+      touchMultiplier: 1.0,
     })
     instance.on('scroll', ScrollTrigger.update)
     const tick = (time) => instance.raf(time * 1000)
     gsap.ticker.add(tick)
-    gsap.ticker.lagSmoothing(0)
+    gsap.ticker.lagSmoothing(500, 33)
     setLenis(instance)
     window.__lenis = instance // handy for debugging and automated checks
     return () => {

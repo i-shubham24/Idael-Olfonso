@@ -54,16 +54,16 @@ function Field({ id, label, error, hint, children }) {
 }
 
 const inputCls = (error) =>
-  `h-14 w-full rounded-[2px] px-4 text-ivory placeholder:text-stone/70 transition-colors ${
-    error ? 'bg-[#2e1c18]' : 'bg-onyx hover:bg-graphite focus:bg-graphite'
+  `h-14 w-full rounded-[2px] px-4 text-ivory placeholder:text-stone/70 transition-colors border ${
+    error ? 'bg-[#2e1c18] border-[#e08a78]' : 'bg-onyx hover:bg-graphite focus:bg-graphite border-line focus:border-gold outline-none'
   }`
 
 function OptionBlock({ id, name, value, checked, onChange, disabled, children, className = '' }) {
   return (
     <label
-      className={`relative block cursor-pointer rounded-[2px] transition-[background-color,color] duration-300 has-[:focus-visible]:outline has-[:focus-visible]:outline-1 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-gold ${
+      className={`relative block cursor-pointer rounded-[2px] border transition-[background-color,color,border-color] duration-300 has-[:focus-visible]:outline has-[:focus-visible]:outline-1 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-gold ${
         disabled ? 'cursor-not-allowed opacity-30' : ''
-      } ${checked ? 'bg-gold text-ink' : 'bg-graphite/70 hover:bg-graphite'} ${className}`}
+      } ${checked ? 'bg-gold text-ink border-transparent font-medium' : 'bg-graphite/70 hover:bg-graphite border-line/60'} ${className}`}
     >
       <input
         id={id}
@@ -134,7 +134,7 @@ function Calendar({ month, setMonth, data, loading, value, onChange, today, last
   const label = formatMonth(month)
 
   return (
-    <div className="rounded-[2px] bg-onyx p-5 md:p-7">
+    <div className="rounded-[2px] bg-onyx border border-line/70 p-5 md:p-7">
       <div className="flex items-center justify-between">
         <p className="font-serif text-2xl md:text-3xl" aria-live="polite">
           {label}
@@ -314,7 +314,7 @@ function TimeSelect({ slots, slot, setSlot, duration }) {
           aria-labelledby="time-label time"
           onClick={() => toggle(!open)}
           onKeyDown={onButtonKey}
-          className={`flex h-16 w-full items-center justify-between gap-4 rounded-[2px] px-5 text-left transition-colors duration-300 ${
+          className={`flex h-16 w-full items-center justify-between gap-4 rounded-[2px] border border-line/70 px-5 text-left transition-colors duration-300 ${
             open ? 'bg-graphite' : 'bg-onyx hover:bg-graphite'
           }`}
         >

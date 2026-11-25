@@ -31,8 +31,8 @@ export default function Hero() {
       const st = { trigger: root.current, start: 'top top', end: 'bottom top', scrub: true }
       gsap.fromTo(
         '.hero-frame',
-        { clipPath: 'inset(0% 0% 0% 0% round 0px)' },
-        { clipPath: 'inset(9% 5% 9% 5% round 6px)', ease: 'none', scrollTrigger: st },
+        { clipPath: 'inset(0% 0% 0% 0%)' },
+        { clipPath: 'inset(7% 4% 7% 4%)', ease: 'none', scrollTrigger: st },
       )
       gsap.to('.hero-shade', { opacity: 0.85, ease: 'none', scrollTrigger: { ...st } })
       gsap.to('.hero-copy', {
@@ -46,7 +46,7 @@ export default function Hero() {
   }, [reduced, h.headline])
 
   return (
-    <section ref={root} className="relative h-[100svh] min-h-[600px] overflow-hidden bg-onyx" aria-labelledby="hero-title">
+    <section ref={root} className="theme-dark-section relative h-[100svh] min-h-[600px] overflow-hidden bg-onyx" aria-labelledby="hero-title">
       <div className="hero-frame absolute inset-0 overflow-hidden will-change-[clip-path]">
         <div className="hero-film absolute inset-0">
           <Video
@@ -57,7 +57,7 @@ export default function Hero() {
             className="h-full w-full object-cover object-[50%_15%]"
           />
         </div>
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgb(10_10_11/0.2),rgb(10_10_11/0.8))]" />
+        <div className="hero-film-overlay absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgb(10_10_11/0.2),rgb(10_10_11/0.8))]" />
         <div className="hero-shade absolute inset-0 bg-onyx opacity-0" />
       </div>
 
@@ -76,8 +76,8 @@ export default function Hero() {
       <p className="hero-in t-label absolute bottom-10 right-4 z-10 hidden text-ivory/60 sm:block md:right-8 xl:right-12">{h.aside}</p>
 
       <TLink to="/#pains" className="hero-in absolute bottom-8 left-1/2 z-10 -translate-x-1/2 p-3" aria-label={h.scroll}>
-        <span className="relative block h-12 w-px overflow-hidden bg-ivory/20">
-          <span className="scroll-drop absolute inset-x-0 top-0 h-1/2 bg-ivory" />
+        <span className="scroll-drop-track relative block h-12 w-px overflow-hidden bg-ivory/20">
+          <span className="scroll-drop absolute inset-x-0 top-0 h-1/2 bg-gold" />
         </span>
       </TLink>
     </section>

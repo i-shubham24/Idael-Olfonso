@@ -103,10 +103,10 @@ export default function Training() {
                       />
                     )}
                   </div>
-                  <span className="t-display tabular absolute left-5 top-4 text-[clamp(2.5rem,4vw,4rem)] text-ivory/90">
+                  <span className="t-display tabular absolute left-5 top-4 text-[clamp(2.5rem,4vw,4rem)] text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.65)]">
                     {String(i + 1).padStart(2, '0')}
                   </span>
-                  <span className="absolute bottom-4 right-4 flex h-11 w-11 translate-y-2 items-center justify-center rounded-full bg-ivory text-ink opacity-0 transition-[opacity,transform] duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+                  <span className="absolute bottom-4 right-4 flex h-11 w-11 translate-y-2 items-center justify-center rounded-full bg-gold text-ink opacity-0 shadow-lg transition-[opacity,transform] duration-500 group-hover:translate-y-0 group-hover:opacity-100">
                     <ArrowUpRight size={18} aria-hidden="true" />
                   </span>
                 </div>

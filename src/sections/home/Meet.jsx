@@ -45,7 +45,7 @@ export default function Meet() {
   }, [])
 
   return (
-    <section ref={root} id="idael" className="relative overflow-hidden pb-28 pt-12 md:pb-44" aria-labelledby="meet-title">
+    <section ref={root} id="idael" className="theme-dark-section relative overflow-hidden pb-28 pt-12 md:pb-44" aria-labelledby="meet-title">
       <div className="grid items-center gap-14 lg:grid-cols-2 lg:gap-0">
         <div className="shell lg:order-1 lg:max-w-none lg:pr-20 xl:pl-[max(3rem,calc((100vw-1440px)/2+3rem))]">
           <Title id="meet-title" kicker={m.kicker} className="t-display text-[clamp(3rem,6vw,6rem)]">

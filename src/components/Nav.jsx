@@ -95,7 +95,10 @@ export default function Nav() {
       start: 0,
       end: 'max',
       onUpdate(self) {
-        el.dataset.scrolled = self.scroll() > 40 ? 'true' : 'false'
+        const isScrolled = self.scroll() > 40 ? 'true' : 'false'
+        if (el.dataset.scrolled !== isScrolled) {
+          el.dataset.scrolled = isScrolled
+        }
         // How far down the page you are, as a thin gold line along the top edge.
         // Measured against the live page height, so pages that load in later never leave it stale.
         const max = ScrollTrigger.maxScroll(window) || 1

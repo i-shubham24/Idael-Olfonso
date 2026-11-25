@@ -49,13 +49,36 @@ export default function Places() {
                     isOpen ? 'scale-100 lg:opacity-100' : 'scale-110 lg:opacity-55'
                   }`}
                 />
-                <div className="absolute inset-0 bg-[linear-gradient(to_top,rgb(10_10_11/0.85),transparent_55%)]" />
-                <div className="absolute inset-x-0 bottom-0 p-5 md:p-7">
-                  <p className="t-label tabular text-ivory/60">{String(i + 1).padStart(2, '0')}</p>
-                  <h3 className="t-display mt-2 whitespace-nowrap text-[clamp(2rem,3vw,3rem)]">{z.name}</h3>
+                <div className="absolute inset-0 bg-[linear-gradient(to_top,rgb(10_10_11/0.88)_0%,rgb(10_10_11/0.45)_50%,transparent_100%)]" />
+
+                {/* Collapsed on desktop: Architectural tilted vertical text pinned to the left edge, 10% larger */}
+                <div
+                  className={`pointer-events-none absolute bottom-8 left-5 md:left-6 hidden lg:block transition-all duration-500 ${
+                    isOpen ? 'opacity-0 invisible' : 'opacity-100 visible delay-100'
+                  }`}
+                  aria-hidden={isOpen}
+                >
+                  <div className="flex items-center gap-4 [writing-mode:vertical-rl] rotate-180">
+                    <span className="t-label tabular text-[#baff00] font-semibold tracking-wider text-[0.82rem]">
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <span className="font-serif text-[1.62rem] tracking-wider text-white whitespace-nowrap">
+                      {z.name}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Expanded state on desktop & standard view on mobile/tablet */}
+                <div
+                  className={`absolute inset-x-0 bottom-0 p-5 md:p-7 text-white transition-all duration-500 ${
+                    isOpen ? 'lg:opacity-100 lg:visible lg:delay-150' : 'lg:opacity-0 lg:invisible lg:pointer-events-none'
+                  }`}
+                >
+                  <p className="t-label tabular text-[#baff00] font-semibold">{String(i + 1).padStart(2, '0')}</p>
+                  <h3 className="t-display mt-2 whitespace-nowrap text-white text-[clamp(2rem,3vw,3.25rem)]">{z.name}</h3>
                   <p
-                    className={`mt-2 max-w-[30ch] text-sm text-ivory/75 transition-opacity duration-500 ${
-                      isOpen ? 'lg:opacity-100 lg:delay-200' : 'lg:opacity-0'
+                    className={`mt-2 max-w-[32ch] text-sm text-white/85 transition-opacity duration-500 ${
+                      isOpen ? 'opacity-100 delay-200' : 'opacity-0'
                     }`}
                   >
                     {z.detail}

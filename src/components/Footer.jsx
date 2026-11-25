@@ -46,9 +46,9 @@ export default function Footer() {
   }, [cta])
 
   return (
-    <footer ref={root} className="bg-onyx-2">
+    <footer ref={root} className="theme-dark-section bg-onyx-2">
       {cta && (
-        <section className="close-band relative flex min-h-[86svh] items-end overflow-hidden" aria-labelledby="closing-cta">
+        <section className="close-band relative flex min-h-[86svh] items-end overflow-hidden text-white" aria-labelledby="closing-cta">
           <div className="absolute inset-0">
             <Img
               image={images.closing}
@@ -57,20 +57,20 @@ export default function Footer() {
               sizes="100vw"
               className="close-img h-full w-full object-cover object-[50%_30%]"
             />
-            <div className="absolute inset-0 bg-[linear-gradient(to_top,rgb(10_10_11/0.92),rgb(10_10_11/0.35)_55%,rgb(10_10_11/0.15))]" />
+            <div className="absolute inset-0 bg-[linear-gradient(to_top,rgb(10_10_11/0.95),rgb(10_10_11/0.58)_55%,rgb(10_10_11/0.30))]" />
           </div>
           <div className="shell relative grid w-full gap-10 pb-16 md:pb-24 lg:grid-cols-12 lg:items-end">
             <div className="lg:col-span-7">
-              <Title id="closing-cta" kicker={f.kicker} kickerClass="text-ivory/70" className="t-display text-[clamp(3rem,6.4vw,7rem)]">
+              <Title id="closing-cta" kicker={f.kicker} kickerClass="text-[#baff00] font-semibold tracking-[0.24em]" className="t-display text-[clamp(3rem,6.4vw,7rem)] text-white">
                 {f.title}
               </Title>
-              <p className="t-lead mt-6 max-w-[38ch] text-ivory/80">{f.intro}</p>
+              <p className="t-lead mt-6 max-w-[38ch] text-white/95">{f.intro}</p>
             </div>
             <div className="flex flex-col items-start gap-5 lg:col-span-4 lg:col-start-9 lg:items-end">
               <Button to="/#book" size="lg">
                 {t.hero.cta}
               </Button>
-              <a className={`${linkCls} text-ivory/75`} href={`https://wa.me/${contact.whatsapp}`} target="_blank" rel="noreferrer">
+              <a className={`${linkCls} text-white hover:text-[#baff00]`} href={`https://wa.me/${contact.whatsapp}`} target="_blank" rel="noreferrer">
                 <WhatsappLogo size={18} aria-hidden="true" /> {f.message}
               </a>
             </div>

@@ -12,11 +12,11 @@
   --color-ivory: #ece8e0;
   --color-ivory-2: #dcd7cd;
   --color-ink: #0a0a0b;
-  --color-gold: #b89a67;
-  --color-gold-2: #d2b98a;
-  /* The one light section (training): warm stone, like a limestone wall. */
-  --color-sand: #e9e4db;
-  --color-sand-2: #ddd6ca;
+  --color-gold: #baff00;
+  --color-gold-2: #a5e600;
+  /* Light tone */
+  --color-sand: #f5f5f7;
+  --color-sand-2: #e8e8ed;
 
   --font-sans: 'Archivo Variable', 'Archivo', ui-sans-serif, system-ui, sans-serif;
   --font-serif: 'Cormorant Garamond Variable', 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
@@ -219,10 +219,12 @@ html.low-gpu .grain {
 /* Video grades. Idael's clips are shot on a light studio backdrop:
    video-grade matches the photos, video-dark sinks the backdrop for text on top. */
 .video-grade {
-  filter: grayscale(1) sepia(0.08) contrast(1.12) brightness(0.86);
+  filter: grayscale(1) contrast(1.08) brightness(0.9);
+  transform: translateZ(0);
 }
 .video-dark {
-  filter: grayscale(1) sepia(0.1) contrast(1.6) brightness(0.42);
+  filter: grayscale(1) contrast(1.15) brightness(0.72);
+  transform: translateZ(0);
 }
 
 /* Faint concentric rings, like the grooves on a plate. Used where a photo is missing. */
@@ -372,3 +374,217 @@ video.fade-media[poster][data-loaded] {
     animation: none;
   }
 }
+
+/* ========================================================
+   THEME STYLING: ALL-WHITE (White BG + Black Text) & MIX
+   ======================================================== */
+
+/* 1. ALL-WHITE MODE (Default & Pure White) */
+html[data-theme='all-white'] {
+  --color-onyx: #ffffff;
+  --color-onyx-2: #f8f8fa;
+  --color-graphite: #f0f0f4;
+  --color-line: #e4e4eb;
+  --color-stone: #555562;
+  --color-ivory: #0a0a0b;
+  --color-ivory-2: #1e1e24;
+  --color-ink: #0a0a0b;
+  --color-sand: #f5f5f8;
+  --color-sand-2: #eaebee;
+  color-scheme: light;
+  background-color: #ffffff;
+  color: #0a0a0b;
+}
+
+html[data-theme='all-white'] .grain {
+  display: none !important;
+}
+
+html[data-theme='all-white'] ::selection {
+  background: var(--color-gold);
+  color: #0a0a0b;
+}
+
+html[data-theme='all-white'] ::-webkit-scrollbar {
+  background: #ffffff;
+}
+
+html[data-theme='all-white'] ::-webkit-scrollbar-thumb {
+  background: #d8d8e2;
+  border-color: #ffffff;
+}
+
+html[data-theme='all-white'] ::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gold);
+}
+
+html[data-theme='all-white'] header[data-scrolled='true'] {
+  background-color: rgba(255, 255, 255, 0.94) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+html[data-theme='all-white'] header button {
+  color: #0a0a0b !important;
+}
+
+/* Hero video background: visibility reduced by 10% for optimal contrast */
+html[data-theme='all-white'] .hero-film video {
+  filter: grayscale(1) contrast(1.06) brightness(0.82) !important;
+  opacity: 0.88 !important;
+  transform: translateZ(0);
+}
+
+html[data-theme='all-white'] .hero-film-overlay {
+  background: radial-gradient(ellipse at 50% 50%, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.30) 55%, rgba(255, 255, 255, 0.65) 100%) !important;
+}
+
+html[data-theme='all-white'] .hero-shade {
+  background-color: #ffffff !important;
+}
+
+/* Sharp, pure typography without any fuzzy shadow or smoke */
+html[data-theme='all-white'] .hero-line {
+  color: #0a0a0b !important;
+  text-shadow: none !important;
+}
+
+html[data-theme='all-white'] .hero-copy p {
+  color: #1a1a22 !important;
+  text-shadow: none !important;
+}
+
+html[data-theme='all-white'] .scroll-drop {
+  background-color: #0a0a0b !important;
+}
+
+html[data-theme='all-white'] .scroll-drop-track {
+  background-color: rgba(10, 10, 11, 0.18) !important;
+}
+
+html[data-theme='all-white'] .text-outline {
+  -webkit-text-stroke: 1px rgba(10, 10, 11, 0.22) !important;
+}
+
+/* Ensure footer closing band text is ALWAYS white on the dark photo */
+.close-band,
+.close-band *,
+.close-band h1,
+.close-band h2,
+.close-band h3,
+.close-band .t-display,
+.close-band .t-display *,
+.close-band .t-lead,
+.close-band p:not(.kick),
+.close-band a:not([class*='bg-gold']) {
+  color: #ffffff !important;
+}
+
+.close-band .kick {
+  color: #baff00 !important;
+}
+
+/* Places section photo cards: ensure text is always crystal clear white and neon green */
+#places li {
+  color: #ffffff !important;
+}
+#places li h3,
+#places li span.font-serif,
+#places li span.whitespace-nowrap {
+  color: #ffffff !important;
+}
+#places li .text-\[\#baff00\],
+#places li .text-gold {
+  color: #baff00 !important;
+}
+
+/* 2. MIX MODE (White Base with Alternating Dark Anchor Sections) */
+html[data-theme='mix'] {
+  --color-onyx: #ffffff;
+  --color-onyx-2: #f8f8fa;
+  --color-graphite: #f0f0f4;
+  --color-line: #e4e4eb;
+  --color-stone: #555562;
+  --color-ivory: #0a0a0b;
+  --color-ivory-2: #1e1e24;
+  --color-ink: #0a0a0b;
+  --color-sand: #f5f5f8;
+  --color-sand-2: #eaebee;
+  color-scheme: light;
+  background-color: #ffffff;
+  color: #0a0a0b;
+}
+
+html[data-theme='mix'] .grain {
+  display: none !important;
+}
+
+/* Contrast inside dark anchor sections in Mix mode */
+html[data-theme='mix'] .theme-dark-section {
+  background-color: #0a0a0b !important;
+  color: #ece8e0 !important;
+}
+
+html[data-theme='mix'] .theme-dark-section h1,
+html[data-theme='mix'] .theme-dark-section h2,
+html[data-theme='mix'] .theme-dark-section h3 {
+  color: #ece8e0 !important;
+}
+
+html[data-theme='mix'] .theme-dark-section p:not(.t-label):not(.kick) {
+  color: rgba(236, 232, 224, 0.78) !important;
+}
+
+html[data-theme='mix'] .theme-dark-section .t-label.text-stone {
+  color: #8f8b84 !important;
+}
+
+html[data-theme='mix'] .theme-dark-section .bg-graphite {
+  background-color: #19191c !important;
+}
+
+html[data-theme='mix'] .theme-dark-section .bg-onyx {
+  background-color: #0a0a0b !important;
+}
+
+html[data-theme='mix'] .theme-dark-section .bg-onyx-2 {
+  background-color: #111113 !important;
+}
+
+html[data-theme='mix'] .theme-dark-section .hero-line {
+  color: #ece8e0 !important;
+}
+
+html[data-theme='mix'] .theme-dark-section .hero-copy p {
+  color: rgba(236, 232, 224, 0.8) !important;
+}
+
+/* 3. NEON GREEN ACCENT REFINEMENTS */
+/* All action buttons with bg-gold: crisp volt green with pitch black text */
+.bg-gold {
+  background-color: #baff00 !important;
+  color: #0a0a0b !important;
+  font-weight: 600 !important;
+}
+
+.bg-gold:hover {
+  background-color: #a5e600 !important;
+}
+
+/* High-contrast neon green for text on white backgrounds */
+html[data-theme='all-white'] .text-gold:not(.t-display),
+html[data-theme='mix'] :not(.theme-dark-section) .text-gold:not(.t-display) {
+  color: #5c9300 !important;
+  font-weight: 600;
+}
+
+/* Big numbers and displays in neon green on white */
+html[data-theme='all-white'] .text-gold.t-display,
+html[data-theme='mix'] :not(.theme-dark-section) .text-gold.t-display {
+  color: #6da300 !important;
+}
+
+/* Big numbers and displays in neon green on dark sections */
+html[data-theme='mix'] .theme-dark-section .text-gold {
+  color: #baff00 !important;
+}
+

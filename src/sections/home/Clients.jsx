@@ -35,7 +35,7 @@ export default function Clients() {
   return (
     <section
       id="clients"
-      className="py-28 md:py-44"
+      className="theme-dark-section py-28 md:py-44"
       aria-labelledby="clients-title"
       onPointerEnter={() => setPaused(true)}
       onPointerLeave={() => setPaused(false)}
